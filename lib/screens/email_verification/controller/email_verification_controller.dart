@@ -32,6 +32,7 @@ class EmailVerificationController extends GetxController {
   }
 
   Future<void> verifyEmail(Map<String, String> otpData) async {
+    myLog.log('calling this method========');
     OverlayLoadingProgress.start(circularProgressColor: Color(0xFF004DBF));
     myLog.log('Verifying OTP: ${otpData['otp']}');
     isLoading.value = true;
@@ -67,6 +68,16 @@ class EmailVerificationController extends GetxController {
         // Get.offAllNamed('/login_screen');
         //Navigator.of(Get.context!).push(CupertinoPageRoute(builder: (context)=> const ProfileSetupScreen()));
         Navigator.pushNamed(Get.context!, '/business-name');
+      } else if (response.statusCode == 422) {
+        var responseBody = jsonDecode(response.body);
+        String message = responseBody['message'];
+        ScaffoldMessenger.of(Get.context!).showSnackBar(
+          SnackBar(
+            content: Text('OTP verification failed: ${message}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        OverlayLoadingProgress.stop();
       } else {
         OverlayLoadingProgress.stop();
         var responseBody = jsonDecode(response.body);

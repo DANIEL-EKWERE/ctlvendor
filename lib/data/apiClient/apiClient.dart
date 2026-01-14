@@ -149,7 +149,7 @@ class ApiClient extends GetConnect {
     String phoneNumber,
     String password,
   ) async {
-    OverlayLoadingProgress.start(circularProgressColor: Colors.amber);
+    OverlayLoadingProgress.start(circularProgressColor: Color(0xFF004DBF));
     myLog.log("password $firstName");
     myLog.log("password $lastName");
     myLog.log("password $phoneNumber");
@@ -1260,6 +1260,20 @@ class ApiClient extends GetConnect {
   // Get payment reports
   Future<http.Response> getPaymentReports() async {
     final url = Uri.parse('$baseUrl/reports/payments');
+    _logRequest('GET', url);
+    final response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    _logResponse(response);
+    return response;
+  }
+
+  // Get plans
+  Future<http.Response> getPlans() async {
+    final url = Uri.parse('$baseUrl/plans');
     _logRequest('GET', url);
     final response = await http.get(
       url,

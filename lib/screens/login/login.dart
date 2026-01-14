@@ -236,24 +236,24 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 const SizedBox(height: 24),
-                _buildSocialButton(
-                  'Continue with Google',
-                  'assets/google_logo.png',
-                  () {},
-                ),
-                const SizedBox(height: 16),
-                _buildSocialButton(
-                  'Continue with Apple',
-                  'assets/apple_logo.png',
-                  () {},
-                ),
-                const SizedBox(height: 16),
-                _buildSocialButton(
-                  'Continue with facebook',
-                  'assets/facebook_logo.png',
-                  () {},
-                ),
-                const SizedBox(height: 24),
+                // _buildSocialButton(
+                //   'Continue with Google',
+                //   'assets/google_logo.png',
+                //   () {},
+                // ),
+                // const SizedBox(height: 16),
+                // _buildSocialButton(
+                //   'Continue with Apple',
+                //   'assets/apple_logo.png',
+                //   () {},
+                // ),
+                // const SizedBox(height: 16),
+                // _buildSocialButton(
+                //   'Continue with facebook',
+                //   'assets/facebook_logo.png',
+                //   () {},
+                // ),
+                //const SizedBox(height: 24),
                 Center(
                   child: TextButton(
                     onPressed: () {
@@ -280,36 +280,77 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.info_outline, color: Colors.grey),
-                      const SizedBox(width: 8),
-                      const Expanded(
-                        child: Text(
-                          'Are you a client looking to book an appointment',
-                          style: TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    // Expanded(child: Divider()),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    //   child: Text(
+                    //     'Social Media',
+                    //     style: TextStyle(color: Colors.grey.shade600),
+                    //   ),
+                    // ),
+                    // Expanded(child: Divider()),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: 80,
+                      child: _buildSocialButton(
+                        //  'Continue with Apple',
+                        'assets/apple_logo.png',
+                        () {},
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Go to Qwik Reserve for client',
-                    style: TextStyle(
-                      color: Color(0xFF004DBF),
-                      fontWeight: FontWeight.bold,
                     ),
-                  ),
+                    SizedBox(
+                      width: 80,
+                      child: _buildSocialButton(
+                        // 'Continue with Google',
+                        'assets/google.png',
+                        () {},
+                      ),
+                    ),
+                    //const SizedBox(height: 16),
+                    SizedBox(
+                      width: 80,
+                      child: _buildSocialButton(
+                        //'Continue with facebook',
+                        'assets/facebook.png',
+                        () {},
+                      ),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 24),
+                // Container(
+                //   padding: const EdgeInsets.all(16),
+                //   decoration: BoxDecoration(
+                //     color: Colors.grey.shade100,
+                //     borderRadius: BorderRadius.circular(8),
+                //   ),
+                //   child: Row(
+                //     children: [
+                //       const Icon(Icons.info_outline, color: Colors.grey),
+                //       const SizedBox(width: 8),
+                //       const Expanded(
+                //         child: Text(
+                //           'Are you a client looking to book an appointment',
+                //           style: TextStyle(fontSize: 14, color: Colors.grey),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // const SizedBox(height: 8),
+                // TextButton(
+                //   onPressed: () {},
+                //   child: const Text(
+                //     'Go to Qwik Reserve for client',
+                //     style: TextStyle(
+                //       color: Color(0xFF004DBF),
+                //       fontWeight: FontWeight.bold,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -319,7 +360,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildSocialButton(
-    String text,
+    // String text,
     String iconPath,
     VoidCallback onPressed,
   ) {
@@ -335,8 +376,8 @@ class _LoginScreenState extends State<LoginScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(iconPath, height: 24, width: 24),
-          const SizedBox(width: 12),
-          Text(text),
+          // const SizedBox(width: 12),
+          // Text(text),
         ],
       ),
     );

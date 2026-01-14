@@ -187,6 +187,145 @@
 
 import 'dart:convert';
 
+// EmailVerificationModel emailVerificationModelFromJson(String str) =>
+//     EmailVerificationModel.fromJson(json.decode(str));
+
+// String emailVerificationModelToJson(EmailVerificationModel data) =>
+//     json.encode(data.toJson());
+
+// class EmailVerificationModel {
+//   dynamic status;
+//   String? message;
+//   Data? data;
+
+//   EmailVerificationModel({this.status, this.message, this.data});
+
+//   EmailVerificationModel.fromJson(Map<String, dynamic> json) {
+//     status = json['status'];
+//     message = json['message'];
+//     data = json['data'] != null ? Data.fromJson(json['data']) : null;
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = {};
+//     data['status'] = status;
+//     data['message'] = message;
+//     if (this.data != null) {
+//       data['data'] = this.data!.toJson();
+//     }
+//     return data;
+//   }
+// }
+
+// class Data {
+//   int? id;
+//   String? slug;
+//   String? firstname;
+//   String? lastname;
+//   String? email;
+//   String? phoneNumber;
+//   String? profilePicture;
+//   String? role;
+//   String? emailVerifiedAt; // Changed from bool to String
+//   String? referralCode;
+//   dynamic referrerId;
+//   String? referralCount;
+//   String? isActive; // Changed from bool to String
+//   String? pin;
+//   String? rememberPinToken;
+//   String? pinTokenExpiry;
+//   String? pinResetToken;
+//   String? pinResetExpiry;
+//   String? lastLogin;
+//   String? createdAt;
+//   String? updatedAt;
+//   String? deletedAt;
+
+//   Data({
+//     this.id,
+//     this.slug,
+//     this.firstname,
+//     this.lastname,
+//     this.email,
+//     this.phoneNumber,
+//     this.profilePicture,
+//     this.role,
+//     this.emailVerifiedAt,
+//     this.referralCode,
+//     this.referrerId,
+//     this.referralCount,
+//     this.isActive,
+//     this.pin,
+//     this.rememberPinToken,
+//     this.pinTokenExpiry,
+//     this.pinResetToken,
+//     this.pinResetExpiry,
+//     this.lastLogin,
+//     this.createdAt,
+//     this.updatedAt,
+//     this.deletedAt,
+//   });
+
+//   Data.fromJson(Map<String, dynamic> json) {
+//     id = json['id'];
+//     slug = json['slug'];
+//     firstname = json['firstname'];
+//     lastname = json['lastname'];
+//     email = json['email'];
+//     phoneNumber = json['phone_number'];
+//     profilePicture = json['profile_picture'];
+//     role = json['role'];
+//     emailVerifiedAt = json['email_verified_at'];
+//     referralCode = json['referral_code'];
+//     referrerId = json['referrer_id'];
+//     referralCount = json['referral_count'];
+//     isActive = json['is_active'];
+//     pin = json['pin'];
+//     rememberPinToken = json['remember_pin_token'];
+//     pinTokenExpiry = json['pin_token_expiry'];
+//     pinResetToken = json['pin_reset_token'];
+//     pinResetExpiry = json['pin_reset_expiry'];
+//     lastLogin = json['last_login'];
+//     createdAt = json['created_at'];
+//     updatedAt = json['updated_at'];
+//     deletedAt = json['deleted_at'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = {};
+//     data['id'] = id;
+//     data['slug'] = slug;
+//     data['firstname'] = firstname;
+//     data['lastname'] = lastname;
+//     data['email'] = email;
+//     data['phone_number'] = phoneNumber;
+//     data['profile_picture'] = profilePicture;
+//     data['role'] = role;
+//     data['email_verified_at'] = emailVerifiedAt;
+//     data['referral_code'] = referralCode;
+//     data['referrer_id'] = referrerId;
+//     data['referral_count'] = referralCount;
+//     data['is_active'] = isActive;
+//     data['pin'] = pin;
+//     data['remember_pin_token'] = rememberPinToken;
+//     data['pin_token_expiry'] = pinTokenExpiry;
+//     data['pin_reset_token'] = pinResetToken;
+//     data['pin_reset_expiry'] = pinResetExpiry;
+//     data['last_login'] = lastLogin;
+//     data['created_at'] = createdAt;
+//     data['updated_at'] = updatedAt;
+//     data['deleted_at'] = deletedAt;
+//     return data;
+//   }
+
+//   // Helper methods for boolean checks
+//   bool get isEmailVerified => emailVerifiedAt != null;
+//   bool get isUserActive => isActive == "1" || isActive == "true";
+//   bool get hasPin => pin != null && pin!.isNotEmpty;
+// }
+
+import 'dart:convert';
+
 EmailVerificationModel emailVerificationModelFromJson(String str) =>
     EmailVerificationModel.fromJson(json.decode(str));
 
@@ -219,107 +358,131 @@ class EmailVerificationModel {
 
 class Data {
   int? id;
-  String? slug;
+  String? name;
   String? firstname;
   String? lastname;
   String? email;
   String? phoneNumber;
   String? profilePicture;
+  String? country;
+  bool? emailVerified;
   String? role;
-  String? emailVerifiedAt; // Changed from bool to String
+  bool? isVendor;
+  bool? isRider;
+  bool? isStaff;
+  bool? isAdmin;
   String? referralCode;
   dynamic referrerId;
   String? referralCount;
-  String? isActive; // Changed from bool to String
-  String? pin;
-  String? rememberPinToken;
-  String? pinTokenExpiry;
-  String? pinResetToken;
-  String? pinResetExpiry;
-  String? lastLogin;
+  bool? hasPin;
+  bool? isActive;
   String? createdAt;
-  String? updatedAt;
-  String? deletedAt;
+  String? lastLogin;
+  Wallet? wallet;
+  List<dynamic>? favorites;
+  List<dynamic>? contactAddress;
 
   Data({
     this.id,
-    this.slug,
+    this.name,
     this.firstname,
     this.lastname,
     this.email,
     this.phoneNumber,
     this.profilePicture,
+    this.country,
+    this.emailVerified,
     this.role,
-    this.emailVerifiedAt,
+    this.isVendor,
+    this.isRider,
+    this.isStaff,
+    this.isAdmin,
     this.referralCode,
     this.referrerId,
     this.referralCount,
+    this.hasPin,
     this.isActive,
-    this.pin,
-    this.rememberPinToken,
-    this.pinTokenExpiry,
-    this.pinResetToken,
-    this.pinResetExpiry,
-    this.lastLogin,
     this.createdAt,
-    this.updatedAt,
-    this.deletedAt,
+    this.lastLogin,
+    this.wallet,
+    this.favorites,
+    this.contactAddress,
   });
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    slug = json['slug'];
+    name = json['name'];
     firstname = json['firstname'];
     lastname = json['lastname'];
     email = json['email'];
     phoneNumber = json['phone_number'];
     profilePicture = json['profile_picture'];
+    country = json['country'];
+    emailVerified = json['email_verified'];
     role = json['role'];
-    emailVerifiedAt = json['email_verified_at'];
+    isVendor = json['is_vendor'];
+    isRider = json['is_rider'];
+    isStaff = json['is_staff'];
+    isAdmin = json['is_admin'];
     referralCode = json['referral_code'];
     referrerId = json['referrer_id'];
     referralCount = json['referral_count'];
+    hasPin = json['has_pin'];
     isActive = json['is_active'];
-    pin = json['pin'];
-    rememberPinToken = json['remember_pin_token'];
-    pinTokenExpiry = json['pin_token_expiry'];
-    pinResetToken = json['pin_reset_token'];
-    pinResetExpiry = json['pin_reset_expiry'];
-    lastLogin = json['last_login'];
     createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'];
+    lastLogin = json['last_login'];
+    wallet = json['wallet'] != null ? Wallet.fromJson(json['wallet']) : null;
+    favorites = json['favorites'];
+    contactAddress = json['contact_address'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
     data['id'] = id;
-    data['slug'] = slug;
+    data['name'] = name;
     data['firstname'] = firstname;
     data['lastname'] = lastname;
     data['email'] = email;
     data['phone_number'] = phoneNumber;
     data['profile_picture'] = profilePicture;
+    data['country'] = country;
+    data['email_verified'] = emailVerified;
     data['role'] = role;
-    data['email_verified_at'] = emailVerifiedAt;
+    data['is_vendor'] = isVendor;
+    data['is_rider'] = isRider;
+    data['is_staff'] = isStaff;
+    data['is_admin'] = isAdmin;
     data['referral_code'] = referralCode;
     data['referrer_id'] = referrerId;
     data['referral_count'] = referralCount;
+    data['has_pin'] = hasPin;
     data['is_active'] = isActive;
-    data['pin'] = pin;
-    data['remember_pin_token'] = rememberPinToken;
-    data['pin_token_expiry'] = pinTokenExpiry;
-    data['pin_reset_token'] = pinResetToken;
-    data['pin_reset_expiry'] = pinResetExpiry;
-    data['last_login'] = lastLogin;
     data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    data['deleted_at'] = deletedAt;
+    data['last_login'] = lastLogin;
+    if (wallet != null) {
+      data['wallet'] = wallet!.toJson();
+    }
+    data['favorites'] = favorites;
+    data['contact_address'] = contactAddress;
     return data;
   }
+}
 
-  // Helper methods for boolean checks
-  bool get isEmailVerified => emailVerifiedAt != null;
-  bool get isUserActive => isActive == "1" || isActive == "true";
-  bool get hasPin => pin != null && pin!.isNotEmpty;
+class Wallet {
+  int? id;
+  String? balance;
+
+  Wallet({this.id, this.balance});
+
+  Wallet.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    balance = json['balance'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['id'] = id;
+    data['balance'] = balance;
+    return data;
+  }
 }

@@ -1,47 +1,41 @@
+import 'dart:convert';
+
 import 'package:ctlvendor/data/apiClient/apiClient.dart';
 import 'package:ctlvendor/screens/payment_method/payment_method.dart';
-import 'package:ctlvendor/screens/plan/plan_screen.dart';
-import 'package:ctlvendor/screens/summary_screen/summary_screen.dart';
-import 'package:ctlvendor/utils/storage.dart';
+import 'package:ctlvendor/screens/plan/models/model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ctlvendor/utils/storage.dart';
 import 'package:overlay_kit/overlay_kit.dart';
 import 'dart:developer' as myLog;
 import 'package:http/http.dart' as http;
 
-class OperationController extends GetxController {
-  Rx<String> orderFulfilment = ''.obs;
-  Rx<String> orderCutOffTime = ''.obs;
-  Rx<String> earlestPreOrderTime = ''.obs;
-
-  TextEditingController orderFulfilmentController = TextEditingController();
-  TextEditingController orderCutOffTimeController = TextEditingController();
-  TextEditingController earlestPreOrderTimeController = TextEditingController();
-
+class PlanController extends GetxController {
+  RxString selectedPlan = 'online'.obs;
+  Rx<bool> isLoading = false.obs;
   ApiClient apiClient = ApiClient(Duration(seconds: 60 * 5));
+  Plan plan = Plan();
+  List<Data> planList = <Data>[];
 
-  Future<void> updateVendorOperation() async {
-    OverlayLoadingProgress.start(circularProgressColor: Color(0xff004BFD));
-    // myLog.log(email);
+  Future<void> updateVendorPlanId() async {
+    OverlayLoadingProgress.start(circularProgressColor: Color(0XFF004BFD));
+    //myLog.log(email);
     var email = await dataBase.getEmail();
     try {
       String url =
-          '${apiClient.baseUrl}/update-business-profile/$email'; // Replace with your API endpoint
+          '${apiClient.baseUrl}/profile-update/$email'; // Replace with your API endpoint
       Map<String, String> headers = {
         'Accept': 'application/json',
 
         //'Content-Type': 'multipart/form-data', // Important for multipart
       };
+      await dataBase.savePlan(selectedPlan.value);
 
       // Create multipart request
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.headers.addAll(headers);
-      //  request.fields['order_cut_off_time'] = orderCutOffTimeController.text;
-      // request.fields['earliest_pre_order_time'] =
-      //     earlestPreOrderTimeController.text;
-      //business_type_id
-      request.fields['order_full_fillment'] = orderFulfilmentController.text;
-      //businessDescriptionController.text;
+      //request.fields['payment_method'] = selectedPlan.value;
+      request.fields['category_id'] = selectedPlan.value;
 
       // if (file1.value != null) {
       //   myLog.log('profile photo adding');
@@ -73,8 +67,10 @@ class OperationController extends GetxController {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         OverlayLoadingProgress.stop();
-        // var responseBody = await response.stream.bytesToString();
-        // myLog.log('Response Body: $responseBody');
+        await dataBase.savePayment(selectedPlan.value);
+
+        var responseBody = await response.stream.bytesToString();
+        myLog.log('Response Body: $responseBody');
         //   // Refresh profile data
         //   fetchUserProfile();
         //   ScaffoldMessenger.of(Get.context!).showSnackBar(
@@ -84,14 +80,21 @@ class OperationController extends GetxController {
         //   ScaffoldMessenger.of(Get.context!).showSnackBar(
         //     SnackBar(content: Text('Failed to update profile: ${response.body}')),
         //   );
-        Get.snackbar("Success", "Profile updated successfully");
+        Get.snackbar(
+          "Success",
+          "Business Category updated successfully",
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        //Get.snackbar(titleText: Icon(Icons.check),'success','Category updated successfully.', colorText: Colors.white, backgroundColor: Colors.green);
         myLog.log('Profile updated successfully');
 
-        Get.to(
-          () =>
-              //SummaryScreen(),
-              PlanScreen(),
-        );
+        //  businessNameController.clear();
+        //Navigator.pushNamed(Get.context!, '/summary');
+       // Get.toNamed('/summary', arguments: {'category': selectedPlan.value});
+
+        Get.to(() => PaymentMethodScreen());
+        
       } else {
         OverlayLoadingProgress.stop();
         var responseBody = await response.stream.bytesToString();
@@ -104,6 +107,39 @@ class OperationController extends GetxController {
       myLog.log(e.toString());
     } finally {
       OverlayLoadingProgress.stop();
+      // Navigator.pushNamed(Get.context!, '/summary');
+    }
+  }
+
+  Future<void> getPlans() async {
+    isLoading.value = true;
+    try {
+      var response = await apiClient.getPlans();
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        isLoading.value = false;
+        myLog.log('called plans');
+        var responseBody = jsonDecode(response.body);
+        myLog.log(responseBody.toString());
+        plan = planfromJson(response.body);
+        planList = plan.data!;
+      } else {
+        var responseBody = jsonDecode(response.body);
+        Get.snackbar(
+          "Error occurred:",
+          responseBody,
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (e) {
+      isLoading.value = false;
+      myLog.log('somthing went wrong $e');
+      Get.snackbar(
+        "Error occurred:",
+        e.toString(),
+        backgroundColor: Colors.red,
+      );
+    } finally {
+      isLoading.value = false;
     }
   }
 }

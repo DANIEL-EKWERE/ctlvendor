@@ -18,7 +18,7 @@ class OperationsScreen extends StatefulWidget {
 
 class _OperationsScreenState extends State<OperationsScreen> {
   Future<void> _selectTime(BuildContext context) async {
-    print('object');
+    print('earlestPreOrderTime');
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: widget.selectedTime ?? TimeOfDay.now(),

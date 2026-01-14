@@ -92,9 +92,11 @@ class PaymentMethodController extends GetxController {
 
         //  businessNameController.clear();
         //Navigator.pushNamed(Get.context!, '/summary');
-        Get.toNamed('/summary', arguments: {
-          'category': selectedCategory.first
-        });
+        Get.toNamed(
+          '/summary',
+          arguments: {'category': selectedCategory.first},
+        );
+        //TODO: MOVE TO PLAN
       } else {
         OverlayLoadingProgress.stop();
         var responseBody = await response.stream.bytesToString();
