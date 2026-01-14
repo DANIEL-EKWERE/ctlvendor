@@ -115,10 +115,10 @@ class _OperationsScreenState extends State<OperationsScreen> {
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
       child: Row(
         children: List.generate(
-          5,
+          6,
           (index) => Expanded(
             child: Container(
-              height: 4,
+              height: 3,
               margin: const EdgeInsets.symmetric(horizontal: 2),
               decoration: BoxDecoration(
                 color: index < 3 ? Color(0XFF004BFD) : Colors.grey.shade300,

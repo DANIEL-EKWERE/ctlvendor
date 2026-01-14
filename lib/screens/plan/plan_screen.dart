@@ -166,6 +166,8 @@ class _PlanScreenState extends State<PlanScreen> {
                                         setState(() {
                                           controller.selectedPlan.value =
                                               controller.planList[i].name ?? '';
+                                          controller.selectedPlanId.value =
+                                              controller.planList[i].id ?? 0;
                                         });
                                       },
                                     ),
@@ -291,6 +293,9 @@ class _PlanScreenState extends State<PlanScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   // controller.updateVendorProfilePaymentMethod();
+                  // print(controller.selectedPlan.value);
+                  // print(controller.selectedPlanId.value);
+                  controller.updateVendorPlanId();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0XFF004BFD),
@@ -317,13 +322,13 @@ class _PlanScreenState extends State<PlanScreen> {
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
       child: Row(
         children: List.generate(
-          7,
+          6,
           (index) => Expanded(
             child: Container(
               height: 4,
               margin: const EdgeInsets.symmetric(horizontal: 2),
               decoration: BoxDecoration(
-                color: index < 5 ? Color(0XFF004BFD) : Colors.grey.shade300,
+                color: index < 4 ? Color(0XFF004BFD) : Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

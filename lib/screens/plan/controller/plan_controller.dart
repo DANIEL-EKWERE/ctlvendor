@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 
 class PlanController extends GetxController {
   RxString selectedPlan = 'online'.obs;
+  RxInt selectedPlanId = 0.obs;
   Rx<bool> isLoading = false.obs;
   ApiClient apiClient = ApiClient(Duration(seconds: 60 * 5));
   Plan plan = Plan();
@@ -19,7 +20,8 @@ class PlanController extends GetxController {
 
   Future<void> updateVendorPlanId() async {
     OverlayLoadingProgress.start(circularProgressColor: Color(0XFF004BFD));
-    //myLog.log(email);
+    myLog.log(selectedPlanId.value.toString());
+    myLog.log(selectedPlan.value);
     var email = await dataBase.getEmail();
     try {
       String url =
@@ -35,7 +37,7 @@ class PlanController extends GetxController {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.headers.addAll(headers);
       //request.fields['payment_method'] = selectedPlan.value;
-      request.fields['category_id'] = selectedPlan.value;
+      request.fields['plan_id'] = selectedPlanId.value.toString();
 
       // if (file1.value != null) {
       //   myLog.log('profile photo adding');
@@ -91,10 +93,9 @@ class PlanController extends GetxController {
 
         //  businessNameController.clear();
         //Navigator.pushNamed(Get.context!, '/summary');
-       // Get.toNamed('/summary', arguments: {'category': selectedPlan.value});
+        // Get.toNamed('/summary', arguments: {'category': selectedPlan.value});
 
         Get.to(() => PaymentMethodScreen());
-        
       } else {
         OverlayLoadingProgress.stop();
         var responseBody = await response.stream.bytesToString();

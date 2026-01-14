@@ -14,6 +14,7 @@ class BusinessController extends GetxController {
   TextEditingController businessNameController = TextEditingController();
   TextEditingController bvnController = TextEditingController();
   Rx<String> businessType = ''.obs;
+  Rx<String> fullfillmentType = ''.obs;
   Rx<String> category = ''.obs;
   TextEditingController cacNoController = TextEditingController();
   TextEditingController taxNoController = TextEditingController();
@@ -45,6 +46,8 @@ class BusinessController extends GetxController {
       //business_type_id
       request.fields['business_type_id'] = businessType.value;
       //
+      
+      request.fields['fulfilment_type'] = fullfillmentType.value;
 
       request.fields['means_of_identification'] = meansOfIdentification.value;
       request.fields['tax_number'] = taxNoController.text;

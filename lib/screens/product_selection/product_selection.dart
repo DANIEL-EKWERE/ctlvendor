@@ -48,13 +48,13 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
       child: Row(
         children: List.generate(
-          7,
+          6,
           (index) => Expanded(
             child: Container(
               height: 4,
               margin: const EdgeInsets.symmetric(horizontal: 2),
               decoration: BoxDecoration(
-                color: index < 5 ? Color(0XFF004BFD) : Colors.grey.shade300,
+                color: index < 2 ? Color(0XFF004BFD) : Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

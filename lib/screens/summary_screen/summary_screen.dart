@@ -59,13 +59,13 @@ class _SummaryScreenState extends State<SummaryScreen> {
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
       child: Row(
         children: List.generate(
-          5,
+          6,
           (index) => Expanded(
             child: Container(
               height: 4,
               margin: const EdgeInsets.symmetric(horizontal: 2),
               decoration: BoxDecoration(
-                color: index < 5 ? Color(0XFF004BFD) : Colors.grey.shade300,
+                color: index < 6 ? Color(0XFF004BFD) : Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

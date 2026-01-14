@@ -22,6 +22,27 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
     super.dispose();
   }
 
+  Widget _buildProgressIndicator() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+      child: Row(
+        children: List.generate(
+          6,
+          (index) => Expanded(
+            child: Container(
+              height: 4,
+              margin: const EdgeInsets.symmetric(horizontal: 2),
+              decoration: BoxDecoration(
+                color: index < 1 ? Color(0XFF004BFD) : Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +54,7 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
             //crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const StatusBar(),
+              _buildProgressIndicator(),
               const SizedBox(height: 16),
               const Row(
                 children: [
@@ -118,13 +140,13 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
               SizedBox(
                 width: double.infinity,
                 child: DropdownMenuFormField<String>(
-                  hintText: 'Category',
+                  hintText: 'Fulfilment Type',
                   textStyle: TextStyle(color: Colors.grey),
                   width: double.infinity,
                   dropdownMenuEntries: const [
-                    DropdownMenuEntry(value: 'option1', label: 'Option 1'),
-                    DropdownMenuEntry(value: 'option2', label: 'Option 2'),
-                    DropdownMenuEntry(value: 'option3', label: 'Option 3'),
+                    DropdownMenuEntry(value: 'instant', label: 'instant'),
+                    DropdownMenuEntry(value: 'preorder', label: 'preorder'),
+                    DropdownMenuEntry(value: 'both', label: 'both'),
                   ],
                   // decoration: const InputDecoration(
                   //   labelText: 'Select an option',
@@ -132,7 +154,7 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
                   // ),
                   onSelected: (String? value) {
                     print('Selected: $value');
-                    controller.category.value = value!;
+                    controller.fullfillmentType.value = value!;
                   },
                 ),
               ),
@@ -162,9 +184,12 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
                   textStyle: TextStyle(color: Colors.grey),
                   width: double.infinity,
                   dropdownMenuEntries: const [
-                    DropdownMenuEntry(value: 'option1', label: 'Option 1'),
-                    DropdownMenuEntry(value: 'option2', label: 'Option 2'),
-                    DropdownMenuEntry(value: 'option3', label: 'Option 3'),
+                    DropdownMenuEntry(value: 'yes', label: 'yes'),
+                    DropdownMenuEntry(value: 'no', label: 'no'),
+                    DropdownMenuEntry(
+                      value: 'Rather not say',
+                      label: 'Rather not say',
+                    ),
                   ],
                   // decoration: const InputDecoration(
                   //   labelText: 'Select an option',
