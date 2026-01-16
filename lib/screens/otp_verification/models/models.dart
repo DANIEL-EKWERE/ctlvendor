@@ -6,9 +6,6 @@ EmailVerificationModel emailVerificationModelFromJson(String str) =>
 String emailVerificationModelToJson(EmailVerificationModel data) =>
     json.encode(data.toJson());
 
-
-
-
 class EmailVerificationModel {
   bool? status;
   String? message;
@@ -19,13 +16,13 @@ class EmailVerificationModel {
   EmailVerificationModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = {};
+    data['status'] = status;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -35,6 +32,7 @@ class EmailVerificationModel {
 
 class Data {
   int? id;
+  String? slug;
   String? name;
   String? firstname;
   String? lastname;
@@ -42,31 +40,36 @@ class Data {
   String? phoneNumber;
   String? profilePicture;
   String? country;
-  String? businessName;
-  String? businessAddress;
-  String? shopSize;
-  String? latitude;
-  String? longitude;
-  String? accountNumber;
-  String? accountName;
-  String? bankName;
-  bool? emailVerified;
   String? role;
-  bool? isVendor;
-  List<dynamic>? vendorCategories;
+  String? emailVerifiedAt; // Changed to String (from validate-otp)
+  bool? emailVerified; // Keep this for validate-email
   String? referralCode;
   dynamic referrerId;
   String? referralCount;
-  bool? hasPin;
-  int? isActive;
-  String? createdAt;
+  String? isActive; // Changed to String to handle "1" or "0"
+  String? pin;
+  bool? hasPin; // Keep this for validate-email
+  String? rememberPinToken;
+  String? pinTokenExpiry;
+  String? pinResetToken;
+  String? pinResetExpiry;
   String? lastLogin;
+  String? createdAt;
+  String? updatedAt;
+  String? deletedAt;
+  
+  // Additional fields from validate-email
+  bool? isVendor;
+  bool? isRider;
+  bool? isStaff;
+  bool? isAdmin;
   Wallet? wallet;
   List<dynamic>? favorites;
   List<dynamic>? contactAddress;
 
   Data({
     this.id,
+    this.slug,
     this.name,
     this.firstname,
     this.lastname,
@@ -74,25 +77,27 @@ class Data {
     this.phoneNumber,
     this.profilePicture,
     this.country,
-    this.businessName,
-    this.businessAddress,
-    this.shopSize,
-    this.latitude,
-    this.longitude,
-    this.accountNumber,
-    this.accountName,
-    this.bankName,
-    this.emailVerified,
     this.role,
-    this.isVendor,
-    this.vendorCategories,
+    this.emailVerifiedAt,
+    this.emailVerified,
     this.referralCode,
     this.referrerId,
     this.referralCount,
-    this.hasPin,
     this.isActive,
-    this.createdAt,
+    this.pin,
+    this.hasPin,
+    this.rememberPinToken,
+    this.pinTokenExpiry,
+    this.pinResetToken,
+    this.pinResetExpiry,
     this.lastLogin,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+    this.isVendor,
+    this.isRider,
+    this.isStaff,
+    this.isAdmin,
     this.wallet,
     this.favorites,
     this.contactAddress,
@@ -100,6 +105,7 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    slug = json['slug'];
     name = json['name'];
     firstname = json['firstname'];
     lastname = json['lastname'];
@@ -107,25 +113,35 @@ class Data {
     phoneNumber = json['phone_number'];
     profilePicture = json['profile_picture'];
     country = json['country'];
-    businessName = json['business_name'];
-    businessAddress = json['business_address'];
-    shopSize = json['shop_size'];
-    latitude = json['latitude'];
-    longitude = json['longitude'];
-    accountNumber = json['account_number'];
-    accountName = json['account_name'];
-    bankName = json['bank_name'];
-    emailVerified = json['email_verified'];
     role = json['role'];
-    isVendor = json['is_vendor'];
-    vendorCategories = json['vendor_categories'];
+    
+    // Handle both email_verified_at (String) and email_verified (bool)
+    emailVerifiedAt = json['email_verified_at'];
+    emailVerified = json['email_verified'];
+    
     referralCode = json['referral_code'];
     referrerId = json['referrer_id'];
     referralCount = json['referral_count'];
+    
+    // Handle is_active as String ("1" or "0")
+    isActive = json['is_active']?.toString();
+    
+    pin = json['pin'];
     hasPin = json['has_pin'];
-    isActive = json['is_active'];
-    createdAt = json['created_at'];
+    rememberPinToken = json['remember_pin_token'];
+    pinTokenExpiry = json['pin_token_expiry'];
+    pinResetToken = json['pin_reset_token'];
+    pinResetExpiry = json['pin_reset_expiry'];
     lastLogin = json['last_login'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    deletedAt = json['deleted_at'];
+    
+    // Additional fields
+    isVendor = json['is_vendor'];
+    isRider = json['is_rider'];
+    isStaff = json['is_staff'];
+    isAdmin = json['is_admin'];
     wallet = json['wallet'] != null ? Wallet.fromJson(json['wallet']) : null;
     favorites = json['favorites'];
     contactAddress = json['contact_address'];
@@ -133,42 +149,49 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['firstname'] = this.firstname;
-    data['lastname'] = this.lastname;
-    data['email'] = this.email;
-    data['phone_number'] = this.phoneNumber;
-    data['profile_picture'] = this.profilePicture;
-    data['country'] = this.country;
-    data['business_name'] = this.businessName;
-    data['business_address'] = this.businessAddress;
-    data['shop_size'] = this.shopSize;
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
-    data['account_number'] = this.accountNumber;
-    data['account_name'] = this.accountName;
-    data['bank_name'] = this.bankName;
-    data['email_verified'] = this.emailVerified;
-    data['role'] = this.role;
-    data['is_vendor'] = this.isVendor;
-    data['vendor_categories'] = this.vendorCategories;
-    data['referral_code'] = this.referralCode;
-    data['referrer_id'] = this.referrerId;
-    data['referral_count'] = this.referralCount;
-    data['has_pin'] = this.hasPin;
-    data['is_active'] = this.isActive;
-    data['created_at'] = this.createdAt;
-    data['last_login'] = this.lastLogin;
-    if (this.wallet != null) {
-      data['wallet'] = this.wallet!.toJson();
+    data['id'] = id;
+    data['slug'] = slug;
+    data['name'] = name;
+    data['firstname'] = firstname;
+    data['lastname'] = lastname;
+    data['email'] = email;
+    data['phone_number'] = phoneNumber;
+    data['profile_picture'] = profilePicture;
+    data['country'] = country;
+    data['role'] = role;
+    data['email_verified_at'] = emailVerifiedAt;
+    data['email_verified'] = emailVerified;
+    data['referral_code'] = referralCode;
+    data['referrer_id'] = referrerId;
+    data['referral_count'] = referralCount;
+    data['is_active'] = isActive;
+    data['pin'] = pin;
+    data['has_pin'] = hasPin;
+    data['remember_pin_token'] = rememberPinToken;
+    data['pin_token_expiry'] = pinTokenExpiry;
+    data['pin_reset_token'] = pinResetToken;
+    data['pin_reset_expiry'] = pinResetExpiry;
+    data['last_login'] = lastLogin;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['deleted_at'] = deletedAt;
+    data['is_vendor'] = isVendor;
+    data['is_rider'] = isRider;
+    data['is_staff'] = isStaff;
+    data['is_admin'] = isAdmin;
+    if (wallet != null) {
+      data['wallet'] = wallet!.toJson();
     }
-    data['favorites'] = this.favorites;
-    data['contact_address'] = this.contactAddress;
+    data['favorites'] = favorites;
+    data['contact_address'] = contactAddress;
     return data;
   }
-}
 
+  // Helper methods for boolean checks
+  bool get isEmailVerified => emailVerifiedAt != null || emailVerified == true;
+  bool get isUserActive => isActive == "1" || isActive == "true";
+  bool get userHasPin => pin != null && pin!.isNotEmpty || hasPin == true;
+}
 
 class Wallet {
   int? id;
@@ -182,9 +205,9 @@ class Wallet {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['balance'] = this.balance;
+    final Map<String, dynamic> data = {};
+    data['id'] = id;
+    data['balance'] = balance;
     return data;
   }
 }

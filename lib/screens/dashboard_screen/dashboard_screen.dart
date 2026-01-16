@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/route_manager.dart';
 import 'package:ctlvendor/screens/dashboard_screen/controller/dashboard_controller.dart';
@@ -74,110 +75,392 @@ class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
 
   @override
+  // Widget build(BuildContext context) {
+  //   return Column(
+  //     children: [
+  //       const StatusBar(),
+  //       Padding(
+  //         padding: const EdgeInsets.all(16.0),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Image.asset('assets/logo.png', height: 40),
+  //             GestureDetector(
+  //               onTap: () {
+  //                 Navigator.pushNamed(context, '/earnings');
+  //               },
+  //               child: const Icon(
+  //                 Icons.notifications_outlined,
+  //                 size: 28,
+  //                 color: Colors.grey,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       const SizedBox(height: 24),
+  //       GestureDetector(
+  //         onTap: () {
+  //           Navigator.pushNamed(context, '/earnings');
+  //         },
+  //         child: Container(
+  //           margin: const EdgeInsets.symmetric(horizontal: 16),
+  //           padding: const EdgeInsets.all(16),
+  //           decoration: BoxDecoration(
+  //             color: Colors.white,
+  //             borderRadius: BorderRadius.circular(12),
+  //             boxShadow: [
+  //               BoxShadow(
+  //                 color: Colors.black.withAlpha(
+  //                   13,
+  //                 ), // Changed from withOpacity(0.05)
+  //                 blurRadius: 10,
+  //                 offset: const Offset(0, 5),
+  //               ),
+  //             ],
+  //           ),
+  //           child: Row(
+  //             children: [
+  //               Container(
+  //                 width: 50,
+  //                 height: 50,
+  //                 decoration: BoxDecoration(
+  //                   color: const Color(0xFFFFF3E0),
+  //                   borderRadius: BorderRadius.circular(8),
+  //                 ),
+  //                 child: const Icon(
+  //                   Icons.bar_chart,
+  //                   color: Color(0xFF004DBF),
+  //                   size: 30,
+  //                 ),
+  //               ),
+  //               const SizedBox(width: 16),
+  //               const Expanded(
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     Text(
+  //                       'View Earnings',
+  //                       style: TextStyle(
+  //                         fontSize: 16,
+  //                         fontWeight: FontWeight.bold,
+  //                       ),
+  //                     ),
+  //                     SizedBox(height: 4),
+  //                     Text(
+  //                       'Check your daily and weekly earnings',
+  //                       style: TextStyle(fontSize: 12, color: Colors.black54),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //               const Icon(
+  //                 Icons.arrow_forward_ios,
+  //                 size: 16,
+  //                 color: Colors.black54,
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //       const Expanded(
+  //         child: Center(
+  //           child: Text(
+  //             'Home Screen Content',
+  //             style: TextStyle(fontSize: 18, color: Colors.black54),
+  //           ),
+  //         ),
+  //       ),
+  //       ElevatedButton(
+  //         onPressed: () async {
+  //           var token = await dataBase.getToken();
+  //           print(token);
+  //         },
+  //         child: Text('token print'),
+  //       ),
+  //     ],
+  //   );
+  // }
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const StatusBar(),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Image.asset('assets/logo.png', height: 40),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, '/earnings');
-                },
-                child: const Icon(
-                  Icons.notifications_outlined,
-                  size: 28,
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 24),
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/earnings');
-          },
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withAlpha(
-                    13,
-                  ), // Changed from withOpacity(0.05)
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Row(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dashboard'),
+        actions: [
+          IconButton(icon: Icon(Icons.notifications), onPressed: () {}),
+          IconButton(icon: Icon(Icons.person), onPressed: () {}),
+        ],
+      ),
+      drawer: _buildDrawer(),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        return RefreshIndicator(
+          onRefresh: controller.refreshDashboard,
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFF3E0),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(
-                    Icons.bar_chart,
-                    color: Color(0xFF004DBF),
-                    size: 30,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'View Earnings',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                // Stats Cards Row 1
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildStatCard(
+                        'Sales Today',
+                        '₦${controller.salesToday.value}',
+                        Icons.attach_money,
+                        Colors.green,
                       ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Check your daily and weekly earnings',
-                        style: TextStyle(fontSize: 12, color: Colors.black54),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: _buildStatCard(
+                        'Orders Today',
+                        '${controller.ordersToday.value}',
+                        Icons.shopping_cart,
+                        Colors.blue,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12),
+
+                // Stats Cards Row 2
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildStatCard(
+                        'Total Products',
+                        '${controller.totalProducts.value}',
+                        Icons.inventory,
+                        Colors.orange,
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: _buildStatCard(
+                        'Active Promotions',
+                        '${controller.activePromotions.value}',
+                        Icons.local_offer,
+                        Colors.purple,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12),
+
+                // Stats Cards Row 3
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildStatCard(
+                        'Low Stock Alert',
+                        '${controller.lowStockCount.value}',
+                        Icons.warning,
+                        Colors.red,
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: _buildStatCard(
+                        'Pending Orders',
+                        '${controller.pendingOrders.value}',
+                        Icons.pending,
+                        Colors.amber,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 24),
+
+                // Revenue Chart
+                Text(
+                  'Revenue (Month)',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 12),
+                Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                        offset: Offset(0, 2),
                       ),
                     ],
                   ),
+                  child: Center(child: Text('Chart: Revenue vs Month')),
                 ),
-                const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 16,
-                  color: Colors.black54,
+                SizedBox(height: 24),
+
+                // Top Selling Products
+                Text(
+                  'Top Selling Products',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 12),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: controller.topProducts.length,
+                  itemBuilder: (context, index) {
+                    var product = controller.topProducts[index];
+                    return Card(
+                      margin: EdgeInsets.only(bottom: 8),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Color(0XFFFF8C42),
+                          child: Text('${index + 1}'),
+                        ),
+                        title: Text(product['name'] ?? ''),
+                        subtitle: Text('${product['sold']} sold'),
+                        trailing: Text(
+                          '₦${product['revenue']}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
           ),
-        ),
-        const Expanded(
-          child: Center(
-            child: Text(
-              'Home Screen Content',
-              style: TextStyle(fontSize: 18, color: Colors.black54),
+        );
+      }),
+    );
+  }
+
+  Widget _buildStatCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(icon, color: color, size: 28),
+              Container(
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Icon(Icons.trending_up, color: color, size: 16),
+              ),
+            ],
+          ),
+          SizedBox(height: 12),
+          Text(
+            value,
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 4),
+          Text(title, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDrawer() {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(color: Color(0XFFFF8C42)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.store, size: 30, color: Color(0XFFFF8C42)),
+                ),
+                SizedBox(height: 12),
+                Text(
+                  'Vendor Name',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'vendor@email.com',
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
+                ),
+              ],
             ),
           ),
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            var token = await dataBase.getToken();
-            print(token);
-          },
-          child: Text('token print'),
-        ),
-      ],
+          _buildDrawerItem(Icons.dashboard, 'Dashboard', () => Get.back()),
+          _buildDrawerItem(
+            Icons.inventory,
+            'Products',
+            () => Get.toNamed('AppRoutes.productList'),
+          ),
+          _buildDrawerItem(
+            Icons.category,
+            'Categories',
+            () => Get.toNamed('AppRoutes.categoryList'),
+          ),
+          _buildDrawerItem(
+            Icons.inventory_2,
+            'Packs',
+            () => Get.toNamed('AppRoutes.packList'),
+          ),
+          _buildDrawerItem(
+            Icons.local_offer,
+            'Promotions',
+            () => Get.toNamed('AppRoutes.promotionList'),
+          ),
+          _buildDrawerItem(
+            Icons.location_on,
+            'Locations',
+            () => Get.toNamed('AppRoutes.locationList'),
+          ),
+          _buildDrawerItem(
+            Icons.shopping_bag,
+            'Orders',
+            () => Get.toNamed('AppRoutes.orderList'),
+          ),
+          Divider(),
+          _buildDrawerItem(Icons.settings, 'Settings', () {}),
+          _buildDrawerItem(Icons.logout, 'Logout', () {}),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDrawerItem(IconData icon, String title, VoidCallback onTap) {
+    return ListTile(
+      leading: Icon(icon, color: Color(0XFFFF8C42)),
+      title: Text(title),
+      onTap: onTap,
     );
   }
 }

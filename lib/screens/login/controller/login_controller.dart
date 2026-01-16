@@ -37,7 +37,7 @@ class LoginController extends GetxController {
     // if (!_formKey.currentState!.validate()) {
     //   return;
     // }
-    OverlayLoadingProgress.start(circularProgressColor: Colors.amber);
+    OverlayLoadingProgress.start(circularProgressColor: Color(0xff004BFD));
     isLoading.value = true;
 
     try {
@@ -67,8 +67,8 @@ class LoginController extends GetxController {
         await dataBase.saveReferalCount(data.referralCount ?? 'N/A');
         await dataBase.saveRefererId(data.referrerId ?? 'N/A');
 
-        emailController.dispose();
-        passwordController.dispose();
+        emailController.clear();
+        passwordController.clear();
         ScaffoldMessenger.of(Get.context!).showSnackBar(
           SnackBar(
             content: Text('Success: ${loginModel.message}'),

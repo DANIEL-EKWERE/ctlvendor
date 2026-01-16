@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-
-
 extension ImageTypeExtension on String {
   ImageType get imageType {
     if (this.startsWith('http') || this.startsWith('https')) {
@@ -37,25 +35,22 @@ class AvatarWithEdit extends StatelessWidget {
     this.onEditPressed,
   }) : super(key: key);
 
-
-
   @override
   Widget build(BuildContext context) {
-
     final imageUrl = this.imageUrl;
 
-  ImageProvider imageProvider;
+    ImageProvider imageProvider;
 
-  if (imageUrl != null && imageUrl.startsWith('/')) {
-    // Local file image
-    imageProvider = FileImage(File(imageUrl));
-  } else if (imageUrl != null && imageUrl.startsWith('http')) {
-    // Network image
-    imageProvider = NetworkImage(imageUrl);
-  } else {
-    // Fallback (asset or placeholder)
-    imageProvider = const AssetImage('assets/images/avatar_placeholder.png');
-  }
+    if (imageUrl != null && imageUrl.startsWith('/')) {
+      // Local file image
+      imageProvider = FileImage(File(imageUrl));
+    } else if (imageUrl != null && imageUrl.startsWith('http')) {
+      // Network image
+      imageProvider = NetworkImage(imageUrl);
+    } else {
+      // Fallback (asset or placeholder)
+      imageProvider = const AssetImage('assets/backgound.png');
+    }
     return Stack(
       children: [
         CircleAvatar(
@@ -74,11 +69,11 @@ class AvatarWithEdit extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color:Colors.grey[200],
+                color: Colors.grey[200],
                 border: Border.all(color: Colors.white, width: 5),
                 shape: BoxShape.circle,
               ),
-              child: SvgPicture.asset('assets/edit.svg',height: 20,width: 20,),
+              child: SvgPicture.asset('assets/edit.svg', height: 20, width: 20),
               // Icon(
               //   Icons.edit,
               //   color: Colors.black,

@@ -315,7 +315,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                       : (controller.walletModel.data?.balance
                                                 ?.toString() ??
                                             '0.00'),
-                                  subtitle: 'JaraWallet - Seamless Pay',
+                                  subtitle: 'CTLWallet - Seamless Pay',
                                   isBalanceVisible: _isBalanceVisible,
                                   onToggleVisibility: () {
                                     setState(() {

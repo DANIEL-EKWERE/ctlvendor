@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as myLog;
+import 'package:ctlvendor/screens/change_password/changePasswordScreen.dart';
+import 'package:ctlvendor/screens/change_password/controller/changePasswordController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ctlvendor/data/apiClient/apiClient.dart';
@@ -126,7 +128,8 @@ class OtpVerificationController extends GetxController {
         );
         // Get.offAllNamed('/login_screen');
         //Navigator.of(Get.context!).push(CupertinoPageRoute(builder: (context)=> const ProfileSetupScreen()));
-        Get.offAllNamed('/login');
+        // Get.offAllNamed('/login');
+        Get.to(() => ChangePasswordScreen());
       } else {
         OverlayLoadingProgress.stop();
         var responseBody = jsonDecode(response.body);
