@@ -26,6 +26,8 @@ class Changepasswordcontroller extends GetxController {
 
       var response = await _apiClient.resetPassword(body);
       if (response.statusCode == 200 || response.statusCode == 201) {
+        isLoading.value = false;
+        dataBase.logOut();
         ScaffoldMessenger.of(Get.context!).showSnackBar(
           SnackBar(
             content: Text('Success: Password Changed Successfully'),
@@ -35,6 +37,7 @@ class Changepasswordcontroller extends GetxController {
         );
         Get.offAllNamed('/login');
       } else {
+        isLoading.value = false;
         var responseBody = jsonDecode(response.body);
         myLog.log(responseBody['errors']['password'].toList().toString());
         ScaffoldMessenger.of(Get.context!).showSnackBar(
@@ -48,7 +51,17 @@ class Changepasswordcontroller extends GetxController {
         );
       }
     } catch (e) {
+      isLoading.value = false;
       myLog.log(e.toString());
-    } finally {}
+      ScaffoldMessenger.of(Get.context!).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 10),
+        ),
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

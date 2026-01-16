@@ -37,6 +37,10 @@ class LoginController extends GetxController {
     // if (!_formKey.currentState!.validate()) {
     //   return;
     // }
+
+    // Save context early before any async operations
+    final BuildContext? context = Get.context;
+
     OverlayLoadingProgress.start(circularProgressColor: Color(0xff004BFD));
     isLoading.value = true;
 
@@ -47,16 +51,15 @@ class LoginController extends GetxController {
       });
 
       isLoading.value = false;
+      OverlayLoadingProgress.stop();
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         loginModel = loginModelFromJson(response.body);
         data = loginModel.data;
-        OverlayLoadingProgress.stop();
+
         // Save token and user data to shared preferences
         await dataBase.saveToken(data.token ?? 'N/A');
-        await dataBase.saveUserId(
-          (data.id!.toInt()).toString(),
-        ); //data.id is int ? data.id as int : 0
+        await dataBase.saveUserId((data.id!.toInt()).toString());
         await dataBase.saveFirstName(data.firstname ?? 'N/A');
         await dataBase.saveLastName(data.lastname ?? 'N/A');
         await dataBase.saveFullName(data.name ?? 'N/A');
@@ -69,33 +72,50 @@ class LoginController extends GetxController {
 
         emailController.clear();
         passwordController.clear();
-        ScaffoldMessenger.of(Get.context!).showSnackBar(
-          SnackBar(
-            content: Text('Success: ${loginModel.message}'),
-            backgroundColor: Colors.green,
-          ),
+
+        // Use Get.snackbar instead of ScaffoldMessenger
+        Get.snackbar(
+          'Success',
+          loginModel.message ?? 'Login successful',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          duration: Duration(seconds: 3),
         );
+
+        // Navigate to dashboard
         Get.offAllNamed('/dashboard');
       } else {
-        OverlayLoadingProgress.stop();
-        ScaffoldMessenger.of(Get.context!).showSnackBar(
-          SnackBar(
-            content: Text('Login failed: ${response.body}'),
-            backgroundColor: Colors.red,
-          ),
+        // Handle error response
+        var errorData = jsonDecode(response.body);
+        String errorMessage = errorData['message'] ?? 'Login failed';
+
+        Get.snackbar(
+          'Error',
+          errorMessage,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: Duration(seconds: 3),
         );
       }
     } catch (e) {
-      OverlayLoadingProgress.stop();
       isLoading.value = false;
-      myLog.log(e.toString());
-      ScaffoldMessenger.of(Get.context!).showSnackBar(
-        SnackBar(
-          content: Text('Error during login: $e'),
-          backgroundColor: Colors.red,
-        ),
+      OverlayLoadingProgress.stop();
+
+      myLog.log('Login error: ${e.toString()}');
+
+      // Use Get.snackbar instead of ScaffoldMessenger
+      Get.snackbar(
+        'Error',
+        'Something went wrong. Please try again.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: Duration(seconds: 3),
       );
     } finally {
+      isLoading.value = false;
       OverlayLoadingProgress.stop();
     }
   }

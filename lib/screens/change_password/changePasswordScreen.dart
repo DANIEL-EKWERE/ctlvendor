@@ -1,5 +1,6 @@
 import 'package:ctlvendor/screens/change_password/controller/changePasswordController.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/utils.dart';
 import 'package:ctlvendor/screens/forget_password_screen/forget_password_screen.dart';
@@ -186,143 +187,149 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   obscureText: _isPasswordVisible,
                 ),
                 const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: () => (_isButtonEnabled && !_isLoading)
-                      ? controller.changePassword()
-                      : null, // () { ()
-                  // Navigator.pushNamed(context, '/email-verification');
-                  //  controller.processSignUp();
-                  //},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _isButtonEnabled
-                        ? Theme.of(context).primaryColor
-                        : Colors.grey,
-                  ),
-                  child: const Text('Continue'),
-                ),
+                Obx(() {
+                  return ElevatedButton(
+                    onPressed: () => (_isButtonEnabled && !_isLoading)
+                        ? controller.changePassword()
+                        : null, // () { ()
+                    // Navigator.pushNamed(context, '/email-verification');
+                    //  controller.processSignUp();
+                    //},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: controller.isLoading.value
+                          ? Colors.grey
+                          : _isButtonEnabled
+                          ? Theme.of(context).primaryColor
+                          : Colors.grey,
+                    ),
+                    child: controller.isLoading.value
+                        ? Text('Processing...')
+                        : Text('Continue'),
+                  );
+                }),
                 const SizedBox(height: 8),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      ForgetPasswordScreen();
-                    },
-                    child: RichText(
-                      text: const TextSpan(
-                        text: 'Forgot Password? ',
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
-                        children: [
-                          TextSpan(
-                            text: 'Reset Password',
-                            style: TextStyle(
-                              color: Color(0xFF004DBF),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                const Row(
-                  children: [
-                    Expanded(child: Divider()),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        'or sign In with',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                    Expanded(child: Divider()),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                // _buildSocialButton(
-                //   'Continue with Google',
-                //   'assets/google_logo.png',
-                //   () {},
+                // Align(
+                //   alignment: Alignment.centerRight,
+                //   child: TextButton(
+                //     onPressed: () {
+                //       ForgetPasswordScreen();
+                //     },
+                //     child: RichText(
+                //       text: const TextSpan(
+                //         text: 'Forgot Password? ',
+                //         style: TextStyle(color: Colors.grey, fontSize: 12),
+                //         children: [
+                //           TextSpan(
+                //             text: 'Reset Password',
+                //             style: TextStyle(
+                //               color: Color(0xFF004DBF),
+                //               fontWeight: FontWeight.bold,
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
                 // ),
-                // const SizedBox(height: 16),
-                // _buildSocialButton(
-                //   'Continue with Apple',
-                //   'assets/apple_logo.png',
-                //   () {},
+                // const SizedBox(height: 24),
+                // const Row(
+                //   children: [
+                //     Expanded(child: Divider()),
+                //     Padding(
+                //       padding: EdgeInsets.symmetric(horizontal: 16.0),
+                //       child: Text(
+                //         'or sign In with',
+                //         style: TextStyle(color: Colors.grey),
+                //       ),
+                //     ),
+                //     Expanded(child: Divider()),
+                //   ],
                 // ),
-                // const SizedBox(height: 16),
-                // _buildSocialButton(
-                //   'Continue with facebook',
-                //   'assets/facebook_logo.png',
-                //   () {},
+                // const SizedBox(height: 24),
+                // // _buildSocialButton(
+                // //   'Continue with Google',
+                // //   'assets/google_logo.png',
+                // //   () {},
+                // // ),
+                // // const SizedBox(height: 16),
+                // // _buildSocialButton(
+                // //   'Continue with Apple',
+                // //   'assets/apple_logo.png',
+                // //   () {},
+                // // ),
+                // // const SizedBox(height: 16),
+                // // _buildSocialButton(
+                // //   'Continue with facebook',
+                // //   'assets/facebook_logo.png',
+                // //   () {},
+                // // ),
+                // //const SizedBox(height: 24),
+                // Center(
+                //   child: TextButton(
+                //     onPressed: () {
+                //       Navigator.pushReplacementNamed(
+                //         context,
+                //         '/create-account',
+                //       );
+                //     },
+                //     child: RichText(
+                //       text: const TextSpan(
+                //         text: 'New to CTL? ',
+                //         style: TextStyle(color: Colors.grey, fontSize: 14),
+                //         children: [
+                //           TextSpan(
+                //             text: 'Sign Up',
+                //             style: TextStyle(
+                //               color: Color(0xFF004DBF),
+                //               fontWeight: FontWeight.bold,
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
                 // ),
-                //const SizedBox(height: 24),
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(
-                        context,
-                        '/create-account',
-                      );
-                    },
-                    child: RichText(
-                      text: const TextSpan(
-                        text: 'New to CTL? ',
-                        style: TextStyle(color: Colors.grey, fontSize: 14),
-                        children: [
-                          TextSpan(
-                            text: 'Sign Up',
-                            style: TextStyle(
-                              color: Color(0xFF004DBF),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
                 const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // Expanded(child: Divider()),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    //   child: Text(
-                    //     'Social Media',
-                    //     style: TextStyle(color: Colors.grey.shade600),
-                    //   ),
-                    // ),
-                    // Expanded(child: Divider()),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: 80,
-                      child: _buildSocialButton(
-                        //  'Continue with Apple',
-                        'assets/apple_logo.png',
-                        () {},
-                      ),
-                    ),
-                    SizedBox(
-                      width: 80,
-                      child: _buildSocialButton(
-                        // 'Continue with Google',
-                        'assets/google.png',
-                        () {},
-                      ),
-                    ),
-                    //const SizedBox(height: 16),
-                    SizedBox(
-                      width: 80,
-                      child: _buildSocialButton(
-                        //'Continue with facebook',
-                        'assets/facebook.png',
-                        () {},
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //   children: [
+                //     // Expanded(child: Divider()),
+                //     // Padding(
+                //     //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                //     //   child: Text(
+                //     //     'Social Media',
+                //     //     style: TextStyle(color: Colors.grey.shade600),
+                //     //   ),
+                //     // ),
+                //     // Expanded(child: Divider()),
+                //     const SizedBox(height: 16),
+                //     SizedBox(
+                //       width: 80,
+                //       child: _buildSocialButton(
+                //         //  'Continue with Apple',
+                //         'assets/apple_logo.png',
+                //         () {},
+                //       ),
+                //     ),
+                //     SizedBox(
+                //       width: 80,
+                //       child: _buildSocialButton(
+                //         // 'Continue with Google',
+                //         'assets/google.png',
+                //         () {},
+                //       ),
+                //     ),
+                //     //const SizedBox(height: 16),
+                //     SizedBox(
+                //       width: 80,
+                //       child: _buildSocialButton(
+                //         //'Continue with facebook',
+                //         'assets/facebook.png',
+                //         () {},
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 const SizedBox(height: 24),
                 // Container(
                 //   padding: const EdgeInsets.all(16),
@@ -362,27 +369,27 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     );
   }
 
-  Widget _buildSocialButton(
-    // String text,
-    String iconPath,
-    VoidCallback onPressed,
-  ) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-        side: BorderSide(color: Colors.grey.shade300),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(iconPath, height: 24, width: 24),
-          // const SizedBox(width: 12),
-          // Text(text),
-        ],
-      ),
-    );
-  }
+  // Widget _buildSocialButton(
+  //   // String text,
+  //   String iconPath,
+  //   VoidCallback onPressed,
+  // ) {
+  //   return ElevatedButton(
+  //     onPressed: onPressed,
+  //     style: ElevatedButton.styleFrom(
+  //       backgroundColor: Colors.white,
+  //       foregroundColor: Colors.black,
+  //       elevation: 0,
+  //       side: BorderSide(color: Colors.grey.shade300),
+  //     ),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: [
+  //         Image.asset(iconPath, height: 24, width: 24),
+  //         // const SizedBox(width: 12),
+  //         // Text(text),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
