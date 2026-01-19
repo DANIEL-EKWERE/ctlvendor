@@ -20,10 +20,10 @@ class DashboardController extends GetxController {
   Future<void> loadDashboardData() async {
     try {
       isLoading.value = true;
-      
+
       // Simulate API call
       await Future.delayed(Duration(seconds: 1));
-      
+
       // Mock data
       salesToday.value = 25000.00;
       ordersToday.value = 45;
@@ -31,13 +31,33 @@ class DashboardController extends GetxController {
       activePromotions.value = 5;
       lowStockCount.value = 12;
       pendingOrders.value = 8;
-      
+
       topProducts.value = [
-        {'name': 'Product A', 'sold': 50, 'revenue': 15000},
-        {'name': 'Product B', 'sold': 35, 'revenue': 10500},
-        {'name': 'Product C', 'sold': 28, 'revenue': 8400},
+        {
+          'name': 'Product A',
+          'sold': 50,
+          'revenue': 15000,
+          'categoryName': 'Beveragies',
+        },
+        {
+          'name': 'Product B',
+          'sold': 35,
+          'revenue': 10500,
+          'categoryName': 'Dairy',
+        },
+        {
+          'name': 'Product C',
+          'sold': 28,
+          'revenue': 8400,
+          'categoryName': 'Snacks',
+        },
+        {
+          'name': 'Product D',
+          'sold': 28,
+          'revenue': 4260,
+          'categoryName': 'Bakery',
+        },
       ];
-      
     } catch (e) {
       Get.snackbar('Error', 'Failed to load dashboard data');
     } finally {

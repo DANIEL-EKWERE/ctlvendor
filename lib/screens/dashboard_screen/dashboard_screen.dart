@@ -1,3 +1,4 @@
+import 'package:ctlvendor/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -186,8 +187,14 @@ class HomeTab extends StatelessWidget {
       appBar: AppBar(
         title: Text('Dashboard'),
         actions: [
-          IconButton(icon: Icon(Icons.notifications), onPressed: () {}),
-          IconButton(icon: Icon(Icons.person), onPressed: () {}),
+          IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: () async {
+              var token = await dataBase.getToken();
+              print(token);
+            },
+          ),
+          //  IconButton(icon: Icon(Icons.person), onPressed: () {}),
         ],
       ),
       drawer: _buildDrawer(),
@@ -204,74 +211,56 @@ class HomeTab extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Stats Cards Row 1
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildStatCard(
-                        'Sales Today',
-                        '₦${controller.salesToday.value}',
-                        Icons.attach_money,
-                        Colors.green,
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: _buildStatCard(
-                        'Orders Today',
-                        '${controller.ordersToday.value}',
-                        Icons.shopping_cart,
-                        Colors.blue,
-                      ),
-                    ),
-                  ],
+                // _buildStatCard(
+                //   'Sales Today',
+                //   '₦${controller.salesToday.value}',
+                //   Icons.attach_money,
+                //   Colors.green,
+                // ),
+                _buildStatCard(
+                  'Sales Today',
+                  '₦${controller.salesToday.value}',
+                  Icons.attach_money,
+                  Colors.green,
+                ),
+                SizedBox(height: 12),
+                _buildStatCard(
+                  'Orders Today',
+                  '${controller.ordersToday.value}',
+                  Icons.shopping_cart,
+                  Colors.blue,
                 ),
                 SizedBox(height: 12),
 
                 // Stats Cards Row 2
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildStatCard(
-                        'Total Products',
-                        '${controller.totalProducts.value}',
-                        Icons.inventory,
-                        Colors.orange,
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: _buildStatCard(
-                        'Active Promotions',
-                        '${controller.activePromotions.value}',
-                        Icons.local_offer,
-                        Colors.purple,
-                      ),
-                    ),
-                  ],
+                _buildStatCard(
+                  'Total Products',
+                  '${controller.totalProducts.value}',
+                  Icons.inventory,
+                  Colors.orange,
+                ),
+                SizedBox(height: 12),
+                _buildStatCard(
+                  'Active Promotions',
+                  '${controller.activePromotions.value}',
+                  Icons.local_offer,
+                  Colors.purple,
                 ),
                 SizedBox(height: 12),
 
                 // Stats Cards Row 3
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildStatCard(
-                        'Low Stock Alert',
-                        '${controller.lowStockCount.value}',
-                        Icons.warning,
-                        Colors.red,
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: _buildStatCard(
-                        'Pending Orders',
-                        '${controller.pendingOrders.value}',
-                        Icons.pending,
-                        Colors.amber,
-                      ),
-                    ),
-                  ],
+                _buildStatCard(
+                  'Low Stock Alert',
+                  '${controller.lowStockCount.value}',
+                  Icons.warning,
+                  Colors.red,
+                ),
+                SizedBox(height: 12),
+                _buildStatCard(
+                  'Pending Orders',
+                  '${controller.pendingOrders.value}',
+                  Icons.pending,
+                  Colors.amber,
                 ),
                 SizedBox(height: 24),
 
@@ -286,49 +275,96 @@ class HomeTab extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 10,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
+                    border: Border.all(width: 1, color: Colors.black12),
                   ),
                   child: Center(child: Text('Chart: Revenue vs Month')),
                 ),
                 SizedBox(height: 24),
 
                 // Top Selling Products
-                Text(
-                  'Top Selling Products',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 12),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: controller.topProducts.length,
-                  itemBuilder: (context, index) {
-                    var product = controller.topProducts[index];
-                    return Card(
-                      margin: EdgeInsets.only(bottom: 8),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: Color(0XFFFF8C42),
-                          child: Text('${index + 1}'),
-                        ),
-                        title: Text(product['name'] ?? ''),
-                        subtitle: Text('${product['sold']} sold'),
-                        trailing: Text(
-                          '₦${product['revenue']}',
+                Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(width: 1, color: Colors.black12),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 12),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          'Top Selling Products',
                           style: TextStyle(
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.green,
                           ),
                         ),
                       ),
-                    );
-                  },
+                      SizedBox(height: 12),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: controller.topProducts.length,
+                        itemBuilder: (context, index) {
+                          var product = controller.topProducts[index];
+                          return Card(
+                            elevation: 0,
+                            color: Colors.white,
+
+                            surfaceTintColor: Colors.white,
+                            //margin: EdgeInsets.only(bottom: 8),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                radius: 15,
+                                backgroundColor: Color(
+                                  0xFF004DBF,
+                                ).withValues(alpha: .2),
+                                child: Text(
+                                  '${index + 1}',
+                                  style: TextStyle(
+                                    color: Color(0xFF004DBF),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              title: Text(
+                                product['name'] ?? '',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text('${product['categoryName']}'),
+                              trailing: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '₦${product['revenue']}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Text('${product['sold']} in Stock'),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                            ),
+                            child: Divider(),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -349,13 +385,7 @@ class HomeTab extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: Offset(0, 2),
-          ),
-        ],
+        border: Border.all(width: 1, color: Colors.black12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -363,24 +393,40 @@ class HomeTab extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(icon, color: color, size: 28),
+              //Icon(icon, color: color, size: 28),
+              Text(
+                title,
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+              ),
+              // Container(
+              //   padding: EdgeInsets.all(4),
+              //   decoration: BoxDecoration(
+              //     color: color.withOpacity(0.1),
+              //     borderRadius: BorderRadius.circular(4),
+              //   ),
+              // child: //Icon(icon, color: color, size: 28),
+              // ),
+            ],
+          ),
+          //   SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                value,
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
               Container(
-                padding: EdgeInsets.all(4),
+                padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: color.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(4),
                 ),
-                child: Icon(Icons.trending_up, color: color, size: 16),
+                child: Icon(icon, color: color, size: 28),
               ),
             ],
           ),
-          SizedBox(height: 12),
-          Text(
-            value,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
           SizedBox(height: 4),
-          Text(title, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
         ],
       ),
     );
@@ -392,14 +438,14 @@ class HomeTab extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: Color(0XFFFF8C42)),
+            decoration: BoxDecoration(color: Color(0xFF004DBF)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
                   radius: 30,
                   backgroundColor: Colors.white,
-                  child: Icon(Icons.store, size: 30, color: Color(0XFFFF8C42)),
+                  child: Icon(Icons.person, size: 30, color: Color(0xFF004DBF)),
                 ),
                 SizedBox(height: 12),
                 Text(
@@ -417,36 +463,40 @@ class HomeTab extends StatelessWidget {
               ],
             ),
           ),
-          _buildDrawerItem(Icons.dashboard, 'Dashboard', () => Get.back()),
           _buildDrawerItem(
-            Icons.inventory,
+            Icons.dashboard_customize_outlined,
+            'Dashboard',
+            () => Get.back(),
+          ),
+          _buildDrawerItem(
+            Icons.inventory_2_outlined,
             'Products',
-            () => Get.toNamed('AppRoutes.productList'),
+            () => Get.toNamed(AppRoutes.productList),
           ),
           _buildDrawerItem(
-            Icons.category,
+            Icons.category_outlined,
             'Categories',
-            () => Get.toNamed('AppRoutes.categoryList'),
+            () => Get.toNamed(AppRoutes.categoryList),
           ),
           _buildDrawerItem(
-            Icons.inventory_2,
+            Icons.inventory_2_outlined,
             'Packs',
-            () => Get.toNamed('AppRoutes.packList'),
+            () => Get.toNamed(AppRoutes.packList),
           ),
           _buildDrawerItem(
-            Icons.local_offer,
+            Icons.local_offer_outlined,
             'Promotions',
-            () => Get.toNamed('AppRoutes.promotionList'),
+            () => Get.toNamed(AppRoutes.promotionList),
           ),
           _buildDrawerItem(
-            Icons.location_on,
+            Icons.location_on_outlined,
             'Locations',
-            () => Get.toNamed('AppRoutes.locationList'),
+            () => Get.toNamed(AppRoutes.locationList),
           ),
           _buildDrawerItem(
-            Icons.shopping_bag,
+            Icons.shopping_bag_outlined,
             'Orders',
-            () => Get.toNamed('AppRoutes.orderList'),
+            () => Get.toNamed(AppRoutes.orderList),
           ),
           Divider(),
           _buildDrawerItem(Icons.settings, 'Settings', () {}),
@@ -457,11 +507,7 @@ class HomeTab extends StatelessWidget {
   }
 
   Widget _buildDrawerItem(IconData icon, String title, VoidCallback onTap) {
-    return ListTile(
-      leading: Icon(icon, color: Color(0XFFFF8C42)),
-      title: Text(title),
-      onTap: onTap,
-    );
+    return ListTile(leading: Icon(icon), title: Text(title), onTap: onTap);
   }
 }
 

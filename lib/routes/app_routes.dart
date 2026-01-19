@@ -1,4 +1,29 @@
 import 'dart:core';
+import 'package:ctlvendor/screens/ProductListScreen/ProductListScreen.dart';
+import 'package:ctlvendor/screens/ProductCreateScreen/ProductCreateScreen.dart';
+import 'package:ctlvendor/screens/ProductCreateScreen/bindings/ProductCreateBinding.dart';
+import 'package:ctlvendor/screens/ProductEditScreen/ProductEditScreen.dart';
+import 'package:ctlvendor/screens/ProductEditScreen/bindings/ProductEditBinding.dart';
+import 'package:ctlvendor/screens/CategoryListScreen/CategoryListScreen.dart';
+import 'package:ctlvendor/screens/CategoryListScreen/bindings/CategoryListBinding.dart';
+import 'package:ctlvendor/screens/CategoryCreateScreen/CategoryCreateScreen.dart';
+import 'package:ctlvendor/screens/CategoryCreateScreen/bindings/CategoryCreateBinding.dart';
+import 'package:ctlvendor/screens/PackListScreen/PackListScreen.dart';
+import 'package:ctlvendor/screens/PackListScreen/bindings/PackListBinding.dart';
+import 'package:ctlvendor/screens/PackCreateScreen/PackCreateScreen.dart';
+import 'package:ctlvendor/screens/PackCreateScreen/bindings/PackCreateBinding.dart';
+import 'package:ctlvendor/screens/PromotionListScreen/PromotionListScreen.dart';
+import 'package:ctlvendor/screens/PromotionListScreen/bindings/PromotionListBinding.dart';
+import 'package:ctlvendor/screens/PromotionCreateScreen/PromotionCreateScreen.dart';
+import 'package:ctlvendor/screens/PromotionCreateScreen/bindings/PromotionCreateBinding.dart';
+import 'package:ctlvendor/screens/LocationListScreen/LocationListScreen.dart';
+import 'package:ctlvendor/screens/LocationListScreen/bindings/LocationListBinding.dart';
+import 'package:ctlvendor/screens/LocationCreateScreen/LocationCreateScreen.dart';
+import 'package:ctlvendor/screens/LocationCreateScreen/bindings/LocationCreateBinding.dart';
+import 'package:ctlvendor/screens/OrderListScreen/OrderListScreen.dart';
+import 'package:ctlvendor/screens/OrderListScreen/bindings/OrderListBinding.dart';
+import 'package:ctlvendor/screens/OrderDetailsScreen/OrderDetailsScreen.dart';
+import 'package:ctlvendor/screens/OrderDetailsScreen/bindings/OrderDetailsBinding.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:ctlvendor/screens/add_money_screen/add_money_screen.dart';
 import 'package:ctlvendor/screens/add_money_screen/bindings/add_money_bindings.dart';
@@ -85,7 +110,89 @@ class AppRoutes {
   static const String addScreen = '/add-money';
   static const String privacyPolicyScreen = '/privacy_policy_screen';
 
+  //TODO: START HERE
+
+  //static const String dashboard = '/dashboard';
+  static const String productList = '/products';
+  static const String productCreate = '/products/create';
+  static const String productEdit = '/products/edit';
+  static const String categoryList = '/categories';
+  static const String categoryCreate = '/categories/create';
+  static const String packList = '/packs';
+  static const String packCreate = '/packs/create';
+  static const String promotionList = '/promotions';
+  static const String promotionCreate = '/promotions/create';
+  static const String locationList = '/locations';
+  static const String locationCreate = '/locations/create';
+  static const String orderList = '/orders';
+  static const String orderDetails = '/orders/details';
+
   static List<GetPage> pages = [
+    //TODO: STARTS HERE
+    //GetPage(name: dashboard, page: () => DashboardScreen()),
+    GetPage(name: productList, page: () => ProductListScreen()),
+    GetPage(
+      name: productCreate,
+      page: () => ProductCreateScreen(),
+      bindings: [ProductCreateBinding()],
+    ),
+    GetPage(
+      name: productEdit,
+      page: () => ProductEditScreen(),
+      bindings: [ProductEditBinding()],
+    ),
+    GetPage(
+      name: categoryList,
+      page: () => CategoryListScreen(),
+      bindings: [CategoryListBinding()],
+    ),
+    GetPage(
+      name: categoryCreate,
+      page: () => CategoryCreateScreen(),
+      bindings: [CategoryCreateBinding()],
+    ),
+    GetPage(
+      name: packList,
+      page: () => PackListScreen(),
+      bindings: [PackListBinding()],
+    ),
+    GetPage(
+      name: packCreate,
+      page: () => PackCreateScreen(),
+      bindings: [PackCreateBinding()],
+    ),
+    GetPage(
+      name: promotionList,
+      page: () => PromotionListScreen(),
+      bindings: [PromotionListBinding()],
+    ),
+    GetPage(
+      name: promotionCreate,
+      page: () => PromotionCreateScreen(),
+      bindings: [PromotionCreateBinding()],
+    ),
+    GetPage(
+      name: locationList,
+      page: () => LocationListScreen(),
+      bindings: [LocationListBinding()],
+    ),
+    GetPage(
+      name: locationCreate,
+      page: () => LocationCreateScreen(),
+      bindings: [LocationCreateBinding()],
+    ),
+    GetPage(
+      name: orderList,
+      page: () => OrderListScreen(),
+      bindings: [OrderListBinding()],
+    ),
+    GetPage(
+      name: orderDetails,
+      page: () => OrderDetailsScreen(),
+      bindings: [OrderDetailsBinding()],
+    ),
+
+    //TODO: ENDS HERE
     GetPage(
       name: addScreen,
       page: () => const AddMoneyScreen(),
