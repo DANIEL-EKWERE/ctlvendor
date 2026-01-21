@@ -617,8 +617,9 @@ class ApiClient extends GetConnect {
   }
 
   // Fetch food products
-  Future<http.Response> fetchFood() async {
-    final url = Uri.parse('$baseUrl/fetch/categories-limit-products');
+  Future<http.Response> fetchProduct() async {
+    final url = Uri.parse('$baseUrl/vendor/products?company_id=12');
+    var token = await dataBase.getToken();
     _logRequest('GET', url);
     return _retryRequest(() async {
       final response = await http
@@ -626,6 +627,83 @@ class ApiClient extends GetConnect {
             url,
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer $token',
+            },
+          )
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () {
+              throw TimeoutException('Request timed out');
+            },
+          );
+      _logResponse(response);
+      return response;
+    });
+  }
+
+  // Fetch food locations
+  Future<http.Response> fetchlocations() async {
+    final url = Uri.parse('$baseUrl/vendor/companies');
+    var token = await dataBase.getToken();
+    _logRequest('GET', url);
+    return _retryRequest(() async {
+      final response = await http
+          .get(
+            url,
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer $token',
+            },
+          )
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () {
+              throw TimeoutException('Request timed out');
+            },
+          );
+      _logResponse(response);
+      return response;
+    });
+  }
+
+
+  // Fetch food packs
+  Future<http.Response> fetchPacks() async {
+    final url = Uri.parse('$baseUrl/vendor/packs?company_id=1&vendor_id=3');
+    var token = await dataBase.getToken();
+    _logRequest('GET', url);
+    return _retryRequest(() async {
+      final response = await http
+          .get(
+            url,
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer $token',
+            },
+          )
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () {
+              throw TimeoutException('Request timed out');
+            },
+          );
+      _logResponse(response);
+      return response;
+    });
+  }
+
+  // Fetch food promotions
+  Future<http.Response> fetchPromotions() async {
+    final url = Uri.parse('$baseUrl/vendor/promotions');
+    var token = await dataBase.getToken();
+    _logRequest('GET', url);
+    return _retryRequest(() async {
+      final response = await http
+          .get(
+            url,
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer $token',
             },
           )
           .timeout(
