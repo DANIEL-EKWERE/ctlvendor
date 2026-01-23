@@ -1,4 +1,5 @@
 import 'package:ctlvendor/screens/PromotionCreateScreen/controller/PromotionCreateController.dart';
+import 'package:ctlvendor/screens/PromotionListScreen/models/model.dart';
 import 'package:ctlvendor/widgets/custom_button.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -6,19 +7,33 @@ import 'package:get/get.dart';
 import 'dart:developer' as myLog;
 import 'package:ctlvendor/screens/ProductListScreen/model/model.dart'
     as productModel;
+//import 'package:get/get.dart';
 
 //PromotionCreateController controller = Get.put(PromotionCreateController());
 
-class PromotionCreateScreen extends StatefulWidget {
-  const PromotionCreateScreen(this.controller, {super.key});
-
+class PromotionEditScreen extends StatefulWidget {
+  const PromotionEditScreen(this.promotion, this.controller, {super.key});
   final PromotionCreateController controller;
-
+  final Data promotion;
   @override
-  State<PromotionCreateScreen> createState() => _PromotionCreateScreenState();
+  State<PromotionEditScreen> createState() => _PromotionCreateScreenState();
 }
 
-class _PromotionCreateScreenState extends State<PromotionCreateScreen> {
+class _PromotionCreateScreenState extends State<PromotionEditScreen> {
+  initState() {
+    super.initState();
+    widget.controller.editPromotionTitleController.text =
+        widget.promotion.title!;
+    widget.controller.editDiscountValueController.text =
+        widget.promotion.discount!;
+    widget.controller.editStartDateController.text = widget.promotion.startsAt!;
+    widget.controller.editEndDateController.text = widget.promotion.endsAt!;
+    widget.controller.editDiscountType.value = widget.promotion.type!;
+    widget.controller.isActive.value = widget.promotion.status == 'active'
+        ? true
+        : false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +55,7 @@ class _PromotionCreateScreenState extends State<PromotionCreateScreen> {
               children: [
                 SizedBox(width: 10),
                 Text(
-                  'Add Promotion',
+                  'Edit Promotion',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 IconButton(
@@ -55,7 +70,7 @@ class _PromotionCreateScreenState extends State<PromotionCreateScreen> {
             Text('Title'),
             SizedBox(height: 5),
             TextField(
-              controller: widget.controller.promotionTitleController,
+              controller: widget.controller.editPromotionTitleController,
               decoration: InputDecoration(
                 hintText: 'Enter Promotion Title',
                 hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
@@ -87,16 +102,16 @@ class _PromotionCreateScreenState extends State<PromotionCreateScreen> {
                       SizedBox(height: 5),
                       DropdownButtonFormField<String>(
                         initialValue:
-                            widget.controller.discountType.value.isEmpty
+                            widget.controller.editDiscountType.value.isEmpty
                             ? null
-                            : widget.controller.discountType.value,
+                            : widget.controller.editDiscountType.value,
                         items: <String>['percentage', 'Fixed Amount']
                             .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(
                                   value,
-                                  style: TextStyle(fontSize: 11),
+                                  style: TextStyle(fontSize: 10),
                                 ),
                               );
                             })
@@ -132,7 +147,7 @@ class _PromotionCreateScreenState extends State<PromotionCreateScreen> {
                       Text('Discount Value'),
                       SizedBox(height: 5),
                       TextField(
-                        // readOnly: true,
+                        //readOnly: true,
                         // onTap: () async {
                         //   DateTime? pickedDate = await showDatePicker(
                         //     context: context,
@@ -149,7 +164,8 @@ class _PromotionCreateScreenState extends State<PromotionCreateScreen> {
                         //     print(formattedDate);
                         //   }
                         // },
-                        controller: widget.controller.discountValueController,
+                        controller:
+                            widget.controller.editDiscountValueController,
                         decoration: InputDecoration(
                           hintText: 'Enter Discount Value',
                           hintStyle: TextStyle(
@@ -189,7 +205,7 @@ class _PromotionCreateScreenState extends State<PromotionCreateScreen> {
                       SizedBox(height: 5),
                       TextField(
                         readOnly: true,
-                        controller: widget.controller.startDateController,
+                        controller: widget.controller.editStartDateController,
                         onTap: () async {
                           DateTime? pickedDate = await showDatePicker(
                             context: context,
@@ -204,7 +220,7 @@ class _PromotionCreateScreenState extends State<PromotionCreateScreen> {
 
                             // You can use the formatted date as needed
                             print(formattedDate);
-                            widget.controller.startDateController.text =
+                            widget.controller.editStartDateController.text =
                                 formattedDate;
                           }
                         },
@@ -257,11 +273,11 @@ class _PromotionCreateScreenState extends State<PromotionCreateScreen> {
 
                             // You can use the formatted date as needed
                             print(formattedDate);
-                            widget.controller.endDateController.text =
+                            widget.controller.editEndDateController.text =
                                 formattedDate;
                           }
                         },
-                        controller: widget.controller.endDateController,
+                        controller: widget.controller.editEndDateController,
                         decoration: InputDecoration(
                           hintText: 'Select End Date',
                           hintStyle: TextStyle(
@@ -359,7 +375,7 @@ class _PromotionCreateScreenState extends State<PromotionCreateScreen> {
                 // print('selected item is: ${controller.selectedCountry1}');
                 // print(
                 //     'selected item Id is: ${controller.selectedCountryId}');
-
+                //
                 assert(
                   widget.controller.selectedProduct != null,
                   'Selected product should not be null',
@@ -439,9 +455,7 @@ class _PromotionCreateScreenState extends State<PromotionCreateScreen> {
                 emptyBuilder: (context, searchEntry) {
                   return widget.controller.isLoading.value
                       ? const Center(
-                          child: CircularProgressIndicator(
-                            color: Color(0xff004BFD),
-                          ),
+                          child: CircularProgressIndicator(color: Colors.amber),
                         )
                       : const Center(
                           child: Text(
@@ -481,7 +495,6 @@ class _PromotionCreateScreenState extends State<PromotionCreateScreen> {
                 fit: FlexFit.loose,
               ),
             ),
-
             SizedBox(height: 30),
             Row(
               spacing: 10,
@@ -505,7 +518,9 @@ class _PromotionCreateScreenState extends State<PromotionCreateScreen> {
                     text: 'Save',
                     onPressed: () {
                       Get.back();
-                      widget.controller.createPromotion();
+                      widget.controller.updatePromotion(
+                        widget.promotion.id.toString(),
+                      );
                     },
                   ),
                 ),

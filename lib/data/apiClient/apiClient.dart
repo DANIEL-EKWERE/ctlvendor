@@ -282,6 +282,46 @@ class ApiClient extends GetConnect {
     return response;
   }
 
+  Future<http.Response> storeAddress(Map<String, dynamic> addressData) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    final url = Uri.parse('$baseUrl/addresses');
+    _logRequest('POST', url, body: addressData);
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(addressData),
+    );
+    _logResponse(response);
+    return response;
+  }
+
+  //update address
+  Future<http.Response> updateAddress(
+    Map<String, dynamic> addressData,
+    String id,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    final url = Uri.parse('$baseUrl/addresses/$id');
+    _logRequest('PUT', url, body: addressData);
+    final response = await http.put(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(addressData),
+    );
+    _logResponse(response);
+    return response;
+  }
+
   Future<http.Response> resetPassword(Map<String, dynamic> customerData) async {
     final url = Uri.parse('$baseUrl/reset-password');
     _logRequest('POST', url, body: customerData);
@@ -643,7 +683,7 @@ class ApiClient extends GetConnect {
 
   // Fetch food locations
   Future<http.Response> fetchlocations() async {
-    final url = Uri.parse('$baseUrl/vendor/companies');
+    final url = Uri.parse('$baseUrl/addresses');
     var token = await dataBase.getToken();
     _logRequest('GET', url);
     return _retryRequest(() async {
@@ -666,10 +706,12 @@ class ApiClient extends GetConnect {
     });
   }
 
-
   // Fetch food packs
   Future<http.Response> fetchPacks() async {
-    final url = Uri.parse('$baseUrl/vendor/packs?company_id=1&vendor_id=3');
+    var userId = await dataBase.getUserId();
+    final url = Uri.parse(
+      '$baseUrl/vendor/packs?company_id=12&vendor_id=$userId',
+    );
     var token = await dataBase.getToken();
     _logRequest('GET', url);
     return _retryRequest(() async {
@@ -784,6 +826,120 @@ class ApiClient extends GetConnect {
               "status": "accepted", //rejected
               "vendor_id": vendorId, //1 if is admin that is accepted
             }),
+          )
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () {
+              throw TimeoutException('Request timed out');
+            },
+          );
+      _logResponse(response);
+      return response;
+    });
+  }
+
+  // update pack
+  Future<http.Response> updatePack(
+    Map<String, dynamic> packData,
+    String id,
+  ) async {
+    print(packData);
+    final url = Uri.parse('$baseUrl/vendor/packs/$id');
+    var token = await dataBase.getToken();
+    _logRequest('POST', url);
+    return _retryRequest(() async {
+      final response = await http
+          .post(
+            url,
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer $token',
+            },
+            body: jsonEncode(packData),
+          )
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () {
+              throw TimeoutException('Request timed out');
+            },
+          );
+      _logResponse(response);
+      return response;
+    });
+  }
+
+  // update promtion
+  Future<http.Response> updatePromotion(
+    Map<String, dynamic> packData,
+    String id,
+  ) async {
+    print(packData);
+    final url = Uri.parse('$baseUrl/vendor/promotions/$id');
+    var token = await dataBase.getToken();
+    _logRequest('POST', url);
+    return _retryRequest(() async {
+      final response = await http
+          .post(
+            url,
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer $token',
+            },
+            body: jsonEncode(packData),
+          )
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () {
+              throw TimeoutException('Request timed out');
+            },
+          );
+      _logResponse(response);
+      return response;
+    });
+  }
+
+  //create pack
+  Future<http.Response> createPack(Map<String, dynamic> packData) async {
+    final url = Uri.parse('$baseUrl/vendor/packs');
+    var token = await dataBase.getToken();
+    _logRequest('POST', url);
+    return _retryRequest(() async {
+      final response = await http
+          .post(
+            url,
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer $token',
+            },
+            body: jsonEncode(packData),
+          )
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () {
+              throw TimeoutException('Request timed out');
+            },
+          );
+      _logResponse(response);
+      return response;
+    });
+  }
+
+  //create promotion
+  Future<http.Response> createPromotion(
+    Map<String, dynamic> promotionData,
+  ) async {
+    final url = Uri.parse('$baseUrl/vendor/promotions');
+    var token = await dataBase.getToken();
+    _logRequest('POST', url);
+    return _retryRequest(() async {
+      final response = await http
+          .post(
+            url,
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer $token',
+            },
+            body: jsonEncode(promotionData),
           )
           .timeout(
             const Duration(seconds: 10),

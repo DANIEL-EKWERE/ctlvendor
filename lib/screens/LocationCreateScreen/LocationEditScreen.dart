@@ -1,8 +1,10 @@
 import 'package:ctlvendor/screens/LocationCreateScreen/controller/LocationCreateController.dart';
+import 'package:ctlvendor/screens/LocationListScreen/models/model.dart';
 import 'package:ctlvendor/screens/checkout_address_change/models/country_model.dart';
 import 'package:ctlvendor/screens/checkout_address_change/models/lga_model.dart'
     as lgaData;
 import 'package:ctlvendor/screens/checkout_address_change/models/state_model.dart';
+import 'package:ctlvendor/screens/faq_screen/faq_screen.dart';
 import 'package:ctlvendor/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -10,23 +12,33 @@ import 'package:get/get.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'dart:developer' as myLog;
 
-LocationCreateController controller = Get.put(LocationCreateController());
+//LocationCreateController widget.controller = Get.put(LocationCreateController());
 
-class LocationCreateScreen extends StatefulWidget {
-  const LocationCreateScreen({super.key});
-  //final LocationCreateController controller;
-
+class LocationEditScreen extends StatefulWidget {
+  const LocationEditScreen(this.controller, this.location, {super.key});
+  final LocationCreateController controller;
+  final Data location;
   @override
-  State<LocationCreateScreen> createState() => _LocationCreateScreenState();
+  State<LocationEditScreen> createState() => _LocationCreateScreenState();
 }
 
-class _LocationCreateScreenState extends State<LocationCreateScreen> {
+class _LocationCreateScreenState extends State<LocationEditScreen> {
   String _locationMessage = "";
 
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller.fetchCountries();
+    widget.controller.fetchCountries();
+    widget.controller.edtContactAddressController.text =
+        widget.location.contactAddress!;
+    myLog.log('printing location address: ${widget.location.contactAddress}');
+    //  widget.controller.contactAddressController.text;
+    widget.controller.editContactNumberController.text =
+        widget.location.phone ?? 'N/A';
+    widget.controller.selectedCountry1 = widget.location.country ?? 'N/A';
+    widget.controller.selectedState1 = widget.location.state ?? 'N/A';
+    widget.controller.selectedLGA1 = widget.location.lga ?? 'N/A';
+    //  widget.controller.contactNumberController.text;
     _getCurrentLocation();
   }
 
@@ -75,8 +87,8 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
       setState(() {
         _locationMessage =
             'Lat: ${position.latitude}, Lng: ${position.longitude}';
-        controller.lat?.value = position.latitude.toString();
-        controller.long?.value = position.longitude.toString();
+        widget.controller.lat?.value = position.latitude.toString();
+        widget.controller.long?.value = position.longitude.toString();
       });
     } catch (e) {
       setState(() {
@@ -118,20 +130,20 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
             SizedBox(height: 10),
 
             // TextField(
-            //   controller: controller.locationNameController,
+            //   widget.controller: widget.controller.locationNameController,
             //   decoration: InputDecoration(
             //     labelText: 'Location Name',
             //   ),
             // ),
             // TextField(
-            //   controller: controller.descriptionController,
+            //   widget.controller: widget.controller.descriptionController,
             //   decoration: InputDecoration(
             //     labelText: 'Description',
             //   ),
             // ),
             // ElevatedButton(
             //   onPressed: () {
-            //     controller.createLocation();
+            //     widget.controller.createLocation();
             //   },
             //   child: Text('Create Location'),
             // ),
@@ -147,24 +159,24 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
                     child: DropdownSearch<CountryData>(
                       onChanged: (value) async {
                         setState(() {
-                          controller.selectedCountry1 = value!.name;
-                          controller.selectedCountryId = value.id;
+                          widget.controller.selectedCountry1 = value!.name;
+                          widget.controller.selectedCountryId = value.id;
                         });
-                        // print('selected item is: ${controller.selectedCountry1}');
+                        // print('selected item is: ${widget.controller.selectedCountry1}');
                         // print(
-                        //     'selected item Id is: ${controller.selectedCountryId}');
+                        //     'selected item Id is: ${widget.controller.selectedCountryId}');
 
                         assert(
-                          controller.selectedCountry1 != null,
+                          widget.controller.selectedCountry1 != null,
                           'Selected country should not be null',
                         );
 
-                        await controller.fetchStates();
+                        await widget.controller.fetchStates();
                         myLog.log(
-                          'Selected country: ${controller.selectedCountry1}',
+                          'Selected country: ${widget.controller.selectedCountry1}',
                         );
                       },
-                      selectedItem: controller.selectedCountry,
+                      selectedItem: widget.controller.selectedCountry,
                       suffixProps: const DropdownSuffixProps(),
                       compareFn: (item1, item2) {
                         return item1 == item2;
@@ -220,9 +232,9 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
                           );
                         }
                       },
-                      items: (f, cs) => controller.isCountryLoading.value
+                      items: (f, cs) => widget.controller.isCountryLoading.value
                           ? []
-                          : controller.countryDataList,
+                          : widget.controller.countryDataList,
                       //
                       itemAsString: (item) {
                         return item.name ?? '';
@@ -231,7 +243,7 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
                         showSelectedItems: true,
                         searchDelay: const Duration(seconds: 0),
                         emptyBuilder: (context, searchEntry) {
-                          return controller.isCountryLoading.value
+                          return widget.controller.isCountryLoading.value
                               ? const Center(
                                   child: CircularProgressIndicator(
                                     color: Colors.amber,
@@ -290,19 +302,23 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
                     child: DropdownSearch<StateData>(
                       onChanged: (value) async {
                         setState(() {
-                          controller.selectedState1 = value!.name;
-                          controller.selectedStateId = value.id;
+                          widget.controller.selectedState1 = value!.name;
+                          widget.controller.selectedStateId = value.id;
                         });
-                        print('selected item is: ${controller.selectedState1}');
-                        await controller.fetchLgas(controller.selectedState1!);
-                        myLog.log(
-                          'Selected state: ${controller.selectedState1}',
+                        print(
+                          'selected item is: ${widget.controller.selectedState1}',
+                        );
+                        await widget.controller.fetchLgas(
+                          widget.controller.selectedState1!,
                         );
                         myLog.log(
-                          'Selected state ID: ${controller.selectedStateId}',
+                          'Selected state: ${widget.controller.selectedState1}',
+                        );
+                        myLog.log(
+                          'Selected state ID: ${widget.controller.selectedStateId}',
                         );
                       },
-                      selectedItem: controller.selectedState,
+                      selectedItem: widget.controller.selectedState,
                       suffixProps: const DropdownSuffixProps(),
                       compareFn: (item1, item2) {
                         return item1 == item2;
@@ -357,9 +373,9 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
                           );
                         }
                       },
-                      items: (f, cs) => controller.isStateLoading.value
+                      items: (f, cs) => widget.controller.isStateLoading.value
                           ? []
-                          : controller.stateDataList,
+                          : widget.controller.stateDataList,
                       itemAsString: (item) {
                         return item.name ?? '';
                       },
@@ -367,7 +383,7 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
                         showSelectedItems: true,
                         searchDelay: const Duration(seconds: 0),
                         emptyBuilder: (context, searchEntry) {
-                          return controller.isStateLoading.value
+                          return widget.controller.isStateLoading.value
                               ? const Center(
                                   child: CircularProgressIndicator(
                                     color: Color(0xff004BFD),
@@ -426,14 +442,14 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
                     child: DropdownSearch<lgaData.LgaData>(
                       onChanged: (value) {
                         setState(() {
-                          controller.selectedLGA1 = value!.name;
-                          controller.selectedLGAId = value.id;
+                          widget.controller.selectedLGA1 = value!.name;
+                          widget.controller.selectedLGAId = value.id;
                         });
-                        // print('selected item is: ${controller.selectedLGA1}');
-                        // myLog.log('Selected LGA: ${controller.selectedLGA1}');
-                        // myLog.log('Selected LGA ID: ${controller.selectedLGAId}');
+                        // print('selected item is: ${widget.controller.selectedLGA1}');
+                        // myLog.log('Selected LGA: ${widget.controller.selectedLGA1}');
+                        // myLog.log('Selected LGA ID: ${widget.controller.selectedLGAId}');
                       },
-                      selectedItem: controller.selectedLGA,
+                      selectedItem: widget.controller.selectedLGA,
                       suffixProps: const DropdownSuffixProps(),
                       compareFn: (item1, item2) {
                         return item1 == item2;
@@ -491,9 +507,9 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
                           );
                         }
                       },
-                      items: (f, cs) => controller.isLgaLoading.value
+                      items: (f, cs) => widget.controller.isLgaLoading.value
                           ? []
-                          : controller.lgaDataList,
+                          : widget.controller.lgaDataList,
                       //
                       itemAsString: (item) {
                         return item.name ?? '';
@@ -502,7 +518,7 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
                         showSelectedItems: true,
                         searchDelay: const Duration(seconds: 0),
                         emptyBuilder: (context, searchEntry) {
-                          return controller.isStateLoading.value
+                          return widget.controller.isStateLoading.value
                               ? const Center(
                                   child: CircularProgressIndicator(
                                     color: Color(0xff004BFD),
@@ -558,7 +574,7 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
             Text('Contact Address'),
             SizedBox(height: 5),
             TextField(
-              // controller: controller.editPackNameController,
+              controller: widget.controller.edtContactAddressController,
               decoration: InputDecoration(
                 hintText: 'Contact Address',
                 hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
@@ -583,7 +599,7 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
             Text('Phone Number'),
             SizedBox(height: 5),
             TextField(
-              // controller: controller.editPackNameController,
+              controller: widget.controller.editContactNumberController,
               decoration: InputDecoration(
                 hintText: 'Phone Number',
                 hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
@@ -606,7 +622,9 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
             ),
             SizedBox(height: 20),
             DropdownButtonFormField<String>(
-              initialValue: controller.isActive.value ? 'Active' : 'Inactive',
+              initialValue: widget.controller.isActive.value
+                  ? 'Active'
+                  : 'Inactive',
               items: <String>['Active', 'Inactive']
                   .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
@@ -658,7 +676,10 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
                     text: 'Save',
                     onPressed: () {
                       Get.back();
-                      controller.storeAddress();
+                      // widget.controller.editPacks(widget.product.id.toString());
+                      widget.controller.updateAddress(
+                        widget.location.id.toString(),
+                      );
                     },
                   ),
                 ),

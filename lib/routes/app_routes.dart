@@ -1,4 +1,7 @@
 import 'dart:core';
+import 'package:ctlvendor/screens/LocationCreateScreen/controller/LocationCreateController.dart';
+import 'package:ctlvendor/screens/PackCreateScreen/controller/PackCreateController.dart';
+import 'package:ctlvendor/screens/ProductCreateScreen/controller/ProductCreateController.dart';
 import 'package:ctlvendor/screens/ProductListScreen/ProductListScreen.dart';
 import 'package:ctlvendor/screens/ProductCreateScreen/ProductCreateScreen.dart';
 import 'package:ctlvendor/screens/ProductCreateScreen/bindings/ProductCreateBinding.dart';
@@ -12,6 +15,7 @@ import 'package:ctlvendor/screens/PackListScreen/PackListScreen.dart';
 import 'package:ctlvendor/screens/PackListScreen/bindings/PackListBinding.dart';
 import 'package:ctlvendor/screens/PackCreateScreen/PackCreateScreen.dart';
 import 'package:ctlvendor/screens/PackCreateScreen/bindings/PackCreateBinding.dart';
+import 'package:ctlvendor/screens/PromotionCreateScreen/controller/PromotionCreateController.dart';
 import 'package:ctlvendor/screens/PromotionListScreen/PromotionListScreen.dart';
 import 'package:ctlvendor/screens/PromotionListScreen/bindings/PromotionListBinding.dart';
 import 'package:ctlvendor/screens/PromotionCreateScreen/PromotionCreateScreen.dart';
@@ -133,7 +137,7 @@ class AppRoutes {
     GetPage(name: productList, page: () => ProductListScreen()),
     GetPage(
       name: productCreate,
-      page: () => ProductCreateScreen(),
+      page: () => ProductCreateScreen(ProductCreateController()),
       bindings: [ProductCreateBinding()],
     ),
     GetPage(
@@ -158,7 +162,7 @@ class AppRoutes {
     ),
     GetPage(
       name: packCreate,
-      page: () => PackCreateScreen(),
+      page: () => PackCreateScreen(PackCreateController()),
       bindings: [PackCreateBinding()],
     ),
     GetPage(
@@ -168,7 +172,7 @@ class AppRoutes {
     ),
     GetPage(
       name: promotionCreate,
-      page: () => PromotionCreateScreen(),
+      page: () => PromotionCreateScreen(PromotionCreateController()),
       bindings: [PromotionCreateBinding()],
     ),
     GetPage(

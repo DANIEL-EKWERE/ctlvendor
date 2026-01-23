@@ -45,7 +45,8 @@
 
 import 'dart:convert';
 
-LocationModel locationModelFromJson(String x) => LocationModel.fromJson(json.decode(x));
+LocationModel locationModelFromJson(String x) =>
+    LocationModel.fromJson(json.decode(x));
 
 class LocationModel {
   bool? status;
@@ -79,26 +80,29 @@ class LocationModel {
 class Data {
   int? id;
   String? contactAddress;
-  Null? lat;
-  Null? lon;
-  Null? country;
-  Null? state;
-  Null? lga;
-  bool? isActive;
+  String? lat;
+  String? lon;
+  String? country;
+  String? state;
+  String? lga;
+  String? phone;
+  String? isActive;
   bool? isPrimary;
   String? createdAt;
 
-  Data(
-      {this.id,
-      this.contactAddress,
-      this.lat,
-      this.lon,
-      this.country,
-      this.state,
-      this.lga,
-      this.isActive,
-      this.isPrimary,
-      this.createdAt});
+  Data({
+    this.id,
+    this.contactAddress,
+    this.lat,
+    this.lon,
+    this.country,
+    this.state,
+    this.lga,
+    this.phone,
+    this.isActive,
+    this.isPrimary,
+    this.createdAt,
+  });
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -108,7 +112,8 @@ class Data {
     country = json['country'];
     state = json['state'];
     lga = json['lga'];
-    isActive = json['is_active'];
+    phone = json['phone_number'];
+    isActive = json['is_default'];
     isPrimary = json['is_primary'];
     createdAt = json['created_at'];
   }
@@ -122,7 +127,8 @@ class Data {
     data['country'] = this.country;
     data['state'] = this.state;
     data['lga'] = this.lga;
-    data['is_active'] = this.isActive;
+    data['phone_number'] = this.phone;
+    data['is_default'] = this.isActive;
     data['is_primary'] = this.isPrimary;
     data['created_at'] = this.createdAt;
     return data;

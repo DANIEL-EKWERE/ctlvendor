@@ -1,4 +1,3 @@
-
 // lib/data/models/promotion_model.dart
 // class Promotion {
 //   int? id;
@@ -34,8 +33,8 @@
 //       discountValue: json['discount_value']?.toDouble(),
 //       startDate: json['start_date'],
 //       endDate: json['end_date'],
-//       productIds: json['product_ids'] != null 
-//           ? List<int>.from(json['product_ids']) 
+//       productIds: json['product_ids'] != null
+//           ? List<int>.from(json['product_ids'])
 //           : null,
 //       isActive: json['is_active'],
 //       productsCount: json['products_count'],
@@ -60,7 +59,8 @@
 
 import 'dart:convert';
 
-PromotionModel promotionModelFromJson(String x) => PromotionModel.fromJson(json.decode(x));
+PromotionModel promotionModelFromJson(String x) =>
+    PromotionModel.fromJson(json.decode(x));
 
 class PromotionModel {
   bool? status;
@@ -100,20 +100,23 @@ class Data {
   String? typeLabel;
   String? startsAt;
   String? endsAt;
+  String? status;
   String? imageUrl;
   List<VendorProducts>? vendorProducts;
 
-  Data(
-      {this.id,
-      this.title,
-      this.discount,
-      this.discountLabel,
-      this.type,
-      this.typeLabel,
-      this.startsAt,
-      this.endsAt,
-      this.imageUrl,
-      this.vendorProducts});
+  Data({
+    this.id,
+    this.title,
+    this.discount,
+    this.discountLabel,
+    this.type,
+    this.typeLabel,
+    this.startsAt,
+    this.endsAt,
+    this.status,
+    this.imageUrl,
+    this.vendorProducts,
+  });
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -121,6 +124,7 @@ class Data {
     discount = json['discount'];
     discountLabel = json['discount_label'];
     type = json['type'];
+    status = json['status'];
     typeLabel = json['type_label'];
     startsAt = json['starts_at'];
     endsAt = json['ends_at'];
@@ -142,11 +146,13 @@ class Data {
     data['type'] = this.type;
     data['type_label'] = this.typeLabel;
     data['starts_at'] = this.startsAt;
+    data['status'] = this.status;
     data['ends_at'] = this.endsAt;
     data['image_url'] = this.imageUrl;
     if (this.vendorProducts != null) {
-      data['vendor_products'] =
-          this.vendorProducts!.map((v) => v.toJson()).toList();
+      data['vendor_products'] = this.vendorProducts!
+          .map((v) => v.toJson())
+          .toList();
     }
     return data;
   }
@@ -156,38 +162,40 @@ class VendorProducts {
   int? id;
   Product? product;
   Category? category;
-  Null? packId;
+  String? packId;
   String? price;
   String? cost;
   String? stock;
   String? sku;
-  int? finalPrice;
+  String? finalPrice;
   String? description;
-  Null? imageUrl;
+  String? imageUrl;
   String? status;
   String? createdAt;
   String? updatedAt;
 
-  VendorProducts(
-      {this.id,
-      this.product,
-      this.category,
-      this.packId,
-      this.price,
-      this.cost,
-      this.stock,
-      this.sku,
-      this.finalPrice,
-      this.description,
-      this.imageUrl,
-      this.status,
-      this.createdAt,
-      this.updatedAt});
+  VendorProducts({
+    this.id,
+    this.product,
+    this.category,
+    this.packId,
+    this.price,
+    this.cost,
+    this.stock,
+    this.sku,
+    this.finalPrice,
+    this.description,
+    this.imageUrl,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   VendorProducts.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    product =
-        json['product'] != null ? new Product.fromJson(json['product']) : null;
+    product = json['product'] != null
+        ? new Product.fromJson(json['product'])
+        : null;
     category = json['category'] != null
         ? new Category.fromJson(json['category'])
         : null;
@@ -196,7 +204,7 @@ class VendorProducts {
     cost = json['cost'];
     stock = json['stock'];
     sku = json['sku'];
-    finalPrice = json['final_price'];
+    finalPrice = json['final_price'].toString();
     description = json['description'];
     imageUrl = json['image_url'];
     status = json['status'];
@@ -236,13 +244,14 @@ class Product {
   String? createdAt;
   String? updatedAt;
 
-  Product(
-      {this.id,
-      this.name,
-      this.description,
-      this.status,
-      this.createdAt,
-      this.updatedAt});
+  Product({
+    this.id,
+    this.name,
+    this.description,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -274,14 +283,15 @@ class Category {
   String? sort;
   String? createdAt;
 
-  Category(
-      {this.id,
-      this.type,
-      this.name,
-      this.description,
-      this.imageUrl,
-      this.sort,
-      this.createdAt});
+  Category({
+    this.id,
+    this.type,
+    this.name,
+    this.description,
+    this.imageUrl,
+    this.sort,
+    this.createdAt,
+  });
 
   Category.fromJson(Map<String, dynamic> json) {
     id = json['id'];

@@ -52,6 +52,7 @@ dependencies:
   flutter_inappwebview:
   launcher_name:
   cached_network_image: ^3.4.1
+  geolocator: ^14.0.2
 
 dev_dependencies:
   flutter_test:

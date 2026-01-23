@@ -171,9 +171,9 @@ class DataBase extends GetxController {
     return true;
   }
 
-  saveBrmCode(String brmCode) async {
+  saveVendorId(String vendorId) async {
     SharedPreferences sharedPreferences = await _pref;
-    await sharedPreferences.setString('brmCode', brmCode);
+    await sharedPreferences.setString('vendorId', vendorId);
 
     return true;
   }
@@ -299,11 +299,11 @@ class DataBase extends GetxController {
     return true;
   }
 
-  saveBrmId(String brmId) async {
+  saveCompanyId(String companyId) async {
     SharedPreferences sharedPreferences = await _pref;
-    await sharedPreferences.setString('brmId', brmId);
+    await sharedPreferences.setString('companyId', companyId);
 
-    _businessBrandName = brmId;
+    _businessBrandName = companyId;
 
     return true;
   }
@@ -563,11 +563,11 @@ Future<List<String>> loadSelectedProducts() async {
     }
   }
 
-  Future<String> getBrmId() async {
+  Future<String> getCompanyId() async {
     SharedPreferences sharedPreferences = await _pref;
 
-    if (sharedPreferences.containsKey('brmId')) {
-      String data = sharedPreferences.getString('brmId')!;
+    if (sharedPreferences.containsKey('companyId')) {
+      String data = sharedPreferences.getString('companyId')!;
       _brmId = data;
 
       return data;
@@ -578,11 +578,11 @@ Future<List<String>> loadSelectedProducts() async {
     }
   }
 
-  Future<String> getBrmCode() async {
+  Future<String> getVendorId() async {
     SharedPreferences sharedPreferences = await _pref;
 
-    if (sharedPreferences.containsKey('brmCode')) {
-      String data = sharedPreferences.getString('brmCode')!;
+    if (sharedPreferences.containsKey('vendorId')) {
+      String data = sharedPreferences.getString('vendorId')!;
       _brmCode = data;
 
       return data;

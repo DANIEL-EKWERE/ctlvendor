@@ -1,4 +1,7 @@
 import 'package:ctlvendor/routes/app_routes.dart';
+import 'package:ctlvendor/screens/PackCreateScreen/PackCreateScreen.dart';
+import 'package:ctlvendor/screens/PackCreateScreen/PackEditScreen.dart';
+import 'package:ctlvendor/screens/PackCreateScreen/controller/PackCreateController.dart';
 import 'package:ctlvendor/screens/PackListScreen/controller/PackListController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -148,7 +151,22 @@ class _PackListScreenState extends State<PackListScreen> {
                   SizedBox(
                     width: 150,
                     child: ElevatedButton.icon(
-                      onPressed: () => Get.toNamed(AppRoutes.productCreate),
+                      onPressed: () {
+                        Get.dialog(
+                          AlertDialog(
+                            backgroundColor: Colors.transparent,
+                            insetPadding: EdgeInsets.zero,
+                            contentPadding: EdgeInsets.zero,
+                            content: SizedBox(
+                              height: 320,
+                              child: PackCreateScreen(
+                                Get.put(PackCreateController()),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      //Get.toNamed(AppRoutes.productCreate),
                       icon: Icon(Icons.add, size: 18),
                       label: Text('Add Pack', style: TextStyle(fontSize: 12)),
                       style: ElevatedButton.styleFrom(
@@ -245,8 +263,22 @@ class _PackListScreenState extends State<PackListScreen> {
                                 ),
                                 SizedBox(height: 8),
                                 TextButton(
-                                  onPressed: () =>
-                                      Get.toNamed(AppRoutes.productCreate),
+                                  onPressed: () {
+                                    Get.dialog(
+                                      AlertDialog(
+                                        backgroundColor: Colors.transparent,
+                                        insetPadding: EdgeInsets.zero,
+                                        contentPadding: EdgeInsets.zero,
+                                        content: SizedBox(
+                                          height: 320,
+                                          child: PackCreateScreen(
+                                            Get.put(PackCreateController()),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  //Get.toNamed(AppRoutes.productCreate),
                                   child: Text('Add your first product'),
                                 ),
                               ],
@@ -261,10 +293,10 @@ class _PackListScreenState extends State<PackListScreen> {
                             scrollDirection: Axis.vertical,
                             child: Table(
                               columnWidths: const {
-                                0: FixedColumnWidth(150),
-                                1: FixedColumnWidth(180),
-                                2: FixedColumnWidth(10),
-                                3: FixedColumnWidth(100),
+                                0: FixedColumnWidth(100),
+                                1: FixedColumnWidth(120),
+                                2: FixedColumnWidth(80),
+                                3: FixedColumnWidth(80),
                                 // 4: FixedColumnWidth(100),
                                 // 5: FixedColumnWidth(80),
                                 // 6: FixedColumnWidth(80),
@@ -305,7 +337,25 @@ class _PackListScreenState extends State<PackListScreen> {
                                           Icons.edit,
                                           color: Colors.red,
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Get.dialog(
+                                            AlertDialog(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              insetPadding: EdgeInsets.zero,
+                                              contentPadding: EdgeInsets.zero,
+                                              content: SizedBox(
+                                                height: 320,
+                                                child: PackEditScreen(
+                                                  Get.put(
+                                                    PackCreateController(),
+                                                  ),
+                                                  product,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
                                         color: Colors.red,
                                       ),
 

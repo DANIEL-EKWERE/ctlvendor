@@ -1,4 +1,7 @@
 import 'package:ctlvendor/routes/app_routes.dart';
+import 'package:ctlvendor/screens/PromotionCreateScreen/PromotionCreateScreen.dart';
+import 'package:ctlvendor/screens/PromotionCreateScreen/PromotionEditScreen.dart';
+import 'package:ctlvendor/screens/PromotionCreateScreen/controller/PromotionCreateController.dart';
 import 'package:ctlvendor/screens/PromotionListScreen/controller/PromotionListController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,9 +19,9 @@ class PromotionListScreen extends StatefulWidget {
 class _PromotionListScreenState extends State<PromotionListScreen> {
   final TextEditingController searchController = TextEditingController();
 
-_onRefresh(){
-  controller.fetchPromotions();
-}
+  _onRefresh() {
+    controller.fetchPromotions();
+  }
 
   Widget _buildDrawer() {
     return Drawer(
@@ -59,7 +62,7 @@ _onRefresh(){
           _buildDrawerItem(
             Icons.inventory_2_outlined,
             'Products',
-            () => Get.back(),
+            () => Get.toNamed(AppRoutes.productList),
           ),
           _buildDrawerItem(
             Icons.category_outlined,
@@ -101,15 +104,15 @@ _onRefresh(){
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: _onRefresh(),
-      
+      onRefresh: controller.fetchPromotions,
+
       child: Scaffold(
         backgroundColor: Colors.grey.shade50,
         drawer: _buildDrawer(),
         appBar: AppBar(
           backgroundColor: Colors.grey.shade50,
           elevation: 0,
-      
+
           // leading: IconButton(
           //   icon: Icon(Icons.menu, color: Colors.black),
           //   onPressed: () => Scaffold.of(context).openDrawer(),
@@ -154,7 +157,24 @@ _onRefresh(){
                   SizedBox(
                     width: 140,
                     child: ElevatedButton.icon(
-                      onPressed: () => Get.toNamed(AppRoutes.productCreate),
+                      onPressed: () {
+                        Get.dialog(
+                          AlertDialog(
+                            backgroundColor: Colors.transparent,
+                            insetPadding: EdgeInsets.zero,
+                            contentPadding: EdgeInsets.zero,
+
+                            content: SizedBox(
+                              height: 600,
+                              width: 300,
+                              child: PromotionCreateScreen(
+                                Get.put(PromotionCreateController()),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      //=> Get.toNamed(AppRoutes.promotionCreate),
                       icon: Icon(Icons.add, size: 18),
                       label: Text(
                         'Add Promotion',
@@ -178,11 +198,11 @@ _onRefresh(){
             ),
             // Table(
             //   children: [
-      
+
             //   ],
             // ),
             //DataTable(columns: [], rows: []),
-      
+
             // Search Bar
             Expanded(
               child: Container(
@@ -220,18 +240,20 @@ _onRefresh(){
                         ),
                       ),
                     ),
-      
+
                     const SizedBox(height: 20),
-      
+
                     /// ================= CONTENT =================
                     Expanded(
                       child: Obx(() {
                         if (controller.isLoading.value) {
                           return const Center(
-                            child: CircularProgressIndicator(color: Colors.black),
+                            child: CircularProgressIndicator(
+                              color: Colors.black,
+                            ),
                           );
                         }
-      
+
                         if (controller.promotions.isEmpty) {
                           return Center(
                             child: Column(
@@ -252,15 +274,35 @@ _onRefresh(){
                                 ),
                                 SizedBox(height: 8),
                                 TextButton(
-                                  onPressed: () =>
-                                      Get.toNamed(AppRoutes.productCreate),
+                                  onPressed: () {
+                                    Get.dialog(
+                                      AlertDialog(
+                                        backgroundColor: Colors.transparent,
+                                        insetPadding: EdgeInsets.zero,
+                                        contentPadding: EdgeInsets.zero,
+
+                                        content: SizedBox(
+                                          height: 600,
+                                          width: 300,
+                                          child: PromotionCreateScreen(
+                                            Get.put(
+                                              PromotionCreateController(),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  //=>
+
+                                  //  Get.toNamed(AppRoutes.productCreate),
                                   child: Text('Add your first product'),
                                 ),
                               ],
                             ),
                           );
                         }
-      
+
                         /// ================= TABLE =================
                         return SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
@@ -295,12 +337,12 @@ _onRefresh(){
                                     _headerCell('Date Range'),
                                     _headerCell('Products'),
                                     _headerCell('Status'),
-      
+
                                     _headerCell(''),
                                     _headerCell('Action'),
                                   ],
                                 ),
-      
+
                                 /// DATA
                                 ...controller.promotions.map(
                                   (product) => TableRow(
@@ -310,13 +352,17 @@ _onRefresh(){
                                       _cell(
                                         "${DateFormat('yyyy-MM-dd').format(DateTime.parse(product.startsAt!))} - ${DateFormat('yyyy-MM-dd').format(DateTime.parse(product.endsAt!))}",
                                       ),
-                                      _cell('${product.vendorProducts!.length}'),
-      
+                                      _cell(
+                                        '${product.vendorProducts!.length}',
+                                      ),
+
                                       Container(
                                         margin: EdgeInsets.all(10),
                                         padding: EdgeInsets.all(5),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
                                           color: Colors.black,
                                         ),
                                         child: Center(
@@ -325,18 +371,43 @@ _onRefresh(){
                                             // ?
                                             'Active',
                                             //   : 'In-Active',
-                                            style: TextStyle(color: Colors.white),
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
                                       ),
-      
+
                                       // _menuCell(product),
                                       IconButton(
-                                        icon: Icon(Icons.edit, color: Colors.red),
-                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.edit,
+                                          color: Colors.red,
+                                        ),
+                                        onPressed: () {
+                                          Get.dialog(
+                                            AlertDialog(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              insetPadding: EdgeInsets.zero,
+                                              contentPadding: EdgeInsets.zero,
+
+                                              content: SizedBox(
+                                                height: 600,
+                                                width: 300,
+                                                child: PromotionEditScreen(
+                                                  product,
+                                                  Get.put(
+                                                    PromotionCreateController(),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
                                         color: Colors.red,
                                       ),
-      
+
                                       //_cell('Deactivate'),
                                       IconButton(
                                         icon: Icon(Icons.delete_outline),
@@ -356,7 +427,7 @@ _onRefresh(){
                 ),
               ),
             ),
-      
+
             // Table Content
           ],
         ),

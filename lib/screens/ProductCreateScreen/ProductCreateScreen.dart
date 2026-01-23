@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 // import '../../controllers/product_controller.dart';
-ProductCreateController controller = Get.put(ProductCreateController());
+//ProductCreateController controller = Get.put(ProductCreateController());
 
 class ProductCreateScreen extends StatelessWidget {
+  ProductCreateScreen(this.controller, {Key? key}) : super(key: key);
   //final ProductController controller = Get.find<ProductController>();
+  final ProductCreateController controller;
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController nameController = TextEditingController();
