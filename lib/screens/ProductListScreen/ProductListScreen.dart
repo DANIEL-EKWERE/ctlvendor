@@ -1,4 +1,7 @@
 import 'package:ctlvendor/routes/app_routes.dart';
+import 'package:ctlvendor/screens/ProductCreateScreen/ProductCreateScreen.dart';
+import 'package:ctlvendor/screens/ProductCreateScreen/ProductEditScreen.dart';
+import 'package:ctlvendor/screens/ProductCreateScreen/controller/ProductCreateController.dart';
 import 'package:ctlvendor/screens/ProductListScreen/controller/ProductListController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -98,7 +101,7 @@ class ProductListScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.grey.shade50,
           elevation: 0,
-      
+
           // leading: IconButton(
           //   icon: Icon(Icons.menu, color: Colors.black),
           //   onPressed: () => Scaffold.of(context).openDrawer(),
@@ -143,9 +146,27 @@ class ProductListScreen extends StatelessWidget {
                   SizedBox(
                     width: 140,
                     child: ElevatedButton.icon(
-                      onPressed: () => Get.toNamed(AppRoutes.productCreate),
+                      //onPressed: () => Get.toNamed(AppRoutes.productCreate),
+                      onPressed: () {
+                        Get.dialog(
+                          AlertDialog(
+                            backgroundColor: Colors.transparent,
+                            insetPadding: EdgeInsets.zero,
+                            contentPadding: EdgeInsets.zero,
+                            content: SizedBox(
+                              height: 520,
+                              child: ProductCreateScreen(
+                                Get.put(ProductCreateController()),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                       icon: Icon(Icons.add, size: 18),
-                      label: Text('Add Product', style: TextStyle(fontSize: 12)),
+                      label: Text(
+                        'Add Product',
+                        style: TextStyle(fontSize: 12),
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         foregroundColor: Colors.white,
@@ -164,11 +185,11 @@ class ProductListScreen extends StatelessWidget {
             ),
             // Table(
             //   children: [
-      
+
             //   ],
             // ),
             //DataTable(columns: [], rows: []),
-      
+
             // Search Bar
             Expanded(
               child: Container(
@@ -206,18 +227,20 @@ class ProductListScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-      
+
                     const SizedBox(height: 20),
-      
+
                     /// ================= CONTENT =================
                     Expanded(
                       child: Obx(() {
                         if (controller.isLoading.value) {
                           return const Center(
-                            child: CircularProgressIndicator(color: Colors.black),
+                            child: CircularProgressIndicator(
+                              color: Colors.black,
+                            ),
                           );
                         }
-      
+
                         if (controller.products.isEmpty) {
                           return Center(
                             child: Column(
@@ -239,14 +262,30 @@ class ProductListScreen extends StatelessWidget {
                                 SizedBox(height: 8),
                                 TextButton(
                                   onPressed: () =>
-                                      Get.toNamed(AppRoutes.productCreate),
+                                      //  =>
+                                      //     Get.toNamed(AppRoutes.productCreate),
+                                      Get.dialog(
+                                        AlertDialog(
+                                          backgroundColor: Colors.transparent,
+                                          insetPadding: EdgeInsets.zero,
+                                          contentPadding: EdgeInsets.zero,
+                                          content: SizedBox(
+                                            height: 520,
+                                            child: ProductCreateScreen(
+                                              Get.put(
+                                                ProductCreateController(),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                   child: Text('Add your first product'),
                                 ),
                               ],
                             ),
                           );
                         }
-      
+
                         /// ================= TABLE =================
                         return SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
@@ -287,23 +326,25 @@ class ProductListScreen extends StatelessWidget {
                                     _headerCell('Action'),
                                   ],
                                 ),
-      
+
                                 /// DATA
                                 ...controller.products.map(
                                   (product) => TableRow(
                                     children: [
                                       _cell(product.product!.name),
                                       _cell(product.category!.name),
-                                      _cell((product.packId ?? 'N/A') as String?),
                                       _cell(
-                                        '₦${product.price}',
+                                        (product.packId ?? 'N/A') as String?,
                                       ),
+                                      _cell('₦${product.price}'),
                                       _cell('${product.stock}'),
                                       Container(
                                         margin: EdgeInsets.all(10),
                                         padding: EdgeInsets.all(5),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
                                           color: Colors.black,
                                         ),
                                         child: Center(
@@ -311,19 +352,42 @@ class ProductListScreen extends StatelessWidget {
                                             product.status == '1'
                                                 ? 'Active'
                                                 : 'In-Active',
-                                            style: TextStyle(color: Colors.white),
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
                                       ),
-      
+
                                       // _menuCell(product),
                                       IconButton(
-                                        icon: Icon(Icons.edit, color: Colors.red),
-                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.edit,
+                                          color: Colors.red,
+                                        ),
+                                        onPressed: () {
+                                          Get.dialog(
+                                            AlertDialog(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              insetPadding: EdgeInsets.zero,
+                                              contentPadding: EdgeInsets.zero,
+                                              content: SizedBox(
+                                                height: 520,
+                                                child: ProductEditScreen(
+                                                  Get.put(
+                                                    ProductCreateController(),
+                                                  ),
+                                                  product,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
                                         color: Colors.red,
                                       ),
                                       _cell('Deactivate'),
-      
+
                                       IconButton(
                                         icon: Icon(Icons.delete_outline),
                                         onPressed: () {},
@@ -342,7 +406,7 @@ class ProductListScreen extends StatelessWidget {
                 ),
               ),
             ),
-      
+
             // Table Content
           ],
         ),

@@ -72,7 +72,7 @@ class LoginController extends GetxController {
         );
         await dataBase.saveRefererId(data.referrerId?.toString() ?? 'N/A');
         await dataBase.saveVendorId(data.vendor?.id.toString() ?? 'N/A');
-
+        await dataBase.saveCategoryId(data.vendor?.category?.id.toString() ?? 'N/A');
         await dataBase.saveCompanyId(
           //data.contactAddress?.first.id.toString() ?? 'N/A',
           data.vendor?.locations?.first.id.toString() ?? '0',

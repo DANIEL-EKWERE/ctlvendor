@@ -383,9 +383,9 @@ class Locations {
   String? contactAddress;
   String? lat;
   String? lon;
-  String? country;
-  String? state;
-  String? lga;
+  LocationCountry? country;  // Changed from String? to object
+  LocationState? state;      // Changed from String? to object
+  LocationLga? lga;          // Changed from String? to object
   bool? isActive;
   bool? isPrimary;
   String? createdAt;
@@ -409,27 +409,116 @@ class Locations {
     contactAddress = json['contact_address'];
     lat = json['lat'];
     lon = json['lon'];
-    country = json['country'];
-    state = json['state'];
-    lga = json['lga'];
+    
+    // Handle country as object or string
+    if (json['country'] != null) {
+      if (json['country'] is Map) {
+        country = LocationCountry.fromJson(json['country']);
+      }
+    }
+    
+    // Handle state as object or string
+    if (json['state'] != null) {
+      if (json['state'] is Map) {
+        state = LocationState.fromJson(json['state']);
+      }
+    }
+    
+    // Handle lga as object or string
+    if (json['lga'] != null) {
+      if (json['lga'] is Map) {
+        lga = LocationLga.fromJson(json['lga']);
+      }
+    }
+    
     isActive = json['is_active'];
     isPrimary = json['is_primary'];
     createdAt = json['created_at'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['phone_number'] = this.phoneNumber;
     data['contact_address'] = this.contactAddress;
     data['lat'] = this.lat;
     data['lon'] = this.lon;
-    data['country'] = this.country;
-    data['state'] = this.state;
-    data['lga'] = this.lga;
+    if (this.country != null) {
+      data['country'] = this.country!.toJson();
+    }
+    if (this.state != null) {
+      data['state'] = this.state!.toJson();
+    }
+    if (this.lga != null) {
+      data['lga'] = this.lga!.toJson();
+    }
     data['is_active'] = this.isActive;
     data['is_primary'] = this.isPrimary;
     data['created_at'] = this.createdAt;
+    return data;
+  }
+}
+
+// Add these new classes at the end of your file
+class LocationCountry {
+  int? id;
+  String? name;
+  String? code;
+
+  LocationCountry({this.id, this.name, this.code});
+
+  LocationCountry.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    code = json['code'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['code'] = this.code;
+    return data;
+  }
+}
+
+class LocationState {
+  int? id;
+  String? name;
+  String? countryId;
+
+  LocationState({this.id, this.name, this.countryId});
+
+  LocationState.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    countryId = json['country_id']?.toString();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['country_id'] = this.countryId;
+    return data;
+  }
+}
+
+class LocationLga {
+  int? id;
+  String? name;
+
+  LocationLga({this.id, this.name});
+
+  LocationLga.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
     return data;
   }
 }

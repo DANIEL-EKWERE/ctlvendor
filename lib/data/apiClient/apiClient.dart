@@ -476,6 +476,24 @@ class ApiClient extends GetConnect {
     return response;
   }
 
+  Future<http.Response> getProducts() async {
+    //var token = await dataBase.getToken();
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    final url = Uri.parse('$baseUrl/products');
+    _logRequest('GET', url);
+    final response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    _logResponse(response);
+    return response;
+  }
+
   Future<http.Response> fetchLgas(String name) async {
     // var token = await dataBase.getToken();
     final prefs = await SharedPreferences.getInstance();
@@ -1407,6 +1425,23 @@ class ApiClient extends GetConnect {
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    _logResponse(response);
+    return response;
+  }
+
+  // Get all categories
+  Future<http.Response> getProductCategories() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    final url = Uri.parse('$baseUrl/types/categories');
+    _logRequest('GET', url);
+    final response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
       },
     );
     _logResponse(response);

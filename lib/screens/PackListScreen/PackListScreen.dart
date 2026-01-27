@@ -57,7 +57,7 @@ class _PackListScreenState extends State<PackListScreen> {
           _buildDrawerItem(
             Icons.inventory_2_outlined,
             'Products',
-            () => Get.back(),
+            () => Get.toNamed(AppRoutes.productList),
           ),
           _buildDrawerItem(
             Icons.category_outlined,

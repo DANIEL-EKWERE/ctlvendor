@@ -54,6 +54,8 @@ class DataBase extends GetxController {
 
   String _brmCode = '';
 
+  String _categoryId = '';
+
   String _brmPhone = '';
 
   String _brmAddress = '';
@@ -77,6 +79,9 @@ class DataBase extends GetxController {
   String _last_name = '';
 
   String get recommended_by => _recommended_by;
+
+  String get category_id => _categoryId;
+
 
   String get token => _token;
 
@@ -174,6 +179,13 @@ class DataBase extends GetxController {
   saveVendorId(String vendorId) async {
     SharedPreferences sharedPreferences = await _pref;
     await sharedPreferences.setString('vendorId', vendorId);
+
+    return true;
+  }
+
+  saveCategoryId(String categoryId) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('categoryId', categoryId);
 
     return true;
   }
@@ -588,6 +600,21 @@ Future<List<String>> loadSelectedProducts() async {
       return data;
     } else {
       _brmCode = '';
+
+      return '';
+    }
+  }
+
+   Future<String> getCategoryId() async {
+    SharedPreferences sharedPreferences = await _pref;
+
+    if (sharedPreferences.containsKey('categoryId')) {
+      String data = sharedPreferences.getString('categoryId')!;
+      _categoryId = data;
+
+      return data;
+    } else {
+      _categoryId = '';
 
       return '';
     }

@@ -16,17 +16,21 @@ import 'package:get/get.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 // import '../../controllers/product_controller.dart';
 //ProductCreateController controller = Get.put(ProductCreateController());
+import 'package:ctlvendor/screens/ProductListScreen/model/model.dart';
 
-class ProductCreateScreen extends StatefulWidget {
-  ProductCreateScreen(this.controller, {Key? key}) : super(key: key);
+class ProductEditScreen extends StatefulWidget {
+  ProductEditScreen(this.controller, this.product, {Key? key})
+    : super(key: key);
   //final ProductController controller = Get.find<ProductController>();
   final ProductCreateController controller;
 
+  final Data product;
+
   @override
-  State<ProductCreateScreen> createState() => _ProductCreateScreenState();
+  State<ProductEditScreen> createState() => _ProductCreateScreenState();
 }
 
-class _ProductCreateScreenState extends State<ProductCreateScreen> {
+class _ProductCreateScreenState extends State<ProductEditScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController nameController = TextEditingController();
@@ -40,6 +44,31 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
   final TextEditingController stockController = TextEditingController();
 
   final TextEditingController descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      widget.controller.selectedProduct1.value =
+          widget.product.product?.name ?? '';
+      widget.controller.selectedProductId1.value =
+          widget.product.id?.toString() ?? '';
+      widget.controller.selectedPack1.value = widget.product.sku ?? '';
+      widget.controller.selectedPackId1.value = widget.product.packId ?? '';
+      widget.controller.selectedCategory1.value =
+          widget.product.category?.name ?? '';
+      widget.controller.selectedCategoryId1.value =
+          widget.product.category?.id?.toString() ?? '';
+      widget.controller.editPriceController.text =
+          widget.product.price?.toString() ?? '';
+      widget.controller.editCostController.text =
+          widget.product.cost?.toString() ?? '';
+      widget.controller.editStockController.text =
+          widget.product.stock?.toString() ?? '';
+      widget.controller.editDescriptionController.text =
+          widget.product.description ?? '';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,8 +131,8 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                 DropdownSearch<productModel.Data>(
                   onChanged: (value) async {
                     setState(() {
-                      widget.controller.selectedProduct.value = value!.name!;
-                      widget.controller.selectedProductId.value = value.id
+                      widget.controller.selectedProduct1.value = value!.name!;
+                      widget.controller.selectedProductId1.value = value.id
                           .toString();
                     });
                     // print('selected item is: ${controller.selectedCountry1}');
@@ -111,7 +140,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                     //     'selected item Id is: ${controller.selectedCountryId}');
 
                     assert(
-                      widget.controller.selectedProduct != null,
+                      widget.controller.selectedProduct1 != null,
                       'Selected product should not be null',
                     );
 
@@ -120,13 +149,13 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                     //   'Selected product: ${controller.selectedProduct}',
                     // );
                   },
-                  selectedItem: widget.controller.selectedProduct != null
+                  selectedItem: widget.controller.selectedProduct1 != null
                       //  ? widget.controller.selectedProductId.value != ''
                       ? productModel.Data(
                           id: int.tryParse(
-                            widget.controller.selectedProductId.value,
+                            widget.controller.selectedProductId1.value,
                           ),
-                          name: widget.controller.selectedProduct.value,
+                          name: widget.controller.selectedProduct1.value,
                         )
                       // productModel.Data(
                       //     id: int.parse(widget.controller.selectedProductId ?? '0'),
@@ -254,8 +283,8 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                 DropdownSearch<pack.Data>(
                   onChanged: (value) async {
                     setState(() {
-                      widget.controller.selectedPack.value = value!.name!;
-                      widget.controller.selectedPackId.value = value.id
+                      widget.controller.selectedPack1.value = value!.name!;
+                      widget.controller.selectedPackId1.value = value.id
                           .toString();
                     });
                     // print('selected item is: ${controller.selectedCountry1}');
@@ -263,7 +292,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                     //     'selected item Id is: ${controller.selectedCountryId}');
 
                     assert(
-                      widget.controller.selectedProduct != null,
+                      widget.controller.selectedProduct1 != null,
                       'Selected product should not be null',
                     );
 
@@ -272,11 +301,11 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                     //   'Selected product: ${controller.selectedProduct}',
                     // );
                   },
-                  selectedItem: widget.controller.selectedPack.value != null
-                      //  ? widget.controller.selectedProductId.value != ''
+                  selectedItem: widget.controller.selectedPack1.value != null
+                      //  ? widget.controller.selectedProductId1.value != ''
                       ? pack.Data(
                           id: int.tryParse(
-                            widget.controller.selectedPackId.value,
+                            widget.controller.selectedPackId1.value,
                           ),
                           name: widget.controller.selectedPack.value,
                         )
@@ -398,8 +427,8 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                 DropdownSearch<cat.Data>(
                   onChanged: (value) async {
                     setState(() {
-                      widget.controller.selectedCategory.value = value!.name!;
-                      widget.controller.selectedCategoryId.value = value.id
+                      widget.controller.selectedCategory1.value = value!.name!;
+                      widget.controller.selectedCategoryId1.value = value.id
                           .toString();
                     });
                     // print('selected item is: ${controller.selectedCountry1}');
@@ -407,7 +436,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                     //     'selected item Id is: ${controller.selectedCountryId}');
 
                     assert(
-                      widget.controller.selectedCategory.value != null,
+                      widget.controller.selectedCategory1.value != null,
                       'Selected category should not be null',
                     );
 
@@ -420,9 +449,9 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                       //  ? widget.controller.selectedProductId.value != ''
                       ? cat.Data(
                           id: int.tryParse(
-                            widget.controller.selectedCategoryId.value,
+                            widget.controller.selectedCategoryId1.value,
                           ),
-                          name: widget.controller.selectedCategory.value,
+                          name: widget.controller.selectedCategory1.value,
                         )
                       // productModel.Data(
                       //     id: int.parse(widget.controller.selectedProductId ?? '0'),
@@ -546,7 +575,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                           _buildLabel('Price'),
                           SizedBox(height: 8),
                           TextFormField(
-                            controller: widget.controller.priceController,
+                            controller: widget.controller.editPriceController,
                             keyboardType: TextInputType.number,
                             decoration: _inputDecoration('0'),
                             validator: (value) {
@@ -567,7 +596,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                           _buildLabel('Cost (Optional)'),
                           SizedBox(height: 8),
                           TextFormField(
-                            controller: widget.controller.costController,
+                            controller: widget.controller.editCostController,
                             keyboardType: TextInputType.number,
                             decoration: _inputDecoration('0'),
                           ),
@@ -584,7 +613,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                           TextFormField(
                             controller: widget
                                 .controller
-                                .stockController, //stockController,
+                                .editStockController, //stockController,
                             keyboardType: TextInputType.number,
                             decoration: _inputDecoration('0'),
                             validator: (value) {
@@ -605,7 +634,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                 _buildLabel('Description'),
                 SizedBox(height: 8),
                 TextFormField(
-                  controller: descriptionController,
+                  controller: widget.controller.editDescriptionController,
                   maxLines: 4,
                   decoration: _inputDecoration('Enter product description'),
                 ),
@@ -855,7 +884,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                             //   'Success',
                             //   'Product added successfully',
                             // );
-                            widget.controller.createProduct();
+                            widget.controller.updateProduct();
                           }
                           print('object');
                         },
