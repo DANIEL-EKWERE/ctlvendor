@@ -158,7 +158,7 @@ class _PackListScreenState extends State<PackListScreen> {
                             insetPadding: EdgeInsets.zero,
                             contentPadding: EdgeInsets.zero,
                             content: SizedBox(
-                              height: 320,
+                              height: 400,
                               child: PackCreateScreen(
                                 Get.put(PackCreateController()),
                               ),
@@ -270,7 +270,7 @@ class _PackListScreenState extends State<PackListScreen> {
                                         insetPadding: EdgeInsets.zero,
                                         contentPadding: EdgeInsets.zero,
                                         content: SizedBox(
-                                          height: 320,
+                                          height: 400,
                                           child: PackCreateScreen(
                                             Get.put(PackCreateController()),
                                           ),

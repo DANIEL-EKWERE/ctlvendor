@@ -3,6 +3,7 @@ import 'package:mime/mime.dart';
 import 'package:overlay_kit/overlay_kit.dart';
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 import 'dart:developer' as myLog;
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -23,6 +24,101 @@ class BusinessController extends GetxController {
   TextEditingController contactAddressController = TextEditingController();
   TextEditingController businessDescriptionController = TextEditingController();
   TextEditingController rcNumberController = TextEditingController();
+
+  // Image picker
+  ImagePicker picker = ImagePicker();
+  Rx<XFile?> businessLogoFile = Rx<XFile?>(null);
+  Rx<List<XFile>> businessDocumentFiles = Rx<List<XFile>>([]);
+  Rx<XFile?> identificationFile = Rx<XFile?>(null);
+
+  Future<void> obtainImageFromGallery() async {
+    try {
+      final file = await picker.pickImage(source: ImageSource.gallery);
+      if (file != null) {
+        businessLogoFile.value = file;
+        myLog.log('Image selected from gallery: ${file.path}');
+      }
+    } catch (e) {
+      myLog.log("Error picking image from gallery: $e");
+      Get.snackbar('Error', 'Failed to pick image from gallery');
+    }
+  }
+
+  Future<void> obtainImageFromCamera() async {
+    try {
+      final file = await picker.pickImage(source: ImageSource.camera);
+      if (file != null) {
+        businessLogoFile.value = file;
+        myLog.log('Image selected from camera: ${file.path}');
+      }
+    } catch (e) {
+      myLog.log("Error picking image from camera: $e");
+      Get.snackbar('Error', 'Failed to pick image from camera');
+    }
+  }
+
+  Future<void> obtainDocumentFromGallery() async {
+    try {
+      final file = await picker.pickImage(source: ImageSource.gallery);
+      if (file != null) {
+        final currentList = businessDocumentFiles.value;
+        currentList.add(file);
+        businessDocumentFiles.value = [...currentList];
+        myLog.log('Document selected from gallery: ${file.path}');
+      }
+    } catch (e) {
+      myLog.log("Error picking document from gallery: $e");
+      Get.snackbar('Error', 'Failed to pick document from gallery');
+    }
+  }
+
+  Future<void> obtainDocumentFromCamera() async {
+    try {
+      final file = await picker.pickImage(source: ImageSource.camera);
+      if (file != null) {
+        final currentList = businessDocumentFiles.value;
+        currentList.add(file);
+        businessDocumentFiles.value = [...currentList];
+        myLog.log('Document selected from camera: ${file.path}');
+      }
+    } catch (e) {
+      myLog.log("Error picking document from camera: $e");
+      Get.snackbar('Error', 'Failed to pick document from camera');
+    }
+  }
+
+  Future<void> removeDocumentFile(int index) async {
+    final currentList = businessDocumentFiles.value;
+    currentList.removeAt(index);
+    businessDocumentFiles.value = [...currentList];
+    myLog.log('Document removed at index: $index');
+  }
+
+  Future<void> obtainIdentificationFromGallery() async {
+    try {
+      final file = await picker.pickImage(source: ImageSource.gallery);
+      if (file != null) {
+        identificationFile.value = file;
+        myLog.log('Identification image selected from gallery: ${file.path}');
+      }
+    } catch (e) {
+      myLog.log("Error picking identification image from gallery: $e");
+      Get.snackbar('Error', 'Failed to pick identification image from gallery');
+    }
+  }
+
+  Future<void> obtainIdentificationFromCamera() async {
+    try {
+      final file = await picker.pickImage(source: ImageSource.camera);
+      if (file != null) {
+        identificationFile.value = file;
+        myLog.log('Identification image selected from camera: ${file.path}');
+      }
+    } catch (e) {
+      myLog.log("Error picking identification image from camera: $e");
+      Get.snackbar('Error', 'Failed to pick identification image from camera');
+    }
+  }
 
   Future<void> updateVendorProfileBusinessName() async {
     OverlayLoadingProgress.start(circularProgressColor: Color(0xff004BFD));
@@ -46,7 +142,7 @@ class BusinessController extends GetxController {
       //business_type_id
       request.fields['business_type_id'] = businessType.value;
       //
-      
+
       request.fields['fulfilment_type'] = fullfillmentType.value;
 
       request.fields['means_of_identification'] = meansOfIdentification.value;
@@ -59,22 +155,70 @@ class BusinessController extends GetxController {
       request.fields['is_registered'] =
           '1'; //businessDescriptionController.text;
 
-      // if (file1.value != null) {
-      //   myLog.log('profile photo adding');
-      //   XFile? imageFile = file1.value;
-      //   String mimeType = lookupMimeType(imageFile!.path) ?? 'image/jpeg';
-      //   String fileName = basename(imageFile.path);
+      // Add business logo image if available
+      if (businessLogoFile.value != null) {
+        myLog.log('Adding business logo image');
+        XFile? imageFile = businessLogoFile.value;
+        String mimeType = lookupMimeType(imageFile!.path) ?? 'image/jpeg';
+        String fileName = basename(imageFile.path);
 
-      //   // Convert image to MultipartFile and add it to the request
-      //   var multipartFile1 = await http.MultipartFile.fromPath(
-      //     'profile_picture', // The name of the field in your API
-      //     imageFile.path,
-      //     filename: fileName,
-      //     contentType:
-      //         MediaType(mimeType.split('/')[0], mimeType.split('/')[1]),
-      //   );
-      //   request.files.add(multipartFile1);
-      // }
+        // Convert image to MultipartFile and add it to the request
+        var multipartFile = await http.MultipartFile.fromPath(
+          'logo', // The name of the field in your API
+          imageFile.path,
+          filename: fileName,
+          contentType: MediaType(
+            mimeType.split('/')[0],
+            mimeType.split('/')[1],
+          ),
+        );
+        request.files.add(multipartFile);
+      }
+
+      // Add business documents if available
+      if (businessDocumentFiles.value.isNotEmpty) {
+        myLog.log(
+          'Adding ${businessDocumentFiles.value.length} business documents',
+        );
+        for (int i = 0; i < businessDocumentFiles.value.length; i++) {
+          XFile documentFile = businessDocumentFiles.value[i];
+          String mimeType =
+              lookupMimeType(documentFile.path) ?? 'application/pdf';
+          String fileName = basename(documentFile.path);
+
+          // Convert document to MultipartFile and add it to the request
+          var multipartFile = await http.MultipartFile.fromPath(
+            'business_documents', // The name of the field in your API
+            documentFile.path,
+            filename: fileName,
+            contentType: MediaType(
+              mimeType.split('/')[0],
+              mimeType.split('/')[1],
+            ),
+          );
+          request.files.add(multipartFile);
+        }
+      }
+
+      // Add identification image if available
+      if (identificationFile.value != null) {
+        myLog.log('Adding identification image');
+        XFile? identFile = identificationFile.value;
+        String mimeType = lookupMimeType(identFile!.path) ?? 'image/jpeg';
+        String fileName = basename(identFile.path);
+
+        // Convert image to MultipartFile and add it to the request
+        var multipartFile = await http.MultipartFile.fromPath(
+          'identification_url', // The name of the field in your API
+          identFile.path,
+          filename: fileName,
+          contentType: MediaType(
+            mimeType.split('/')[0],
+            mimeType.split('/')[1],
+          ),
+        );
+        request.files.add(multipartFile);
+      }
 
       // Send the request
       var response = await request.send();
@@ -104,6 +248,12 @@ class BusinessController extends GetxController {
         myLog.log('Profile updated successfully');
         await dataBase.saveAddress(contactAddressController.text);
         businessNameController.clear();
+        businessLogoFile.value =
+            null; // Clear the image after successful upload
+        businessDocumentFiles.value =
+            []; // Clear the documents after successful upload
+        identificationFile.value =
+            null; // Clear the identification image after successful upload
         Navigator.pushNamed(Get.context!, '/product-selection');
       } else {
         OverlayLoadingProgress.stop();

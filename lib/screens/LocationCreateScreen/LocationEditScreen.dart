@@ -4,7 +4,7 @@ import 'package:ctlvendor/screens/checkout_address_change/models/country_model.d
 import 'package:ctlvendor/screens/checkout_address_change/models/lga_model.dart'
     as lgaData;
 import 'package:ctlvendor/screens/checkout_address_change/models/state_model.dart';
-import 'package:ctlvendor/screens/faq_screen/faq_screen.dart';
+
 import 'package:ctlvendor/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -29,6 +29,16 @@ class _LocationCreateScreenState extends State<LocationEditScreen> {
     // TODO: implement initState
     super.initState();
     widget.controller.fetchCountries();
+    widget.controller.selectedCountry1 = widget.location.country ?? 'N/A';
+    
+    widget.controller.selectedState1 = widget.location.state ?? 'N/A';
+    widget.controller.selectedLGA1 = widget.location.lga ?? 'N/A';
+
+    widget.controller.fetchCountries();
+    // widget.controller.selectedCountryId = widget.location.country ?? 'N/A';
+    // widget.controller.selectedStateId = widget.location.state ?? 'N/A';
+    // widget.controller.selectedLGAId = widget.location.lga ?? 'N/A';
+
     widget.controller.edtContactAddressController.text =
         widget.location.contactAddress!;
     myLog.log('printing location address: ${widget.location.contactAddress}');
@@ -635,6 +645,12 @@ class _LocationCreateScreenState extends State<LocationEditScreen> {
                   .toList(),
               onChanged: (String? newValue) {
                 // Handle the selected value
+                print(newValue);
+                if (newValue == 'Active') {
+                  widget.controller.isActive.value = true;
+                } else {
+                  widget.controller.isActive.value = false;
+                }
               },
               decoration: InputDecoration(
                 filled: true,

@@ -160,7 +160,7 @@ class _LocationListScreenState extends State<LocationListScreen> {
                             insetPadding: EdgeInsets.zero,
                             contentPadding: EdgeInsets.zero,
                             content: SizedBox(
-                              height: 500,
+                              height: 600,
                               child: LocationCreateScreen(),
                             ),
                           ),
@@ -272,7 +272,7 @@ class _LocationListScreenState extends State<LocationListScreen> {
                                         insetPadding: EdgeInsets.zero,
                                         contentPadding: EdgeInsets.zero,
                                         content: SizedBox(
-                                          height: 320,
+                                          height: 600,
                                           child: LocationCreateScreen(),
                                         ),
                                       ),

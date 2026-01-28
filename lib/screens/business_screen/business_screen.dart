@@ -3,8 +3,93 @@ import 'package:get/get.dart';
 import 'package:ctlvendor/screens/business_screen/controller/business_controller.dart';
 import '../../widgets/status_bar.dart';
 import '../../widgets/back_button.dart';
+import 'dart:io';
 
 BusinessController controller = Get.put(BusinessController());
+
+Future<void> _showImageSourceDialog(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Select Image Source'),
+        content: const Text('Choose where to upload image from'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              controller.obtainImageFromGallery();
+            },
+            child: const Text('Gallery'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              controller.obtainImageFromCamera();
+            },
+            child: const Text('Camera'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<void> _showDocumentSourceDialog(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Select Document Source'),
+        content: const Text('Choose where to upload document from'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              controller.obtainDocumentFromGallery();
+            },
+            child: const Text('Gallery'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              controller.obtainDocumentFromCamera();
+            },
+            child: const Text('Camera'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<void> _showIdentificationSourceDialog(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Select Identification Source'),
+        content: const Text('Choose where to upload identification from'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              controller.obtainIdentificationFromGallery();
+            },
+            child: const Text('Gallery'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              controller.obtainIdentificationFromCamera();
+            },
+            child: const Text('Camera'),
+          ),
+        ],
+      );
+    },
+  );
+}
 
 class BusinessNameScreen extends StatefulWidget {
   const BusinessNameScreen({super.key});
@@ -258,8 +343,283 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
                   },
                 ),
               ),
-              const Spacer(),
-              SizedBox(height: 20),
+              // Animated Identification Upload Section
+              Obx(
+                () => AnimatedSize(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                  child: controller.meansOfIdentification.value.isNotEmpty
+                      ? Column(
+                          children: [
+                            const SizedBox(height: 20),
+                            GestureDetector(
+                              onTap: () =>
+                                  _showIdentificationSourceDialog(context),
+                              child: Container(
+                                height: 150,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color:
+                                        controller.identificationFile.value ==
+                                            null
+                                        ? Colors.grey
+                                        : Color(0XFF004BFD),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child:
+                                    controller.identificationFile.value == null
+                                    ? Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.file_copy_outlined,
+                                            size: 48,
+                                            color: Color(0XFF004BFD),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            'Upload ${controller.meansOfIdentification.value.replaceAll('_', ' ').toUpperCase()}',
+                                            style: const TextStyle(
+                                              color: Color(0XFF004BFD),
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Image.file(
+                                            File(
+                                              controller
+                                                  .identificationFile
+                                                  .value!
+                                                  .path,
+                                            ),
+                                            fit: BoxFit.cover,
+                                          ),
+                                          Positioned(
+                                            right: 8,
+                                            top: 8,
+                                            child: GestureDetector(
+                                              onTap: () =>
+                                                  controller
+                                                          .identificationFile
+                                                          .value =
+                                                      null,
+                                              child: Container(
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.red,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                padding: const EdgeInsets.all(
+                                                  4,
+                                                ),
+                                                child: const Icon(
+                                                  Icons.close,
+                                                  color: Colors.white,
+                                                  size: 20,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : const SizedBox.shrink(),
+                ),
+              ),
+              const SizedBox(height: 20),
+              // Image Upload Section
+              Obx(
+                () => GestureDetector(
+                  onTap: () => _showImageSourceDialog(context),
+                  child: Container(
+                    height: 150,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: controller.businessLogoFile.value == null
+                            ? Colors.grey
+                            : Color(0XFF004BFD),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: controller.businessLogoFile.value == null
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.cloud_upload_outlined,
+                                size: 48,
+                                color: Color(0XFF004BFD),
+                              ),
+                              const SizedBox(height: 8),
+                              const Text(
+                                'Upload Business Logo',
+                                style: TextStyle(
+                                  color: Color(0XFF004BFD),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.file(
+                                File(controller.businessLogoFile.value!.path),
+                                fit: BoxFit.cover,
+                              ),
+                              Positioned(
+                                right: 8,
+                                top: 8,
+                                child: GestureDetector(
+                                  onTap: () =>
+                                      controller.businessLogoFile.value = null,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    padding: const EdgeInsets.all(4),
+                                    child: const Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 40),
+              // Business Document Upload Section
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Business Documents',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Obx(
+                    () => GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                            childAspectRatio: 1,
+                          ),
+                      itemCount:
+                          controller.businessDocumentFiles.value.length +
+                          1, // +1 for add button
+                      itemBuilder: (context, index) {
+                        // Add new document button
+                        if (index ==
+                            controller.businessDocumentFiles.value.length) {
+                          return GestureDetector(
+                            onTap: () => _showDocumentSourceDialog(context),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Color(0XFF004BFD),
+                                  width: 2,
+                                  style: BorderStyle.solid,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.add_outlined,
+                                    size: 40,
+                                    color: Color(0XFF004BFD),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  const Text(
+                                    'Add Document',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color(0XFF004BFD),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+
+                        // Display document image
+                        final doc =
+                            controller.businessDocumentFiles.value[index];
+                        return Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: Color(0XFF004BFD),
+                                  width: 1,
+                                ),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.file(
+                                  File(doc.path),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              right: 4,
+                              top: 4,
+                              child: GestureDetector(
+                                onTap: () =>
+                                    controller.removeDocumentFile(index),
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  padding: const EdgeInsets.all(4),
+                                  child: const Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () {
                   controller.updateVendorProfileBusinessName();

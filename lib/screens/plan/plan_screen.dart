@@ -26,8 +26,7 @@ class _PlanScreenState extends State<PlanScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: ListView(
-          //crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
           children: [
             // Status bar and progress indicator
             const StatusBar(),
@@ -35,255 +34,147 @@ class _PlanScreenState extends State<PlanScreen> {
 
             // Main content
             Expanded(
-              child: Padding(
+              child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 14),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
+                children: [
+                  const SizedBox(height: 16),
 
-                    // Back button and title
-                    Row(
-                      children: [
-                        const CustomBackButton(),
-                        const SizedBox(width: 16),
-                        Text(
-                          'Business Plan',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0XFF004BFD),
-                          ),
+                  // Back button and title
+                  Row(
+                    children: [
+                      const CustomBackButton(),
+                      const SizedBox(width: 16),
+                      Text(
+                        'Business Plan',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0XFF004BFD),
                         ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // Description text
-                    Text(
-                      'please select a business plan to continue.',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade600,
-                        height: 1.5,
                       ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Description text
+                  Text(
+                    'please select a business plan to continue.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey.shade600,
+                      height: 1.5,
                     ),
+                  ),
 
-                    const SizedBox(height: 32),
+                  const SizedBox(height: 32),
 
-                    // Payment method cards
-                    Obx(
-                      () => controller.isLoading.value
-                          ? Center(
-                              child: CircularProgressIndicator(
-                                color: Color(0XFF004BFD),
-                              ),
-                            )
-                          : Row(
-                              children: [
-                                // Online Payment Card
-                                // Expanded(
-                                //   child: _buildPaymentCard(
-                                //     title: 'Online Payment',
-                                //     icon: Icons.credit_card,
-                                //     iconColor: Colors.white,
-                                //     iconBackground: Colors.green,
-                                //     description: 'Get paid in minutes.',
-                                //     features: [
-                                //       'Enjoy fast payment',
-                                //       'Secure',
-                                //       'Get jaraloan to boost your stock',
-                                //       'Enjoy order preferences.',
-                                //       // 'Lorem ipsum dolor sit a',
-                                //       // 'Lorem ipsum dolor sit a',
-                                //     ],
-                                //     isSelected:
-                                //         controller.selectedPlan.value ==
-                                //         'online',
-                                //     onTap: () {
-                                //       setState(() {
-                                //         controller.selectedPlan.value =
-                                //             'online';
-                                //       });
-                                //     },
-                                //   ),
-                                // ),
-
-                                // const SizedBox(width: 12),
-
-                                // // Offline Payment Card
-                                // Expanded(
-                                //   child: _buildPaymentCard(
-                                //     title: 'Offline Payment',
-                                //     icon: Icons.cloud_outlined,
-                                //     iconColor: Colors.white,
-                                //     iconBackground: Colors.orange,
-                                //     description: 'Get paid within 6 hours.',
-                                //     features: [
-                                //       'Physical delivery record is needed.',
-                                //       'Payment is done within 6 hours.',
-                                //       // 'Lorem ipsum dolor sit a',
-                                //       // 'Lorem ipsum dolor sit a',
-                                //     ],
-                                //     isSelected:
-                                //         controller.selectedPlan.value ==
-                                //         'offline',
-                                //     onTap: () {
-                                //       setState(() {
-                                //         controller.selectedPlan.value =
-                                //             'offline';
-                                //       });
-                                //     },
-                                //   ),
-                                // ),
-                                for (
-                                  int i = 0;
-                                  i < controller.planList.length;
-                                  i++
-                                ) ...[
-                                  if (i > 0) const SizedBox(width: 12),
-                                  Expanded(
-                                    child: _buildPaymentCard(
-                                      title: controller.planList[i].name ?? '',
-                                      icon:
-                                          controller.planList[i].imageUrl ??
-                                          'assets/logo.png',
-                                      iconColor: Colors.white,
-                                      iconBackground: Colors.grey,
-                                      description:
-                                          controller.planList[i].description ??
-                                          '',
-                                      features:
-                                          controller.planList[i].features
-                                              ?.map((f) => f.name as String)
-                                              .toList() ??
-                                          [],
-                                      isSelected:
-                                          controller.selectedPlan.value ==
-                                          controller.planList[i].name,
-                                      onTap: () {
-                                        setState(() {
-                                          controller.selectedPlan.value =
-                                              controller.planList[i].name ?? '';
-                                          controller.selectedPlanId.value =
-                                              controller.planList[i].id ?? 0;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ],
+                  // Payment method cards
+                  Obx(
+                    () => controller.isLoading.value
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              color: Color(0XFF004BFD),
                             ),
-                    ),
-                    // Obx(
-                    //   () => controller.isLoading.value
-                    //       ? Center(
-                    //           child: CircularProgressIndicator(
-                    //             color: Color(0XFF004BFD),
-                    //           ),
-                    //         )
-                    //       : Padding(
-                    //           padding: const EdgeInsets.all(8.0),
-                    //           child: GridView.builder(
-                    //             physics: NeverScrollableScrollPhysics(),
-                    //             shrinkWrap: true,
-                    //             itemCount:
-                    //                 controller.businessCategoryList.length,
-                    //             gridDelegate:
-                    //                 SliverGridDelegateWithFixedCrossAxisCount(
-                    //                   childAspectRatio: 1.9,
-                    //                   crossAxisSpacing: 10,
-                    //                   mainAxisSpacing: 10,
-                    //                   crossAxisCount: 2,
-                    //                 ),
-                    //             itemBuilder: (context, index) {
-                    //               Data catList =
-                    //                   controller.businessCategoryList[index];
-                    //               return GestureDetector(
-                    //                 onTap: () {
-                    //                   setState(() {
-                    //                     controller.selectedCategoryId.clear();
-                    //                     controller.selectedCategoryId.add(
-                    //                       catList.id!,
-                    //                     );
-                    //                     controller.selectedCategory.clear();
-                    //                     controller.selectedCategory.add(
-                    //                       catList.name!,
-                    //                     );
-                    //                     myLog.log(
-                    //                       controller.selectedCategoryId.first
-                    //                           .toString(),
-                    //                     );
-                    //                   });
-                    //                 },
-                    //                 child: Container(
-                    //                   //height: 20,
-                    //                   decoration: BoxDecoration(
-                    //                     color: Color(
-                    //                       0xff2D2D2D,
-                    //                     ).withValues(alpha: .04),
-                    //                     border: Border.all(
-                    //                       color:
-                    //                           controller.selectedCategoryId
-                    //                               .contains(catList.id)
-                    //                           ? Color(0XFF004BFD)
-                    //                           : Color(
-                    //                               0xff2D2D2D,
-                    //                             ).withValues(alpha: .2),
-                    //                     ),
-                    //                     borderRadius: BorderRadius.circular(12),
-                    //                   ),
-                    //                   child: Column(
-                    //                     mainAxisAlignment:
-                    //                         MainAxisAlignment.center,
-                    //                     crossAxisAlignment:
-                    //                         CrossAxisAlignment.center,
-                    //                     children: [
-                    //                       Row(
-                    //                         spacing: 5,
-                    //                         mainAxisAlignment:
-                    //                             MainAxisAlignment.center,
-                    //                         crossAxisAlignment:
-                    //                             CrossAxisAlignment.center,
-                    //                         children: [
-                    //                           // Image.asset(
-                    //                           //   'assets/spices.png',
-                    //                           //   height: 16,
-                    //                           //   //wid
-                    //                           // ),
-                    //                           CustomImageView(
-                    //                             height: 16,
-                    //                             imagePath:
-                    //                                 catList.imageUrl ??
-                    //                                 'assets/spices.png',
-                    //                           ),
-                    //                           SizedBox(
-                    //                             width: 80,
-                    //                             child: Text(
-                    //                               maxLines: 2,
-                    //                               textAlign: TextAlign.center,
-                    //                               overflow:
-                    //                                   TextOverflow.ellipsis,
-                    //                               catList.name!,
-                    //                               style: TextStyle(
-                    //                                 fontSize: 12,
-                    //                                 fontWeight: FontWeight.w500,
-                    //                               ),
-                    //                             ),
-                    //                           ),
-                    //                         ],
-                    //                       ),
-                    //                     ],
-                    //                   ),
-                    //                 ),
-                    //               );
-                    //             },
-                    //           ),
-                    //         ),
-                    // ),
-                  ],
-                ),
+                          )
+                        : Row(
+                            children: [
+                              // Online Payment Card
+                              // Expanded(
+                              //   child: _buildPaymentCard(
+                              //     title: 'Online Payment',
+                              //     icon: Icons.credit_card,
+                              //     iconColor: Colors.white,
+                              //     iconBackground: Colors.green,
+                              //     description: 'Get paid in minutes.',
+                              //     features: [
+                              //       'Enjoy fast payment',
+                              //       'Secure',
+                              //       'Get jaraloan to boost your stock',
+                              //       'Enjoy order preferences.',
+                              //       // 'Lorem ipsum dolor sit a',
+                              //       // 'Lorem ipsum dolor sit a',
+                              //     ],
+                              //     isSelected:
+                              //         controller.selectedPlan.value ==
+                              //         'online',
+                              //     onTap: () {
+                              //       setState(() {
+                              //         controller.selectedPlan.value =
+                              //             'online';
+                              //       });
+                              //     },
+                              //   ),
+                              // ),
+
+                              // const SizedBox(width: 12),
+
+                              // // Offline Payment Card
+                              // Expanded(
+                              //   child: _buildPaymentCard(
+                              //     title: 'Offline Payment',
+                              //     icon: Icons.cloud_outlined,
+                              //     iconColor: Colors.white,
+                              //     iconBackground: Colors.orange,
+                              //     description: 'Get paid within 6 hours.',
+                              //     features: [
+                              //       'Physical delivery record is needed.',
+                              //       'Payment is done within 6 hours.',
+                              //       // 'Lorem ipsum dolor sit a',
+                              //       // 'Lorem ipsum dolor sit a',
+                              //     ],
+                              //     isSelected:
+                              //         controller.selectedPlan.value ==
+                              //         'offline',
+                              //     onTap: () {
+                              //       setState(() {
+                              //         controller.selectedPlan.value =
+                              //             'offline';
+                              //       });
+                              //     },
+                              //   ),
+                              // ),
+                              for (
+                                int i = 0;
+                                i < controller.planList.length;
+                                i++
+                              ) ...[
+                                if (i > 0) const SizedBox(width: 12),
+                                Expanded(
+                                  child: _buildPaymentCard(
+                                    title: controller.planList[i].name ?? '',
+                                    icon:
+                                        controller.planList[i].imageUrl ??
+                                        'assets/logo.png',
+                                    iconColor: Colors.white,
+                                    iconBackground: Colors.grey,
+                                    description:
+                                        controller.planList[i].description ??
+                                        '',
+                                    features:
+                                        controller.planList[i].features
+                                            ?.map((f) => f.name as String)
+                                            .toList() ??
+                                        [],
+                                    isSelected:
+                                        controller.selectedPlan.value ==
+                                        controller.planList[i].name,
+                                    onTap: () {
+                                      setState(() {
+                                        controller.selectedPlan.value =
+                                            controller.planList[i].name ?? '';
+                                        controller.selectedPlanId.value =
+                                            controller.planList[i].id ?? 0;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                  ),
+                  const SizedBox(height: 24),
+                ],
               ),
             ),
 
@@ -292,9 +183,6 @@ class _PlanScreenState extends State<PlanScreen> {
               padding: const EdgeInsets.all(24.0),
               child: ElevatedButton(
                 onPressed: () {
-                  // controller.updateVendorProfilePaymentMethod();
-                  // print(controller.selectedPlan.value);
-                  // print(controller.selectedPlanId.value);
                   controller.updateVendorPlanId();
                 },
                 style: ElevatedButton.styleFrom(

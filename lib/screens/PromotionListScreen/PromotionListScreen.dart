@@ -165,7 +165,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                             contentPadding: EdgeInsets.zero,
 
                             content: SizedBox(
-                              height: 600,
+                              height: 700,
                               width: 300,
                               child: PromotionCreateScreen(
                                 Get.put(PromotionCreateController()),
@@ -282,7 +282,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                                         contentPadding: EdgeInsets.zero,
 
                                         content: SizedBox(
-                                          height: 600,
+                                          height: 700,
                                           width: 300,
                                           child: PromotionCreateScreen(
                                             Get.put(

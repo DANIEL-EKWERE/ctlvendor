@@ -676,7 +676,8 @@ class ApiClient extends GetConnect {
 
   // Fetch food products
   Future<http.Response> fetchProduct() async {
-    final url = Uri.parse('$baseUrl/vendor/products?company_id=12');
+    var companyId = await dataBase.getCompanyId();
+    final url = Uri.parse('$baseUrl/vendor/products?company_id=$companyId');
     var token = await dataBase.getToken();
     _logRequest('GET', url);
     return _retryRequest(() async {
@@ -727,8 +728,9 @@ class ApiClient extends GetConnect {
   // Fetch food packs
   Future<http.Response> fetchPacks() async {
     var userId = await dataBase.getUserId();
+    var companyId = await dataBase.getCompanyId();
     final url = Uri.parse(
-      '$baseUrl/vendor/packs?company_id=12&vendor_id=$userId',
+      '$baseUrl/vendor/packs?company_id=$companyId&vendor_id=$userId',
     );
     var token = await dataBase.getToken();
     _logRequest('GET', url);

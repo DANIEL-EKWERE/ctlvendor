@@ -6,6 +6,7 @@ import 'package:ctlvendor/screens/checkout_address_change/models/country_model.d
 import 'package:ctlvendor/screens/checkout_address_change/models/lga_model.dart';
 import 'package:ctlvendor/screens/checkout_address_change/models/state_model.dart';
 import 'package:ctlvendor/screens/profile_screen/controller/profile_controller.dart';
+import 'package:overlay_kit/overlay_kit.dart';
 
 class CheckoutAddressChangeController extends GetxController {
   ApiClient _apiService = ApiClient(Duration(seconds: 60 * 5));
@@ -34,6 +35,8 @@ class CheckoutAddressChangeController extends GetxController {
   List<LgaData> lgaDataList = [];
   List<String> states = [];
   List<String> lgas = [];
+  Rx<String>? long = ''.obs;
+  Rx<String>? lat = ''.obs;
 
   @override
   void onInit() {
@@ -127,6 +130,7 @@ class CheckoutAddressChangeController extends GetxController {
   }
 
   processUpdateCheckoutAddress() {
+    OverlayLoadingProgress.start(circularProgressColor: Color(0xff004BFD));
     if (isValid()) {
       isLoading.value = true;
       final Map<String, dynamic> addressData = {
@@ -136,6 +140,8 @@ class CheckoutAddressChangeController extends GetxController {
         'contact_address': contactAddressController.text,
         'phone_number': contactNumberController.text,
         'is_default': isDefault.value,
+        "lat": lat!.isEmpty ? 5.01135 : lat?.value,
+        "lon": long!.isEmpty ? 7.91752 : long?.value,
       };
 
       myLog.log('Updating address data: $addressData');
@@ -144,6 +150,7 @@ class CheckoutAddressChangeController extends GetxController {
           .then((response) {
             isLoading.value = false;
             if (response.statusCode == 200 || response.statusCode == 201) {
+              OverlayLoadingProgress.stop();
               myLog.log('Address updated successfully: ${response.body}');
               Get.snackbar(
                 'Success',
@@ -170,11 +177,15 @@ class CheckoutAddressChangeController extends GetxController {
                   'contact_address': contactAddressController.text,
                   'phone_number': contactNumberController.text,
                   'is_default': isDefault.value.toString(),
+                  "lat": lat!.isEmpty ? 5.01135 : lat?.value,
+                  "lon": long!.isEmpty ? 7.91752 : long?.value,
                 });
               } else {
+                OverlayLoadingProgress.stop();
                 print('Cannot pop the current route');
               }
             } else {
+              OverlayLoadingProgress.stop();
               Get.snackbar(
                 'Error',
                 'Failed to update address: ${response.body}',
@@ -184,6 +195,7 @@ class CheckoutAddressChangeController extends GetxController {
             }
           })
           .catchError((error) {
+            OverlayLoadingProgress.stop();
             isLoading.value = false;
             Get.snackbar(
               'Error',
@@ -193,6 +205,7 @@ class CheckoutAddressChangeController extends GetxController {
             );
           });
     } else {
+      OverlayLoadingProgress.stop();
       Get.snackbar(
         'Error',
         'Please select a country, state, and LGA.',
@@ -204,6 +217,7 @@ class CheckoutAddressChangeController extends GetxController {
 
   storeAddress() {
     // Store the address data in shared preferences or any local storage
+    OverlayLoadingProgress.start(circularProgressColor: Color(0xff004BFD));
     final Map<String, dynamic> addressData = {
       'country_id': selectedCountryId,
       'state_id': selectedStateId,
@@ -211,6 +225,8 @@ class CheckoutAddressChangeController extends GetxController {
       'contact_address': contactAddressController.text,
       'phone_number': contactNumberController.text,
       'is_default': isDefault.value,
+      "lat": lat!.isEmpty ? 5.01135 : lat?.value,
+      "lon": long!.isEmpty ? 7.91752 : long?.value,
     };
 
     myLog.log('Storing address data: $addressData');
@@ -219,6 +235,7 @@ class CheckoutAddressChangeController extends GetxController {
         .addCheckoutAddress(addressData)
         .then((response) async {
           if (response.statusCode == 200 || response.statusCode == 201) {
+            OverlayLoadingProgress.stop();
             myLog.log('Address stored successfully: ${response.body}');
             Get.snackbar(
               'Success',
@@ -236,14 +253,18 @@ class CheckoutAddressChangeController extends GetxController {
                 'contact_address': contactAddressController.text,
                 'phone_number': contactNumberController.text,
                 'is_default': isDefault.value.toString(),
+                "lat": lat!.isEmpty ? 5.01135 : lat?.value,
+                "lon": long!.isEmpty ? 7.91752 : long?.value,
               });
             } else {
+              OverlayLoadingProgress.stop();
               print('Cannot pop the current route');
             }
             Future.delayed(Duration(milliseconds: 100), () {
               profileController.fetchUserProfile();
             });
           } else {
+            OverlayLoadingProgress.stop();
             Get.snackbar(
               'Error',
               'Failed to store address: ${response.body}',
@@ -253,6 +274,7 @@ class CheckoutAddressChangeController extends GetxController {
           }
         })
         .catchError((error) {
+          OverlayLoadingProgress.stop();
           Get.snackbar(
             'Error',
             'An error occurred while storing address: $error',

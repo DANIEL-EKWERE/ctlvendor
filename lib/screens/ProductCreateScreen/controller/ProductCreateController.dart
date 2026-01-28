@@ -54,12 +54,13 @@ class ProductCreateController extends GetxController {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController stockController = TextEditingController();
   TextEditingController costController = TextEditingController();
-
+  TextEditingController skuController = TextEditingController();
 //TODO: Edit controllers
   TextEditingController editPriceController = TextEditingController();
   TextEditingController editDescriptionController = TextEditingController();
   TextEditingController editStockController = TextEditingController();
   TextEditingController editCostController = TextEditingController();
+  TextEditingController editSkuController = TextEditingController();
 
   List<Data> productList = [];
 

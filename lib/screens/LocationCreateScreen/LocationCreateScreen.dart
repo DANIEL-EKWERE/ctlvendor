@@ -558,7 +558,7 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
             Text('Contact Address'),
             SizedBox(height: 5),
             TextField(
-              // controller: controller.editPackNameController,
+              controller: controller.contactAddressController,
               decoration: InputDecoration(
                 hintText: 'Contact Address',
                 hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
@@ -583,7 +583,7 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
             Text('Phone Number'),
             SizedBox(height: 5),
             TextField(
-              // controller: controller.editPackNameController,
+              controller: controller.contactNumberController,
               decoration: InputDecoration(
                 hintText: 'Phone Number',
                 hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
@@ -617,6 +617,12 @@ class _LocationCreateScreenState extends State<LocationCreateScreen> {
                   .toList(),
               onChanged: (String? newValue) {
                 // Handle the selected value
+                print(newValue);
+                if (newValue == 'Active') {
+                  controller.isActive.value = true;
+                } else {
+                  controller.isActive.value = false;
+                }
               },
               decoration: InputDecoration(
                 filled: true,

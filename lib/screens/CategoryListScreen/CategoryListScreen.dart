@@ -59,7 +59,7 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
           _buildDrawerItem(
             Icons.category_outlined,
             'Categories',
-            () => Get.toNamed(AppRoutes.categoryList),
+            () => Get.back(),
           ),
           _buildDrawerItem(
             Icons.inventory_2_outlined,
@@ -129,7 +129,7 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                     ),
                     SizedBox(height: 4),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * .45,
+                      //  width: MediaQuery.of(context).size.width * .45,
                       child: Text(
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -143,25 +143,25 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  width: 150,
-                  child: ElevatedButton.icon(
-                    onPressed: () => Get.toNamed(AppRoutes.productCreate),
-                    icon: Icon(Icons.add, size: 18),
-                    label: Text('Add Category', style: TextStyle(fontSize: 12)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      // padding: EdgeInsets.symmetric(
-                      //   horizontal: 20,
-                      //   vertical: 12,
-                      // ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ),
+                // SizedBox(
+                //   width: 150,
+                //   child: ElevatedButton.icon(
+                //     onPressed: () => Get.toNamed(AppRoutes.productCreate),
+                //     icon: Icon(Icons.add, size: 18),
+                //     label: Text('Add Category', style: TextStyle(fontSize: 12)),
+                //     style: ElevatedButton.styleFrom(
+                //       backgroundColor: Colors.black,
+                //       foregroundColor: Colors.white,
+                //       // padding: EdgeInsets.symmetric(
+                //       //   horizontal: 20,
+                //       //   vertical: 12,
+                //       // ),
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(8),
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -233,18 +233,18 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                               ),
                               SizedBox(height: 16),
                               Text(
-                                'No products yet',
+                                'No products yet\n Contact admin to add Categories.',
                                 style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.grey[600],
                                 ),
                               ),
-                              SizedBox(height: 8),
-                              TextButton(
-                                onPressed: () =>
-                                    Get.toNamed(AppRoutes.productCreate),
-                                child: Text('Add your first product'),
-                              ),
+                              // SizedBox(height: 8),
+                              // TextButton(
+                              //   onPressed: () =>
+                              //       Get.toNamed(AppRoutes.productCreate),
+                              //   child: Text('Add your first product'),
+                              // ),
                             ],
                           ),
                         );
@@ -259,10 +259,10 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                             columnWidths: const {
                               0: FixedColumnWidth(100),
                               1: FixedColumnWidth(160),
-                              2: FixedColumnWidth(120),
+                              2: FixedColumnWidth(140),
                               3: FixedColumnWidth(100),
-                              4: FixedColumnWidth(100),
-                              5: FixedColumnWidth(80),
+                              // 4: FixedColumnWidth(100),
+                              // 5: FixedColumnWidth(80),
                               // 6: FixedColumnWidth(80),
                               // 7: FixedColumnWidth(100),
                               // 8: FixedColumnWidth(80),
@@ -284,8 +284,8 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                                   _headerCell('Product Count'),
                                   _headerCell('Status'),
 
-                                  _headerCell(''),
-                                  _headerCell('Action'),
+                                  // _headerCell(''),
+                                  // _headerCell('Action'),
                                 ],
                               ),
 
@@ -316,17 +316,17 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                                     ),
 
                                     // _menuCell(product),
-                                    IconButton(
-                                      icon: Icon(Icons.edit, color: Colors.red),
-                                      onPressed: () {},
-                                      color: Colors.red,
-                                    ),
+                                    // IconButton(
+                                    //   icon: Icon(Icons.edit, color: Colors.red),
+                                    //   onPressed: () {},
+                                    //   color: Colors.red,
+                                    // ),
 
-                                    IconButton(
-                                      icon: Icon(Icons.delete_outline),
-                                      onPressed: () {},
-                                      color: Colors.red,
-                                    ),
+                                    // IconButton(
+                                    //   icon: Icon(Icons.delete_outline),
+                                    //   onPressed: () {},
+                                    //   color: Colors.red,
+                                    // ),
                                   ],
                                 ),
                               ),

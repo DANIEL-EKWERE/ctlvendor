@@ -102,9 +102,9 @@ class LocationCreateController extends GetxController {
         "state_id": selectedStateId,
         "lga_id": selectedLGAId,
         "country_id": selectedCountryId,
-        "is_default": true,
-        "lat": lat?.value ?? 5.01135,
-        "lon": long?.value ?? 7.91752,
+        "is_default": isActive.value,
+        "lat": lat!.isEmpty ? 5.01135 : lat?.value,
+        "lon": long!.isEmpty ? 7.91752 : long?.value,
       };
       final response = await _apiService.storeAddress(body);
 
@@ -146,7 +146,7 @@ class LocationCreateController extends GetxController {
         "state_id": selectedStateId,
         "lga_id": selectedLGAId,
         "country_id": selectedCountryId,
-        "is_default": true,
+        "is_default": isActive.value,
         "lat": lat?.value == ""
             ? 5.01135
             : double.parse(lat?.value ?? "5.01135"),

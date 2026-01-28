@@ -154,7 +154,7 @@ class ProductListScreen extends StatelessWidget {
                             insetPadding: EdgeInsets.zero,
                             contentPadding: EdgeInsets.zero,
                             content: SizedBox(
-                              height: 520,
+                              height: 600,
                               child: ProductCreateScreen(
                                 Get.put(ProductCreateController()),
                               ),
@@ -270,7 +270,7 @@ class ProductListScreen extends StatelessWidget {
                                           insetPadding: EdgeInsets.zero,
                                           contentPadding: EdgeInsets.zero,
                                           content: SizedBox(
-                                            height: 520,
+                                            height: 600,
                                             child: ProductCreateScreen(
                                               Get.put(
                                                 ProductCreateController(),
@@ -334,7 +334,8 @@ class ProductListScreen extends StatelessWidget {
                                       _cell(product.product!.name),
                                       _cell(product.category!.name),
                                       _cell(
-                                        (product.packId ?? 'N/A') as String?,
+                                        (product.pack?.name ?? 'N/A')
+                                            as String?,
                                       ),
                                       _cell('₦${product.price}'),
                                       _cell('${product.stock}'),

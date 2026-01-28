@@ -31,7 +31,7 @@ class ProductSelectionController extends GetxController {
 
   Future<void> fetchBanks() async {
     isLoading.value = true;
-    OverlayLoadingProgress.start(circularProgressColor: Colors.amber);
+    //OverlayLoadingProgress.start(circularProgressColor: Colors.amber);
     //print(selectedProducts);
     try {
       var response = await apiClient.fetchBanks();
@@ -59,7 +59,7 @@ class ProductSelectionController extends GetxController {
     } catch (e) {
       myLog.log(e.toString());
       isLoading.value = false;
-      OverlayLoadingProgress.stop();
+      // OverlayLoadingProgress.stop();
       ScaffoldMessenger.of(Get.context!).showSnackBar(
         SnackBar(
           content: Text('Error: \n${e.toString()}'),
@@ -68,7 +68,7 @@ class ProductSelectionController extends GetxController {
       );
     } finally {
       isLoading.value = false;
-      OverlayLoadingProgress.stop();
+      //OverlayLoadingProgress.stop();
     }
     //update-vendor-categories/:email
   }

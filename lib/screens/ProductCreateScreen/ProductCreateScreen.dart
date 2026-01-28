@@ -42,6 +42,15 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
   final TextEditingController descriptionController = TextEditingController();
 
   @override
+  initState() {
+    super.initState();
+    // You can initialize any data here if needed
+    widget.controller.fetchProducts();
+    widget.controller.fetchPacks();
+    widget.controller.fetchCategories();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -605,7 +614,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                 _buildLabel('Description'),
                 SizedBox(height: 8),
                 TextFormField(
-                  controller: descriptionController,
+                  controller: widget.controller.descriptionController,
                   maxLines: 4,
                   decoration: _inputDecoration('Enter product description'),
                 ),

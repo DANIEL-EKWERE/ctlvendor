@@ -112,6 +112,7 @@ class Data {
   String? packId;
   String? price;
   String? cost;
+  Pack? pack;
   String? stock;
   String? sku;
   String? finalPrice;
@@ -129,6 +130,7 @@ class Data {
     this.price,
     this.cost,
     this.stock,
+    this.pack,
     this.sku,
     this.finalPrice,
     this.description,
@@ -150,6 +152,7 @@ class Data {
     price = json['price'];
     cost = json['cost'];
     stock = json['stock'];
+    pack = json['pack'] != null ? new Pack.fromJson(json['pack']) : null;
     sku = json['sku'];
     finalPrice = json['final_price'].toString();
     description = json['description'];
@@ -259,6 +262,47 @@ class Category {
     data['image_url'] = this.imageUrl;
     data['sort'] = this.sort;
     data['created_at'] = this.createdAt;
+    return data;
+  }
+}
+
+class Pack {
+  int? id;
+  String? vendorId;
+  String? companyId;
+  String? name;
+  String? price;
+  String? createdAt;
+  String? updatedAt;
+
+  Pack(
+      {this.id,
+      this.vendorId,
+      this.companyId,
+      this.name,
+      this.price,
+      this.createdAt,
+      this.updatedAt});
+
+  Pack.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    vendorId = json['vendor_id'];
+    companyId = json['company_id'];
+    name = json['name'];
+    price = json['price'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['vendor_id'] = this.vendorId;
+    data['company_id'] = this.companyId;
+    data['name'] = this.name;
+    data['price'] = this.price;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
     return data;
   }
 }

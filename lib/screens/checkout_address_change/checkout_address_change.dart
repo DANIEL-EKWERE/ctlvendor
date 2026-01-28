@@ -1,6 +1,7 @@
 import 'dart:developer' as myLog;
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:ctlvendor/screens/checkout_address_change/controller/checkout_address_change_controller.dart';
 import 'package:ctlvendor/screens/checkout_address_change/models/country_model.dart';
@@ -24,12 +25,69 @@ class CheckoutAddressChangeScreen extends StatefulWidget {
 
 class _CheckoutAddressChangeScreenState
     extends State<CheckoutAddressChangeScreen> {
+  String _locationMessage = "";
   var isFromProfile = Get.arguments['isFromProfile'] ?? false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     controller.fetchCountries();
+    _getCurrentLocation();
+  }
+
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      setState(() {
+        _locationMessage = 'Location services are disabled.';
+      });
+      return;
+    }
+
+    // Check location permissions
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        setState(() {
+          _locationMessage = 'Location permissions are denied';
+        });
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      setState(() {
+        _locationMessage = 'Location permissions are permanently denied';
+      });
+      return;
+    }
+
+    // Get current position
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+
+        //desiredAccuracy: LocationAccuracy.high,
+      );
+
+      setState(() {
+        _locationMessage =
+            'Lat: ${position.latitude}, Lng: ${position.longitude}';
+        controller.lat?.value = position.latitude.toString();
+        controller.long?.value = position.longitude.toString();
+      });
+    } catch (e) {
+      setState(() {
+        _locationMessage = 'Error: $e';
+      });
+    }
   }
 
   @override
@@ -170,11 +228,11 @@ class _CheckoutAddressChangeScreenState
                       filled: true,
                       fillColor: Color(0xffF5F5F5),
                       alignLabelWithHint: true,
-                      suffixIconColor: Colors.amberAccent,
+                      suffixIconColor: Color(0xff004BFD),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           style: BorderStyle.solid,
-                          color: Colors.amber,
+                          color: Color(0xff004BFD),
                           width: 1,
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -221,7 +279,7 @@ class _CheckoutAddressChangeScreenState
                       return controller.isCountryLoading.value
                           ? const Center(
                               child: CircularProgressIndicator(
-                                color: Colors.amber,
+                                color: Color(0xff004BFD),
                               ),
                             )
                           : const Center(
@@ -292,11 +350,11 @@ class _CheckoutAddressChangeScreenState
                       filled: true,
                       fillColor: Color(0xffF5F5F5),
                       alignLabelWithHint: true,
-                      suffixIconColor: Colors.amber,
+                      suffixIconColor: Color(0xff004BFD),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           style: BorderStyle.solid,
-                          color: Colors.amber,
+                          color: Color(0xff004BFD),
                           width: 1,
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -342,7 +400,7 @@ class _CheckoutAddressChangeScreenState
                       return controller.isStateLoading.value
                           ? const Center(
                               child: CircularProgressIndicator(
-                                color: Colors.amber,
+                                color: Color(0xff004BFD),
                               ),
                             )
                           : const Center(
@@ -411,11 +469,11 @@ class _CheckoutAddressChangeScreenState
                       filled: true,
                       fillColor: const Color(0xffF5F5F5),
                       alignLabelWithHint: true,
-                      suffixIconColor: Colors.amber,
+                      suffixIconColor: Color(0xff004BFD),
                       focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           style: BorderStyle.solid,
-                          color: Colors.amber,
+                          color: Color(0xff004BFD),
                           width: 1,
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -464,7 +522,7 @@ class _CheckoutAddressChangeScreenState
                       return controller.isStateLoading.value
                           ? const Center(
                               child: CircularProgressIndicator(
-                                color: Colors.amber,
+                                color: Color(0xff004BFD),
                               ),
                             )
                           : const Center(
@@ -542,7 +600,7 @@ class _CheckoutAddressChangeScreenState
                             controller.isDefault.value = value!;
                             print(value);
                           },
-                          activeColor: Colors.amberAccent,
+                          activeColor: Color(0xff004BFD),
                           checkColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4),

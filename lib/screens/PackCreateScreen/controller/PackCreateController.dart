@@ -39,6 +39,8 @@ class PackCreateController extends GetxController {
       if (response.statusCode == 200 || response.statusCode == 201) {
         OverlayLoadingProgress.stop();
         isLoading.value = false;
+        packNameController.clear();
+        priceModifierController.clear();
         //Get.back();
         controller.fetchPacks();
       } else {
