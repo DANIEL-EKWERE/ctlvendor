@@ -1,5 +1,6 @@
 import 'package:ctlvendor/routes/app_routes.dart';
 import 'package:ctlvendor/screens/CategoryListScreen/controller/CategoryListController.dart';
+import 'package:ctlvendor/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,6 +15,26 @@ class CategoryListScreen extends StatefulWidget {
 
 class _CategoryListScreenState extends State<CategoryListScreen> {
   final TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.fetchCategories();
+    setValue();
+  }
+
+  String firstName = 'N/A';
+  String lastName = '';
+
+  setValue() async {
+    var fname = await dataBase.getFirstName();
+    var lname = await dataBase.getLastName();
+    setState(() {
+      firstName = fname;
+      lastName = lname;
+    });
+    //  myLog.log('first name $fname ans last name $lastName');
+  }
 
   Widget _buildDrawer() {
     return Drawer(
@@ -32,17 +53,17 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                 ),
                 SizedBox(height: 12),
                 Text(
-                  'Vendor Name',
+                  '$firstName $lastName',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  'vendor@email.com',
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
+                // Text(
+                //   'vendor@email.com',
+                //   style: TextStyle(color: Colors.white70, fontSize: 14),
+                // ),
               ],
             ),
           ),
@@ -215,13 +236,13 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                   /// ================= CONTENT =================
                   Expanded(
                     child: Obx(() {
-                      if (controller.isLoading.value) {
+                      if (controller.isLoading2.value) {
                         return const Center(
                           child: CircularProgressIndicator(color: Colors.black),
                         );
                       }
 
-                      if (controller.categories.isEmpty) {
+                      if (controller.categoryList.isEmpty) {
                         return Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -290,13 +311,13 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                               ),
 
                               /// DATA
-                              ...controller.categories.map(
+                              ...controller.categoryList.map(
                                 (product) => TableRow(
                                   children: [
                                     _cell(product.name),
 
                                     _cell(product.description),
-                                    _cell('${product.productsCount}'),
+                                    _cell('${product.sort}'),
 
                                     Container(
                                       margin: EdgeInsets.all(10),
@@ -307,7 +328,7 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          product.isActive!
+                                          product.isBlank!
                                               ? 'Active'
                                               : 'In-Active',
                                           style: TextStyle(color: Colors.white),

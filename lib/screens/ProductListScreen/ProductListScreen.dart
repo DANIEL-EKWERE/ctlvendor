@@ -3,15 +3,39 @@ import 'package:ctlvendor/screens/ProductCreateScreen/ProductCreateScreen.dart';
 import 'package:ctlvendor/screens/ProductCreateScreen/ProductEditScreen.dart';
 import 'package:ctlvendor/screens/ProductCreateScreen/controller/ProductCreateController.dart';
 import 'package:ctlvendor/screens/ProductListScreen/controller/ProductListController.dart';
+import 'package:ctlvendor/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // lib/screens/products/product_list_screen.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProductListScreen extends StatelessWidget {
+class ProductListScreen extends StatefulWidget {
+  @override
+  State<ProductListScreen> createState() => _ProductListScreenState();
+}
+
+class _ProductListScreenState extends State<ProductListScreen> {
   final Productlistcontroller controller = Get.put(Productlistcontroller());
+
   final TextEditingController searchController = TextEditingController();
+  String firstName = 'N/A';
+  String lastName = '';
+  @override
+  initState() {
+    super.initState();
+    setValue();
+  }
+
+  setValue() async {
+    var fname = await dataBase.getFirstName();
+    var lname = await dataBase.getLastName();
+    setState(() {
+      firstName = fname;
+      lastName = lname;
+    });
+    // myLog.log('first name $fname ans last name $lastName');
+  }
 
   Widget _buildDrawer() {
     return Drawer(
@@ -30,17 +54,17 @@ class ProductListScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 12),
                 Text(
-                  'Vendor Name',
+                  '$firstName $lastName',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  'vendor@email.com',
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
+                // Text(
+                //   'vendor@email.com',
+                //   style: TextStyle(color: Colors.white70, fontSize: 14),
+                // ),
               ],
             ),
           ),

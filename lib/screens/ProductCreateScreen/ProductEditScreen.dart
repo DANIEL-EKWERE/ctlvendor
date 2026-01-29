@@ -1,4 +1,5 @@
 import 'package:ctlvendor/screens/ProductCreateScreen/controller/ProductCreateController.dart';
+import 'package:ctlvendor/widgets/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:ctlvendor/screens/PackListScreen/models/model.dart' as pack;
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 // import '../../controllers/product_controller.dart';
 //ProductCreateController controller = Get.put(ProductCreateController());
 import 'package:ctlvendor/screens/ProductListScreen/model/model.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProductEditScreen extends StatefulWidget {
   ProductEditScreen(this.controller, this.product, {Key? key})
@@ -67,6 +69,11 @@ class _ProductCreateScreenState extends State<ProductEditScreen> {
           widget.product.stock?.toString() ?? '';
       widget.controller.editDescriptionController.text =
           widget.product.description ?? '';
+      if (widget.controller.selectedImages.isEmpty) {
+        widget.controller.selectedImages.add(
+          XFile(widget.product.imageUrl!),
+        ); //= widget.product.imageUrl ?? [];
+      }
     });
 
     widget.controller.fetchProducts();
@@ -770,17 +777,25 @@ class _ProductCreateScreenState extends State<ProductEditScreen> {
                                               ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(6),
-                                                child: Image.file(
-                                                  File(
-                                                    widget
-                                                        .controller
-                                                        .selectedImages[index]
-                                                        .path,
-                                                  ),
+                                                child: CustomImageView(
+                                                  imagePath: widget
+                                                      .controller
+                                                      .selectedImages[index]
+                                                      .path,
                                                   fit: BoxFit.cover,
                                                   width: 120,
                                                   height: 120,
                                                 ),
+                                                // Image.network(
+                                                //   widget
+                                                //       .controller
+                                                //       .selectedImages[index]
+                                                //       .path,
+
+                                                //   fit: BoxFit.cover,
+                                                //   width: 120,
+                                                //   height: 120,
+                                                // ),
                                               ),
                                               // Overlay on tap
                                               Positioned.fill(
@@ -937,12 +952,14 @@ class _ProductCreateScreenState extends State<ProductEditScreen> {
 
   void _showImageOptions(BuildContext context, int index) {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) => Container(
+        // height: 500,
         padding: EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -961,10 +978,14 @@ class _ProductCreateScreenState extends State<ProductEditScreen> {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.file(
-                  File(widget.controller.selectedImages[index].path),
+                child: CustomImageView(
+                  imagePath: widget.controller.selectedImages[index].path,
                   fit: BoxFit.cover,
                 ),
+                // Image.file(
+                //   File(widget.controller.selectedImages[index].path),
+                //   fit: BoxFit.cover,
+                // ),
               ),
             ),
             SizedBox(height: 20),
@@ -974,7 +995,8 @@ class _ProductCreateScreenState extends State<ProductEditScreen> {
                   child: OutlinedButton.icon(
                     onPressed: () {
                       Get.back();
-                      widget.controller.pickImage();
+                      widget.controller.pickImageReplace(index);
+                      // print(index);
                     },
                     icon: Icon(Icons.edit, color: Colors.blue),
                     label: Text(

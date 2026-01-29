@@ -10,6 +10,7 @@ import '../../widgets/status_bar.dart';
 import '../orders_screen/orders_screen.dart';
 import '../wallet_screen/wallet_screen.dart';
 import '../profile_screen/profile_screen.dart';
+import 'dart:developer' as myLog;
 
 DashboardController controller = Get.put(DashboardController());
 
@@ -22,13 +23,32 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
+  String firstName = 'N/A';
+  String lastName = '';
 
-  final List<Widget> _tabs = [
-    const HomeTab(),
-    const OrdersTab(),
-    const WalletTab(),
-    const ProfileTab(),
-  ];
+  late final List<Widget> _tabs;
+  @override
+  void initState() {
+    super.initState();
+    setValue();
+    _tabs = [
+      HomeTab(firstName: firstName, lastName: lastName),
+      const OrdersTab(),
+      const WalletTab(),
+      const ProfileTab(),
+    ];
+    // controller.fetchDashboardData();
+  }
+
+  setValue() async {
+    var fname = await dataBase.getFirstName();
+    var lname = await dataBase.getLastName();
+    setState(() {
+      firstName = fname;
+      lastName = lname;
+    });
+    myLog.log('first name $fname ans last name $lastName');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +92,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-class HomeTab extends StatelessWidget {
-  const HomeTab({super.key});
+class HomeTab extends StatefulWidget {
+  final String firstName;
+  final String lastName;
+
+  const HomeTab({super.key, required this.firstName, required this.lastName});
 
   @override
+  State<HomeTab> createState() => _HomeTabState();
+}
+
+class _HomeTabState extends State<HomeTab> {
+  String firstName = 'N/A';
+  String lastName = '';
+  @override
+  initState() {
+    super.initState();
+    setValue();
+  }
+
+  setValue() async {
+    var fname = await dataBase.getFirstName();
+    var lname = await dataBase.getLastName();
+    setState(() {
+      firstName = fname;
+      lastName = lname;
+    });
+    myLog.log('first name $fname ans last name $lastName');
+  }
+
+  
   // Widget build(BuildContext context) {
   //   return Column(
   //     children: [
@@ -449,17 +495,18 @@ class HomeTab extends StatelessWidget {
                 ),
                 SizedBox(height: 12),
                 Text(
-                  'Vendor Name',
+                  //  ambiguate(value)
+                  '${firstName} ${lastName}',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  'vendor@email.com',
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
+                // Text(
+                //   'vendor@email.com',
+                //   style: TextStyle(color: Colors.white70, fontSize: 14),
+                // ),
               ],
             ),
           ),
@@ -511,9 +558,31 @@ class HomeTab extends StatelessWidget {
   }
 }
 
-class OrdersTab extends StatelessWidget {
+class OrdersTab extends StatefulWidget {
   const OrdersTab({super.key});
 
+  @override
+  State<OrdersTab> createState() => _OrdersTabState();
+}
+
+class _OrdersTabState extends State<OrdersTab> {
+    String firstName = 'N/A';
+  String lastName = '';
+  @override
+  initState() {
+    super.initState();
+    setValue();
+  }
+
+  setValue() async {
+    var fname = await dataBase.getFirstName();
+    var lname = await dataBase.getLastName();
+    setState(() {
+      firstName = fname;
+      lastName = lname;
+    });
+    myLog.log('first name $fname ans last name $lastName');
+  }
   @override
   Widget build(BuildContext context) {
     return const OrdersScreen();

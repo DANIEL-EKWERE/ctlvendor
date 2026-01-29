@@ -3,6 +3,7 @@ import 'package:ctlvendor/screens/PromotionCreateScreen/PromotionCreateScreen.da
 import 'package:ctlvendor/screens/PromotionCreateScreen/PromotionEditScreen.dart';
 import 'package:ctlvendor/screens/PromotionCreateScreen/controller/PromotionCreateController.dart';
 import 'package:ctlvendor/screens/PromotionListScreen/controller/PromotionListController.dart';
+import 'package:ctlvendor/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -23,6 +24,24 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
     controller.fetchPromotions();
   }
 
+  String firstName = 'N/A';
+  String lastName = '';
+  @override
+  initState() {
+    super.initState();
+    setValue();
+  }
+
+  setValue() async {
+    var fname = await dataBase.getFirstName();
+    var lname = await dataBase.getLastName();
+    setState(() {
+      firstName = fname;
+      lastName = lname;
+    });
+    // myLog.log('first name $fname ans last name $lastName');
+  }
+
   Widget _buildDrawer() {
     return Drawer(
       child: ListView(
@@ -40,17 +59,17 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                 ),
                 SizedBox(height: 12),
                 Text(
-                  'Vendor Name',
+                  '$firstName $lastName',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  'vendor@email.com',
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
+                // Text(
+                //   'vendor@email.com',
+                //   style: TextStyle(color: Colors.white70, fontSize: 14),
+                // ),
               ],
             ),
           ),
@@ -165,7 +184,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                             contentPadding: EdgeInsets.zero,
 
                             content: SizedBox(
-                              height: 700,
+                              height: 600,
                               width: 300,
                               child: PromotionCreateScreen(
                                 Get.put(PromotionCreateController()),
@@ -282,7 +301,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                                         contentPadding: EdgeInsets.zero,
 
                                         content: SizedBox(
-                                          height: 700,
+                                          height: 600,
                                           width: 300,
                                           child: PromotionCreateScreen(
                                             Get.put(
@@ -296,7 +315,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                                   //=>
 
                                   //  Get.toNamed(AppRoutes.productCreate),
-                                  child: Text('Add your first product'),
+                                  child: Text('Add your first promotion'),
                                 ),
                               ],
                             ),

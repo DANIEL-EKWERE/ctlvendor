@@ -1,5 +1,6 @@
 import 'package:ctlvendor/routes/app_routes.dart';
 import 'package:ctlvendor/screens/OrderListScreen/controller/OrderListController.dart';
+import 'package:ctlvendor/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,6 +15,24 @@ class OrderListScreen extends StatefulWidget {
 
 class _OrderListScreenState extends State<OrderListScreen> {
   final TextEditingController searchController = TextEditingController();
+
+  String firstName = 'N/A';
+  String lastName = '';
+  @override
+  initState() {
+    super.initState();
+    setValue();
+  }
+
+  setValue() async {
+    var fname = await dataBase.getFirstName();
+    var lname = await dataBase.getLastName();
+    setState(() {
+      firstName = fname;
+      lastName = lname;
+    });
+   // myLog.log('first name $fname ans last name $lastName');
+  }
 
   Widget _buildDrawer() {
     return Drawer(
@@ -32,17 +51,17 @@ class _OrderListScreenState extends State<OrderListScreen> {
                 ),
                 SizedBox(height: 12),
                 Text(
-                  'Vendor Name',
+                  '$firstName $lastName',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  'vendor@email.com',
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
+                // Text(
+                //   'vendor@email.com',
+                //   style: TextStyle(color: Colors.white70, fontSize: 14),
+                // ),
               ],
             ),
           ),
@@ -54,7 +73,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
           _buildDrawerItem(
             Icons.inventory_2_outlined,
             'Products',
-            () => Get.back(),
+            () => Get.toNamed(AppRoutes.productList),
           ),
           _buildDrawerItem(
             Icons.category_outlined,
@@ -69,12 +88,12 @@ class _OrderListScreenState extends State<OrderListScreen> {
           _buildDrawerItem(
             Icons.local_offer_outlined,
             'Promotions',
-            () => Get.back(),
+            () => Get.toNamed(AppRoutes.promotionList),
           ),
           _buildDrawerItem(
             Icons.location_on_outlined,
             'Locations',
-            () => Get.back(),
+            () => Get.toNamed(AppRoutes.locationList),
           ),
           _buildDrawerItem(
             Icons.shopping_bag_outlined,
@@ -120,7 +139,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Locations',
+                      'Orders',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -133,7 +152,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                       child: Text(
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        'Manage warehouses and delivery locations Add Location',
+                        'Manage Orders in one go',
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey[600],
@@ -148,7 +167,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                   child: ElevatedButton.icon(
                     onPressed: () => Get.toNamed(AppRoutes.productCreate),
                     icon: Icon(Icons.add, size: 18),
-                    label: Text('Add Location', style: TextStyle(fontSize: 12)),
+                    label: Text('Add Order', style: TextStyle(fontSize: 12)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
                       foregroundColor: Colors.white,
@@ -187,7 +206,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                   TextField(
                     controller: searchController,
                     decoration: InputDecoration(
-                      hintText: 'Search products by name or SKU',
+                      hintText: 'Search order by name or SKU',
                       hintStyle: TextStyle(
                         color: Colors.grey[400],
                         fontSize: 14,

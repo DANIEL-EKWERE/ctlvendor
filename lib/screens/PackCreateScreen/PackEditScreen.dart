@@ -115,7 +115,7 @@ class _PackEditScreenState extends State<PackEditScreen> {
               children: [
                 SizedBox(
                   width: 90,
-                  height: 40,
+                  height: 50,
                   child: CustomButton(
                     isOutlined: true,
                     text: 'Cancel',
@@ -126,7 +126,7 @@ class _PackEditScreenState extends State<PackEditScreen> {
                 ),
                 SizedBox(
                   width: 90,
-                  height: 40,
+                  height: 50,
                   child: CustomButton(
                     text: 'Save',
                     onPressed: () {

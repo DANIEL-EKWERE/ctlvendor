@@ -489,7 +489,7 @@ class _PromotionCreateScreenState extends State<PromotionCreateScreen> {
               children: [
                 SizedBox(
                   width: 90,
-                  height: 40,
+                  height: 50,
                   child: CustomButton(
                     isOutlined: true,
                     text: 'Cancel',
@@ -500,7 +500,7 @@ class _PromotionCreateScreenState extends State<PromotionCreateScreen> {
                 ),
                 SizedBox(
                   width: 90,
-                  height: 40,
+                  height: 50,
                   child: CustomButton(
                     text: 'Save',
                     onPressed: () {

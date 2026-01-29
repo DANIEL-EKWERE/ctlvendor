@@ -22,13 +22,13 @@ Future<void> _showImageSourceDialog(BuildContext context) {
             },
             child: const Text('Gallery'),
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              controller.obtainImageFromCamera();
-            },
-            child: const Text('Camera'),
-          ),
+          // TextButton(
+          //   onPressed: () {
+          //     Navigator.of(context).pop();
+          //     controller.obtainImageFromCamera();
+          //   },
+          //   child: const Text('Camera'),
+          // ),
         ],
       );
     },
@@ -50,13 +50,13 @@ Future<void> _showDocumentSourceDialog(BuildContext context) {
             },
             child: const Text('Gallery'),
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              controller.obtainDocumentFromCamera();
-            },
-            child: const Text('Camera'),
-          ),
+          // TextButton(
+          //   onPressed: () {
+          //     Navigator.of(context).pop();
+          //     controller.obtainDocumentFromCamera();
+          //   },
+          //   child: const Text('Camera'),
+          // ),
         ],
       );
     },
@@ -78,13 +78,13 @@ Future<void> _showIdentificationSourceDialog(BuildContext context) {
             },
             child: const Text('Gallery'),
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              controller.obtainIdentificationFromCamera();
-            },
-            child: const Text('Camera'),
-          ),
+          // TextButton(
+          //   onPressed: () {
+          //     Navigator.of(context).pop();
+          //     controller.obtainIdentificationFromCamera();
+          //   },
+          //   child: const Text('Camera'),
+          // ),
         ],
       );
     },
@@ -110,16 +110,19 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
   Widget _buildProgressIndicator() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-      child: Row(
-        children: List.generate(
-          6,
-          (index) => Expanded(
-            child: Container(
-              height: 4,
-              margin: const EdgeInsets.symmetric(horizontal: 2),
-              decoration: BoxDecoration(
-                color: index < 1 ? Color(0XFF004BFD) : Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(2),
+      child: SizedBox(
+        width: double.infinity,
+        child: Row(
+          children: List.generate(
+            6,
+            (index) => Expanded(
+              child: Container(
+                height: 4,
+                margin: const EdgeInsets.symmetric(horizontal: 2),
+                decoration: BoxDecoration(
+                  color: index < 1 ? Color(0XFF004BFD) : Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
             ),
           ),
@@ -229,9 +232,9 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
                   textStyle: TextStyle(color: Colors.grey),
                   width: double.infinity,
                   dropdownMenuEntries: const [
-                    DropdownMenuEntry(value: 'instant', label: 'instant'),
-                    DropdownMenuEntry(value: 'preorder', label: 'preorder'),
-                    DropdownMenuEntry(value: 'both', label: 'both'),
+                    DropdownMenuEntry(value: 'instant', label: 'INSTANT'),
+                    DropdownMenuEntry(value: 'preorder', label: 'PRE-ORDER'),
+                    DropdownMenuEntry(value: 'both', label: 'BOTH'),
                   ],
                   // decoration: const InputDecoration(
                   //   labelText: 'Select an option',
@@ -269,12 +272,12 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
                   textStyle: TextStyle(color: Colors.grey),
                   width: double.infinity,
                   dropdownMenuEntries: const [
-                    DropdownMenuEntry(value: 'yes', label: 'yes'),
-                    DropdownMenuEntry(value: 'no', label: 'no'),
-                    DropdownMenuEntry(
-                      value: 'Rather not say',
-                      label: 'Rather not say',
-                    ),
+                    DropdownMenuEntry(value: 'YES', label: 'YES'),
+                    DropdownMenuEntry(value: 'NO', label: 'NO'),
+                    // DropdownMenuEntry(
+                    //   value: 'Rather not say',
+                    //   label: 'Rather not say',
+                    // ),
                   ],
                   // decoration: const InputDecoration(
                   //   labelText: 'Select an option',
@@ -282,7 +285,12 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
                   // ),
                   onSelected: (String? value) {
                     print('Selected: $value');
-                    controller.isBusinessRegistered.value = true;
+                    setState(() {
+                      controller.isBusinessRegistered.value = value == 'YES'
+                          ? true
+                          : false;
+                      print(controller.isBusinessRegistered.value);
+                    });
                   },
                 ),
               ),
@@ -304,15 +312,15 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: controller.rcNumberController,
-                decoration: const InputDecoration(
-                  hintText: 'RC Number',
-                  hintStyle: TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(),
-                ),
-              ),
+              // const SizedBox(height: 20),
+              // TextField(
+              //   controller: controller.rcNumberController,
+              //   decoration: const InputDecoration(
+              //     hintText: 'RC Number',
+              //     hintStyle: TextStyle(color: Colors.grey),
+              //     border: OutlineInputBorder(),
+              //   ),
+              // ),
               const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
@@ -506,118 +514,112 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
               ),
               const SizedBox(height: 40),
               // Business Document Upload Section
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Business Documents',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Obx(
-                    () => GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 12,
-                            mainAxisSpacing: 12,
-                            childAspectRatio: 1,
-                          ),
-                      itemCount:
-                          controller.businessDocumentFiles.value.length +
-                          1, // +1 for add button
-                      itemBuilder: (context, index) {
-                        // Add new document button
-                        if (index ==
-                            controller.businessDocumentFiles.value.length) {
-                          return GestureDetector(
-                            onTap: () => _showDocumentSourceDialog(context),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Color(0XFF004BFD),
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.add_outlined,
-                                    size: 40,
-                                    color: Color(0XFF004BFD),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  const Text(
-                                    'Add Document',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Color(0XFF004BFD),
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }
+              Obx(
+                () => AnimatedSize(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
 
-                        // Display document image
-                        final doc =
-                            controller.businessDocumentFiles.value[index];
-                        return Stack(
+                  child: controller.isBusinessRegistered.value
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  color: Color(0XFF004BFD),
-                                  width: 1,
-                                ),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.file(
-                                  File(doc.path),
-                                  fit: BoxFit.cover,
-                                ),
+                            const Text(
+                              'Business Documents',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
                               ),
                             ),
-                            Positioned(
-                              right: 4,
-                              top: 4,
-                              child: GestureDetector(
-                                onTap: () =>
-                                    controller.removeDocumentFile(index),
+                            const SizedBox(height: 12),
+                            Obx(
+                              () => GestureDetector(
+                                onTap: () => _showDocumentSourceDialog(context),
                                 child: Container(
-                                  decoration: const BoxDecoration(
-                                    color: Colors.red,
-                                    shape: BoxShape.circle,
+                                  height: 150,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color:
+                                          controller
+                                                  .businessDocumentFile
+                                                  .value ==
+                                              null
+                                          ? Colors.grey
+                                          : Color(0XFF004BFD),
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                  padding: const EdgeInsets.all(4),
-                                  child: const Icon(
-                                    Icons.close,
-                                    color: Colors.white,
-                                    size: 16,
-                                  ),
+                                  child:
+                                      controller.businessDocumentFile.value ==
+                                          null
+                                      ? Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Icon(
+                                              Icons.cloud_upload_outlined,
+                                              size: 48,
+                                              color: Color(0XFF004BFD),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            const Text(
+                                              'Upload Business Document',
+                                              style: TextStyle(
+                                                color: Color(0XFF004BFD),
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            Image.file(
+                                              File(
+                                                controller
+                                                    .businessDocumentFile
+                                                    .value!
+                                                    .path,
+                                              ),
+                                              fit: BoxFit.cover,
+                                            ),
+                                            Positioned(
+                                              right: 8,
+                                              top: 8,
+                                              child: GestureDetector(
+                                                onTap: () =>
+                                                    controller
+                                                            .businessDocumentFile
+                                                            .value =
+                                                        null,
+                                                child: Container(
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                        color: Colors.red,
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                  padding: const EdgeInsets.all(
+                                                    4,
+                                                  ),
+                                                  child: const Icon(
+                                                    Icons.close,
+                                                    color: Colors.white,
+                                                    size: 20,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                 ),
                               ),
                             ),
                           ],
-                        );
-                      },
-                    ),
-                  ),
-                ],
+                        )
+                      : SizedBox.shrink(),
+                ),
               ),
               const SizedBox(height: 40),
               ElevatedButton(

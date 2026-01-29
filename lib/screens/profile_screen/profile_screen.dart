@@ -689,6 +689,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             SvgPicture.asset(
+                                              'assets/avatar.svg',
+                                              semanticsLabel: 'Dart Logo',
+                                              height: 20,
+                                              width: 20,
+                                            ),
+                                            const SizedBox(width: 5),
+                                            const Text(
+                                              'Vendor Profile',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                fontFamily: 'Mont',
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+
+                                        // SvgPicture.asset('assets/images/Vector(5).svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),
+                                        TextButton(
+                                          onPressed: () {
+                                            Get.snackbar(
+                                              'Notification',
+                                              'You\'ll start receiving notifications from ctl (Coming Soon)',
+                                            );
+                                          },
+                                          child: const Text(
+                                            '>',
+                                            style: TextStyle(
+                                              color: Color(0XFF004BFD),
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SvgPicture.asset(
                                               'assets/alarm.svg',
                                               semanticsLabel: 'Dart Logo',
                                               height: 20,

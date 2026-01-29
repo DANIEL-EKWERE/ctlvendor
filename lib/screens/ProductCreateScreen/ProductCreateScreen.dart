@@ -1,4 +1,5 @@
 import 'package:ctlvendor/screens/ProductCreateScreen/controller/ProductCreateController.dart';
+import 'package:ctlvendor/widgets/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:ctlvendor/screens/PackListScreen/models/model.dart' as pack;
 import 'package:get/get.dart';
@@ -737,17 +738,26 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                                               ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(6),
-                                                child: Image.file(
-                                                  File(
-                                                    widget
-                                                        .controller
-                                                        .selectedImages[index]
-                                                        .path,
-                                                  ),
+                                                child: CustomImageView(
+                                                  imagePath: widget
+                                                      .controller
+                                                      .selectedImages[index]
+                                                      .path,
                                                   fit: BoxFit.cover,
                                                   width: 120,
                                                   height: 120,
                                                 ),
+                                                //  Image.file(
+                                                //   File(
+                                                //     widget
+                                                //         .controller
+                                                //         .selectedImages[index]
+                                                //         .path,
+                                                //   ),
+                                                //   fit: BoxFit.cover,
+                                                //   width: 120,
+                                                //   height: 120,
+                                                // ),
                                               ),
                                               // Overlay on tap
                                               Positioned.fill(
@@ -928,10 +938,14 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.file(
-                  File(widget.controller.selectedImages[index].path),
+                child: CustomImageView(
+                  imagePath: widget.controller.selectedImages[index].path,
                   fit: BoxFit.cover,
                 ),
+                //  Image.file(
+                //   File(widget.controller.selectedImages[index].path),
+                //   fit: BoxFit.cover,
+                // ),
               ),
             ),
             SizedBox(height: 20),
@@ -941,7 +955,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                   child: OutlinedButton.icon(
                     onPressed: () {
                       Get.back();
-                      widget.controller.pickImage();
+                      widget.controller.pickImageReplace(index);
                     },
                     icon: Icon(Icons.edit, color: Colors.blue),
                     label: Text(

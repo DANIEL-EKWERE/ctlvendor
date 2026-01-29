@@ -3,6 +3,7 @@ import 'package:ctlvendor/screens/PackCreateScreen/PackCreateScreen.dart';
 import 'package:ctlvendor/screens/PackCreateScreen/PackEditScreen.dart';
 import 'package:ctlvendor/screens/PackCreateScreen/controller/PackCreateController.dart';
 import 'package:ctlvendor/screens/PackListScreen/controller/PackListController.dart';
+import 'package:ctlvendor/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,6 +18,24 @@ class PackListScreen extends StatefulWidget {
 
 class _PackListScreenState extends State<PackListScreen> {
   final TextEditingController searchController = TextEditingController();
+
+  String firstName = 'N/A';
+  String lastName = '';
+  @override
+  initState() {
+    super.initState();
+    setValue();
+  }
+
+  setValue() async {
+    var fname = await dataBase.getFirstName();
+    var lname = await dataBase.getLastName();
+    setState(() {
+      firstName = fname;
+      lastName = lname;
+    });
+    // myLog.log('first name $fname ans last name $lastName');
+  }
 
   Widget _buildDrawer() {
     return Drawer(
@@ -35,17 +54,17 @@ class _PackListScreenState extends State<PackListScreen> {
                 ),
                 SizedBox(height: 12),
                 Text(
-                  'Vendor Name',
+                  '$firstName $lastName',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  'vendor@email.com',
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
+                // Text(
+                //   'vendor@email.com',
+                //   style: TextStyle(color: Colors.white70, fontSize: 14),
+                // ),
               ],
             ),
           ),
@@ -158,7 +177,7 @@ class _PackListScreenState extends State<PackListScreen> {
                             insetPadding: EdgeInsets.zero,
                             contentPadding: EdgeInsets.zero,
                             content: SizedBox(
-                              height: 400,
+                              height: 350,
                               child: PackCreateScreen(
                                 Get.put(PackCreateController()),
                               ),
@@ -270,7 +289,7 @@ class _PackListScreenState extends State<PackListScreen> {
                                         insetPadding: EdgeInsets.zero,
                                         contentPadding: EdgeInsets.zero,
                                         content: SizedBox(
-                                          height: 400,
+                                          height: 350,
                                           child: PackCreateScreen(
                                             Get.put(PackCreateController()),
                                           ),
@@ -279,7 +298,7 @@ class _PackListScreenState extends State<PackListScreen> {
                                     );
                                   },
                                   //Get.toNamed(AppRoutes.productCreate),
-                                  child: Text('Add your first product'),
+                                  child: Text('Add your first pack'),
                                 ),
                               ],
                             ),
@@ -345,7 +364,7 @@ class _PackListScreenState extends State<PackListScreen> {
                                               insetPadding: EdgeInsets.zero,
                                               contentPadding: EdgeInsets.zero,
                                               content: SizedBox(
-                                                height: 320,
+                                                height: 350,
                                                 child: PackEditScreen(
                                                   Get.put(
                                                     PackCreateController(),

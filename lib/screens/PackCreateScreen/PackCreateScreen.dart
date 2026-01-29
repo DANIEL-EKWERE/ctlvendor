@@ -97,7 +97,7 @@ class PackCreateScreen extends StatelessWidget {
               children: [
                 SizedBox(
                   width: 90,
-                  height: 40,
+                  height: 50,
                   child: CustomButton(
                     isOutlined: true,
                     text: 'Cancel',
@@ -108,7 +108,7 @@ class PackCreateScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   width: 90,
-                  height: 40,
+                  height: 50,
                   child: CustomButton(
                     text: 'Save',
                     onPressed: () {

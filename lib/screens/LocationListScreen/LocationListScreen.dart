@@ -3,6 +3,7 @@ import 'package:ctlvendor/screens/LocationCreateScreen/LocationCreateScreen.dart
 import 'package:ctlvendor/screens/LocationCreateScreen/LocationEditScreen.dart';
 import 'package:ctlvendor/screens/LocationCreateScreen/controller/LocationCreateController.dart';
 import 'package:ctlvendor/screens/LocationListScreen/controller/LocationListController.dart';
+import 'package:ctlvendor/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,6 +18,24 @@ class LocationListScreen extends StatefulWidget {
 
 class _LocationListScreenState extends State<LocationListScreen> {
   final TextEditingController searchController = TextEditingController();
+
+  String firstName = 'N/A';
+  String lastName = '';
+  @override
+  initState() {
+    super.initState();
+    setValue();
+  }
+
+  setValue() async {
+    var fname = await dataBase.getFirstName();
+    var lname = await dataBase.getLastName();
+    setState(() {
+      firstName = fname;
+      lastName = lname;
+    });
+  //  myLog.log('first name $fname ans last name $lastName');
+  }
 
   Widget _buildDrawer() {
     return Drawer(
@@ -35,17 +54,17 @@ class _LocationListScreenState extends State<LocationListScreen> {
                 ),
                 SizedBox(height: 12),
                 Text(
-                  'Vendor Name',
+                  '$firstName $lastName',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  'vendor@email.com',
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
+                // Text(
+                //   'vendor@email.com',
+                //   style: TextStyle(color: Colors.white70, fontSize: 14),
+                // ),
               ],
             ),
           ),
@@ -160,7 +179,7 @@ class _LocationListScreenState extends State<LocationListScreen> {
                             insetPadding: EdgeInsets.zero,
                             contentPadding: EdgeInsets.zero,
                             content: SizedBox(
-                              height: 600,
+                              height: 500,
                               child: LocationCreateScreen(),
                             ),
                           ),
@@ -257,7 +276,7 @@ class _LocationListScreenState extends State<LocationListScreen> {
                                 ),
                                 SizedBox(height: 16),
                                 Text(
-                                  'No products yet',
+                                  'No location yet',
                                   style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.grey[600],
@@ -272,7 +291,7 @@ class _LocationListScreenState extends State<LocationListScreen> {
                                         insetPadding: EdgeInsets.zero,
                                         contentPadding: EdgeInsets.zero,
                                         content: SizedBox(
-                                          height: 600,
+                                          height: 500,
                                           child: LocationCreateScreen(),
                                         ),
                                       ),
@@ -280,7 +299,7 @@ class _LocationListScreenState extends State<LocationListScreen> {
                                   },
                                   //() =>
                                   //      Get.toNamed(AppRoutes.productCreate),
-                                  child: Text('Add your first product'),
+                                  child: Text('Add your first location'),
                                 ),
                               ],
                             ),

@@ -19,16 +19,16 @@ class BusinessController extends GetxController {
   Rx<String> category = ''.obs;
   TextEditingController cacNoController = TextEditingController();
   TextEditingController taxNoController = TextEditingController();
-  Rx<bool> isBusinessRegistered = true.obs;
+  Rx<bool> isBusinessRegistered = false.obs;
   Rx<String> meansOfIdentification = ''.obs;
   TextEditingController contactAddressController = TextEditingController();
   TextEditingController businessDescriptionController = TextEditingController();
-  TextEditingController rcNumberController = TextEditingController();
+  //TextEditingController rcNumberController = TextEditingController();
 
   // Image picker
   ImagePicker picker = ImagePicker();
   Rx<XFile?> businessLogoFile = Rx<XFile?>(null);
-  Rx<List<XFile>> businessDocumentFiles = Rx<List<XFile>>([]);
+  Rx<XFile?> businessDocumentFile = Rx<XFile?>(null);
   Rx<XFile?> identificationFile = Rx<XFile?>(null);
 
   Future<void> obtainImageFromGallery() async {
@@ -61,9 +61,7 @@ class BusinessController extends GetxController {
     try {
       final file = await picker.pickImage(source: ImageSource.gallery);
       if (file != null) {
-        final currentList = businessDocumentFiles.value;
-        currentList.add(file);
-        businessDocumentFiles.value = [...currentList];
+        businessDocumentFile.value = file;
         myLog.log('Document selected from gallery: ${file.path}');
       }
     } catch (e) {
@@ -76,9 +74,7 @@ class BusinessController extends GetxController {
     try {
       final file = await picker.pickImage(source: ImageSource.camera);
       if (file != null) {
-        final currentList = businessDocumentFiles.value;
-        currentList.add(file);
-        businessDocumentFiles.value = [...currentList];
+        businessDocumentFile.value = file;
         myLog.log('Document selected from camera: ${file.path}');
       }
     } catch (e) {
@@ -87,11 +83,9 @@ class BusinessController extends GetxController {
     }
   }
 
-  Future<void> removeDocumentFile(int index) async {
-    final currentList = businessDocumentFiles.value;
-    currentList.removeAt(index);
-    businessDocumentFiles.value = [...currentList];
-    myLog.log('Document removed at index: $index');
+  Future<void> removeDocumentFile() async {
+    businessDocumentFile.value = null;
+    myLog.log('Document removed');
   }
 
   Future<void> obtainIdentificationFromGallery() async {
@@ -150,10 +144,11 @@ class BusinessController extends GetxController {
       request.fields['business_description'] =
           businessDescriptionController.text;
       request.fields['bvn'] = bvnController.text;
-      request.fields['rc_number'] = rcNumberController.text;
+      // request.fields['rc_number'] = rcNumberController.text;
       //is_registered
-      request.fields['is_registered'] =
-          '1'; //businessDescriptionController.text;
+      request.fields['is_registered'] = isBusinessRegistered.value
+          ? '1'
+          : '0'; //businessDescriptionController.text;
 
       // Add business logo image if available
       if (businessLogoFile.value != null) {
@@ -175,29 +170,24 @@ class BusinessController extends GetxController {
         request.files.add(multipartFile);
       }
 
-      // Add business documents if available
-      if (businessDocumentFiles.value.isNotEmpty) {
-        myLog.log(
-          'Adding ${businessDocumentFiles.value.length} business documents',
-        );
-        for (int i = 0; i < businessDocumentFiles.value.length; i++) {
-          XFile documentFile = businessDocumentFiles.value[i];
-          String mimeType =
-              lookupMimeType(documentFile.path) ?? 'application/pdf';
-          String fileName = basename(documentFile.path);
+      // Add business document if available
+      if (businessDocumentFile.value != null) {
+        myLog.log('Adding business document');
+        XFile documentFile = businessDocumentFile.value!;
+        String mimeType = lookupMimeType(documentFile.path) ?? 'image/jpeg';
+        String fileName = basename(documentFile.path);
 
-          // Convert document to MultipartFile and add it to the request
-          var multipartFile = await http.MultipartFile.fromPath(
-            'business_documents', // The name of the field in your API
-            documentFile.path,
-            filename: fileName,
-            contentType: MediaType(
-              mimeType.split('/')[0],
-              mimeType.split('/')[1],
-            ),
-          );
-          request.files.add(multipartFile);
-        }
+        // Convert document to MultipartFile and add it to the request
+        var multipartFile = await http.MultipartFile.fromPath(
+          'business_documents', // The name of the field in your API
+          documentFile.path,
+          filename: fileName,
+          contentType: MediaType(
+            mimeType.split('/')[0],
+            mimeType.split('/')[1],
+          ),
+        );
+        request.files.add(multipartFile);
       }
 
       // Add identification image if available
@@ -250,8 +240,8 @@ class BusinessController extends GetxController {
         businessNameController.clear();
         businessLogoFile.value =
             null; // Clear the image after successful upload
-        businessDocumentFiles.value =
-            []; // Clear the documents after successful upload
+        businessDocumentFile.value =
+            null; // Clear the document after successful upload
         identificationFile.value =
             null; // Clear the identification image after successful upload
         Navigator.pushNamed(Get.context!, '/product-selection');

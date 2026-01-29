@@ -77,100 +77,51 @@ class _PlanScreenState extends State<PlanScreen> {
                               color: Color(0XFF004BFD),
                             ),
                           )
-                        : Row(
-                            children: [
-                              // Online Payment Card
-                              // Expanded(
-                              //   child: _buildPaymentCard(
-                              //     title: 'Online Payment',
-                              //     icon: Icons.credit_card,
-                              //     iconColor: Colors.white,
-                              //     iconBackground: Colors.green,
-                              //     description: 'Get paid in minutes.',
-                              //     features: [
-                              //       'Enjoy fast payment',
-                              //       'Secure',
-                              //       'Get jaraloan to boost your stock',
-                              //       'Enjoy order preferences.',
-                              //       // 'Lorem ipsum dolor sit a',
-                              //       // 'Lorem ipsum dolor sit a',
-                              //     ],
-                              //     isSelected:
-                              //         controller.selectedPlan.value ==
-                              //         'online',
-                              //     onTap: () {
-                              //       setState(() {
-                              //         controller.selectedPlan.value =
-                              //             'online';
-                              //       });
-                              //     },
-                              //   ),
-                              // ),
-
-                              // const SizedBox(width: 12),
-
-                              // // Offline Payment Card
-                              // Expanded(
-                              //   child: _buildPaymentCard(
-                              //     title: 'Offline Payment',
-                              //     icon: Icons.cloud_outlined,
-                              //     iconColor: Colors.white,
-                              //     iconBackground: Colors.orange,
-                              //     description: 'Get paid within 6 hours.',
-                              //     features: [
-                              //       'Physical delivery record is needed.',
-                              //       'Payment is done within 6 hours.',
-                              //       // 'Lorem ipsum dolor sit a',
-                              //       // 'Lorem ipsum dolor sit a',
-                              //     ],
-                              //     isSelected:
-                              //         controller.selectedPlan.value ==
-                              //         'offline',
-                              //     onTap: () {
-                              //       setState(() {
-                              //         controller.selectedPlan.value =
-                              //             'offline';
-                              //       });
-                              //     },
-                              //   ),
-                              // ),
-                              for (
-                                int i = 0;
-                                i < controller.planList.length;
-                                i++
-                              ) ...[
-                                if (i > 0) const SizedBox(width: 12),
-                                Expanded(
-                                  child: _buildPaymentCard(
-                                    title: controller.planList[i].name ?? '',
-                                    icon:
-                                        controller.planList[i].imageUrl ??
-                                        'assets/logo.png',
-                                    iconColor: Colors.white,
-                                    iconBackground: Colors.grey,
-                                    description:
-                                        controller.planList[i].description ??
-                                        '',
-                                    features:
-                                        controller.planList[i].features
-                                            ?.map((f) => f.name as String)
-                                            .toList() ??
-                                        [],
-                                    isSelected:
-                                        controller.selectedPlan.value ==
-                                        controller.planList[i].name,
-                                    onTap: () {
-                                      setState(() {
-                                        controller.selectedPlan.value =
-                                            controller.planList[i].name ?? '';
-                                        controller.selectedPlanId.value =
-                                            controller.planList[i].id ?? 0;
-                                      });
-                                    },
+                        : SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                for (
+                                  int i = 0;
+                                  i < controller.planList.length;
+                                  i++
+                                ) ...[
+                                  if (i > 0) const SizedBox(width: 12),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width *
+                                        0.85,
+                                    child: _buildPaymentCard(
+                                      title: controller.planList[i].name ?? '',
+                                      icon:
+                                          controller.planList[i].imageUrl ??
+                                          'assets/logo.png',
+                                      iconColor: Colors.white,
+                                      iconBackground: Colors.grey,
+                                      description:
+                                          controller.planList[i].description ??
+                                          '',
+                                      features:
+                                          controller.planList[i].features
+                                              ?.map((f) => f.name as String)
+                                              .toList() ??
+                                          [],
+                                      isSelected:
+                                          controller.selectedPlan.value ==
+                                          controller.planList[i].name,
+                                      onTap: () {
+                                        setState(() {
+                                          controller.selectedPlan.value =
+                                              controller.planList[i].name ?? '';
+                                          controller.selectedPlanId.value =
+                                              controller.planList[i].id ?? 0;
+                                        });
+                                      },
+                                    ),
                                   ),
-                                ),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
                   ),
                   const SizedBox(height: 24),

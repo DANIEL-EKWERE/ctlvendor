@@ -19,9 +19,10 @@ import 'package:path/path.dart';
 import 'package:overlay_kit/overlay_kit.dart';
 
 class ProductCreateController extends GetxController {
-    Productlistcontroller controller = Get.find<Productlistcontroller>();
+  Productlistcontroller controller = Get.find<Productlistcontroller>();
   ApiClient apiClient = ApiClient(Duration(seconds: 60 * 5));
   RxList<XFile> selectedImages = <XFile>[].obs;
+  RxList<XFile> editSelectedImages = <XFile>[].obs;
   final ImagePicker _imagePicker = ImagePicker();
   Rx<bool> isLoading = false.obs;
   Rx<bool> isLoading1 = false.obs;
@@ -32,12 +33,11 @@ class ProductCreateController extends GetxController {
   Rx<String> selectedPack = ''.obs;
   Rx<String> selectedPackId = ''.obs;
 
-    Rx<String> selectedCategory = ''.obs;
+  Rx<String> selectedCategory = ''.obs;
   Rx<String> selectedCategoryId = ''.obs;
   Rx<int> isActive = 1.obs;
 
-//TODO: edit variables
-
+  //TODO: edit variables
 
   Rx<String> selectedProduct1 = ''.obs;
   Rx<String> selectedProductId1 = ''.obs;
@@ -45,7 +45,7 @@ class ProductCreateController extends GetxController {
   Rx<String> selectedPack1 = ''.obs;
   Rx<String> selectedPackId1 = ''.obs;
 
-    Rx<String> selectedCategory1 = ''.obs;
+  Rx<String> selectedCategory1 = ''.obs;
   Rx<String> selectedCategoryId1 = ''.obs;
   Rx<int> isActive1 = 1.obs;
 
@@ -55,7 +55,7 @@ class ProductCreateController extends GetxController {
   TextEditingController stockController = TextEditingController();
   TextEditingController costController = TextEditingController();
   TextEditingController skuController = TextEditingController();
-//TODO: Edit controllers
+  //TODO: Edit controllers
   TextEditingController editPriceController = TextEditingController();
   TextEditingController editDescriptionController = TextEditingController();
   TextEditingController editStockController = TextEditingController();
@@ -85,6 +85,25 @@ class ProductCreateController extends GetxController {
         imageQuality: 80,
       );
       if (pickedFile != null) {
+     
+        selectedImages.add(pickedFile);
+        myLog.log('Image picked: ${pickedFile.path}');
+      }
+    } catch (e) {
+      myLog.log('Error picking image: $e');
+      Get.snackbar('Error', 'Failed to pick image');
+    }
+  }
+
+  // Image picker and replace method
+  Future<void> pickImageReplace(int index) async {
+    try {
+      final XFile? pickedFile = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80,
+      );
+      if (pickedFile != null) {
+        removeImage(index);
         selectedImages.add(pickedFile);
         myLog.log('Image picked: ${pickedFile.path}');
       }
@@ -215,7 +234,6 @@ class ProductCreateController extends GetxController {
         Get.back();
         Get.snackbar("Success", "Profile updated successfully");
         myLog.log('Product created successfully');
-
         controller.fetchProducts();
 
         Get.back();
@@ -233,7 +251,6 @@ class ProductCreateController extends GetxController {
       OverlayLoadingProgress.stop();
     }
   }
-
 
   Future<void> updateProduct() async {
     OverlayLoadingProgress.start(circularProgressColor: Color(0xff004BFD));
