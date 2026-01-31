@@ -93,7 +93,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                   //         features: [
                   //           'Enjoy fast payment',
                   //           'Secure',
-                  //           'Get jaraloan to boost your stock',
+                  //           'Get nkserekeloan to boost your stock',
                   //           'Enjoy order preferences.',
                   //           // 'Lorem ipsum dolor sit a',
                   //           // 'Lorem ipsum dolor sit a',
@@ -177,6 +177,10 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                         controller.selectedCategoryId.first
                                             .toString(),
                                       );
+                                      myLog.log(
+                                        controller.selectedCategory.first
+                                            .toString(),
+                                      );
                                     });
                                   },
                                   child: Container(
@@ -252,7 +256,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
               padding: const EdgeInsets.all(24.0),
               child: ElevatedButton(
                 onPressed: () {
-                  controller.updateVendorProfilePaymentMethod();
+                  controller.updateVendorBusinessLocation();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0XFF004BFD),
@@ -279,13 +283,13 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
       child: Row(
         children: List.generate(
-          6,
+          7,
           (index) => Expanded(
             child: Container(
               height: 4,
               margin: const EdgeInsets.symmetric(horizontal: 2),
               decoration: BoxDecoration(
-                color: index < 5 ? Color(0XFF004BFD) : Colors.grey.shade300,
+                color: index < 6 ? Color(0XFF004BFD) : Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

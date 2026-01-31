@@ -306,6 +306,10 @@
 //   }
 // }
 
+import 'package:ctlvendor/screens/business_screen/controller/business_controller.dart';
+import 'package:ctlvendor/screens/login/models/models.dart';
+import 'package:ctlvendor/screens/vendor_business/vendor_business_screen.dart';
+import 'package:ctlvendor/utils/storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -314,12 +318,12 @@ import 'package:ctlvendor/routes/app_routes.dart';
 import 'package:ctlvendor/screens/forget_password_screen/forget_password_screen.dart';
 import 'package:ctlvendor/screens/help_and_support/help_and_support.dart';
 import 'package:ctlvendor/screens/profile_screen/controller/profile_controller.dart';
-import 'package:ctlvendor/screens/success_screen/success_screen.dart';
 import 'package:ctlvendor/widgets/avatar_with_edtt.dart';
 import 'package:ctlvendor/widgets/custom_button.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 ProfileController controller = Get.put(ProfileController());
+BusinessController bc = Get.put(BusinessController());
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -432,7 +436,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              controller.data.name! ?? 'N/A',
+                              controller.data.name ?? 'N/A',
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -565,7 +569,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               ),
                                             ),
                                             Text(
-                                              controller.data.email! ?? 'N/A',
+                                              controller.data.email ?? 'N/A',
                                               style: const TextStyle(
                                                 fontSize: 13,
                                                 fontFamily: 'Mont',
@@ -612,7 +616,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 controller
                                                         .data
                                                         .contactAddress![0]
-                                                        .contactAddress! ??
+                                                        .contactAddress ??
                                                     'N/A',
                                                 style: const TextStyle(
                                                   fontSize: 13,
@@ -708,10 +712,79 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                                         // SvgPicture.asset('assets/images/Vector(5).svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),
                                         TextButton(
-                                          onPressed: () {
-                                            Get.snackbar(
-                                              'Notification',
-                                              'You\'ll start receiving notifications from ctl (Coming Soon)',
+                                          onPressed: () async {
+                                            // Get.snackbar(
+                                            //   'Notification',
+                                            //   'You\'ll start receiving notifications from ctl (Coming Soon)',
+                                            // );
+                                            // Get.to(
+                                            //   VendorBusinessScreen(),
+                                            //   arguments:
+                                            //       VendorBusinessModel.fromBusinessController(
+                                            //         bc,
+                                            //       ),
+                                            // );
+                                            print('object');
+                                            Map<String, dynamic>? vendor =
+                                                await dataBase.getVendor();
+                                            // myLog.log('vendor details: ${vendor.toString()}');
+                                            // myLog.log('vendor details: ${vendor!['business_type_id']}');
+                                            Get.to(
+                                              () => VendorBusinessScreen(
+                                                vendor: Vendor(
+                                                  banner:
+                                                      vendor!['banner'] ?? '',
+                                                  businessAddress:
+                                                      vendor['business_address'],
+                                                  distanceKm:
+                                                      vendor['distance_km'],
+                                                  phoneNumber:
+                                                      vendor['phone_number'],
+                                                  email: vendor['email'],
+                                                  taxNumber:
+                                                      vendor['tax_number'],
+                                                  identificationUrl:
+                                                      vendor['identification_url'],
+                                                  isVerified:
+                                                      vendor['is_verified'],
+                                                  isActive: vendor['is_active'],
+                                                  isRegistered:
+                                                      vendor['is_registered'],
+                                                  fulfilmentType:
+                                                      vendor['fulfilment_type'],
+                                                  logo: vendor['logo'] ?? '',
+                                                  businessDocuments:
+                                                      vendor['business_documents'],
+                                                  meansOfIdentification:
+                                                      vendor['means_of_identification'],
+                                                  businessDescription:
+                                                      vendor['business_description'],
+
+                                                  businessName:
+                                                      vendor['business_name'],
+                                                  businessTypeId:
+                                                      vendor['business_type_id'],
+                                                  id: vendor['id'],
+                                                  bvn: vendor['bvn'],
+                                                  category:
+                                                      vendor['category'] != null
+                                                      ? Category.fromJson(
+                                                          vendor['category'],
+                                                        )
+                                                      : null,
+                                                ),
+                                                userData: LoginData(
+                                                  id: controller.data.id,
+                                                  name: controller.data.name,
+                                                  email: controller.data.email,
+                                                  phoneNumber: controller
+                                                      .data
+                                                      .phoneNumber,
+                                                  profilePicture: controller
+                                                      .data
+                                                      .profilePicture,
+                                                ),
+                                              ),
                                             );
                                           },
                                           child: const Text(
@@ -1171,10 +1244,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showEditContactInfoDialog() {
-    final TextEditingController phoneController = TextEditingController(
-      text: _userProfile['phone'],
-    );
-
     showDialog(
       context: context,
       builder: (context) => AlertDialog(

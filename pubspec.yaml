@@ -53,6 +53,7 @@ dependencies:
   launcher_name:
   cached_network_image: ^3.4.1
   geolocator: ^14.0.2
+  change_app_package_name: ^1.5.0
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +66,11 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
   flutter_launcher_icons:
+
+
+launcher_name:
+  default: "NK'sereke"
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -81,6 +87,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -107,3 +114,37 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_launcher_icons:
+  image_path: "assets/logo.png"
+  android:
+    generate: true
+    image_path: "assets/logo.png"
+    background_color: "#004694"
+    theme_color: "#004694"
+  linux:
+    generate: true
+    image_path: "assets/logo.png"
+    background_color: "#004694"
+    theme_color: "#004694"
+  ios:
+    generate: true
+    image_path: "assets/logo.png"
+    background_color: "#004694"
+    theme_color: "#004694"
+    remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/logo.png"
+    background_color: "#004694"
+    theme_color: "#004694"
+  windows:
+    generate: true
+    image_path: "assets/logo.png"
+    background_color: "#004694"
+    theme_color: "#004694"
+    icon_size: 256
+  macos:
+    generate: true
+    image_path: "assets/logo.png"
+    background_color: "#004694"
+    theme_color: "#004694"

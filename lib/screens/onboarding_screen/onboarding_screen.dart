@@ -31,7 +31,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       'title': 'Dear Vendor',
       'description':
-          'You can qualify for jaraFund to boost your market stock and make more profit.',
+          'You can qualify for nkserekeFund to boost your market stock and make more profit.',
       'icon': 'delivery',
     },
   ];

@@ -48,7 +48,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
       child: Row(
         children: List.generate(
-          6,
+          7,
           (index) => Expanded(
             child: Container(
               height: 4,

@@ -15,7 +15,8 @@ class BusinessController extends GetxController {
   TextEditingController businessNameController = TextEditingController();
   TextEditingController bvnController = TextEditingController();
   Rx<String> businessType = ''.obs;
-  Rx<String> fullfillmentType = ''.obs;
+  Rx<String> fulfilmentType = ''.obs;
+
   Rx<String> category = ''.obs;
   TextEditingController cacNoController = TextEditingController();
   TextEditingController taxNoController = TextEditingController();
@@ -23,11 +24,12 @@ class BusinessController extends GetxController {
   Rx<String> meansOfIdentification = ''.obs;
   TextEditingController contactAddressController = TextEditingController();
   TextEditingController businessDescriptionController = TextEditingController();
-  //TextEditingController rcNumberController = TextEditingController();
+  TextEditingController rcNumberController = TextEditingController();
 
   // Image picker
   ImagePicker picker = ImagePicker();
   Rx<XFile?> businessLogoFile = Rx<XFile?>(null);
+  Rx<XFile?> businessLogoBanner = Rx<XFile?>(null);
   Rx<XFile?> businessDocumentFile = Rx<XFile?>(null);
   Rx<XFile?> identificationFile = Rx<XFile?>(null);
 
@@ -57,6 +59,32 @@ class BusinessController extends GetxController {
     }
   }
 
+  Future<void> obtainImageBannerFromGallery() async {
+    try {
+      final file = await picker.pickImage(source: ImageSource.gallery);
+      if (file != null) {
+        businessLogoBanner.value = file;
+        myLog.log('Image selected from gallery: ${file.path}');
+      }
+    } catch (e) {
+      myLog.log("Error picking image from gallery: $e");
+      Get.snackbar('Error', 'Failed to pick image from gallery');
+    }
+  }
+
+  Future<void> obtainImageBannerFromCamera() async {
+    try {
+      final file = await picker.pickImage(source: ImageSource.camera);
+      if (file != null) {
+        businessLogoBanner.value = file;
+        myLog.log('Image selected from camera: ${file.path}');
+      }
+    } catch (e) {
+      myLog.log("Error picking image from camera: $e");
+      Get.snackbar('Error', 'Failed to pick image from camera');
+    }
+  }
+
   Future<void> obtainDocumentFromGallery() async {
     try {
       final file = await picker.pickImage(source: ImageSource.gallery);
@@ -67,6 +95,19 @@ class BusinessController extends GetxController {
     } catch (e) {
       myLog.log("Error picking document from gallery: $e");
       Get.snackbar('Error', 'Failed to pick document from gallery');
+    }
+  }
+
+    Future<void> obtainBannerFromGallery() async {
+    try {
+      final file = await picker.pickImage(source: ImageSource.gallery);
+      if (file != null) {
+        businessLogoBanner.value = file;
+        myLog.log('Banner selected from gallery: ${file.path}');
+      }
+    } catch (e) {
+      myLog.log("Error picking banner from gallery: $e");
+      Get.snackbar('Error', 'Failed to pick banner from gallery');
     }
   }
 
@@ -86,6 +127,11 @@ class BusinessController extends GetxController {
   Future<void> removeDocumentFile() async {
     businessDocumentFile.value = null;
     myLog.log('Document removed');
+  }
+
+    Future<void> removeBannerFile() async {
+    businessLogoBanner.value = null;
+    myLog.log('Banner removed');
   }
 
   Future<void> obtainIdentificationFromGallery() async {
@@ -132,19 +178,22 @@ class BusinessController extends GetxController {
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.headers.addAll(headers);
       request.fields['business_name'] = businessNameController.text;
-      request.fields['business_address'] = contactAddressController.text;
+      //TODO: REMOVE THIS LINE AFTER TESTING
+      //request.fields['business_address'] = contactAddressController.text;
       //business_type_id
       request.fields['business_type_id'] = businessType.value;
       //
 
-      request.fields['fulfilment_type'] = fullfillmentType.value;
-
       request.fields['means_of_identification'] = meansOfIdentification.value;
-      request.fields['tax_number'] = taxNoController.text;
+      if (taxNoController.text.isNotEmpty) {
+        request.fields['tax_number'] = taxNoController.text;
+      } else {
+        request.fields['tax_number'] = 'Not Provided';
+      }
       request.fields['business_description'] =
           businessDescriptionController.text;
       request.fields['bvn'] = bvnController.text;
-      // request.fields['rc_number'] = rcNumberController.text;
+      request.fields['rc_number'] = rcNumberController.text;
       //is_registered
       request.fields['is_registered'] = isBusinessRegistered.value
           ? '1'
@@ -180,6 +229,25 @@ class BusinessController extends GetxController {
         // Convert document to MultipartFile and add it to the request
         var multipartFile = await http.MultipartFile.fromPath(
           'business_documents', // The name of the field in your API
+          documentFile.path,
+          filename: fileName,
+          contentType: MediaType(
+            mimeType.split('/')[0],
+            mimeType.split('/')[1],
+          ),
+        );
+        request.files.add(multipartFile);
+      }
+        // adding banner image if available
+      if (businessLogoBanner.value != null) {
+        myLog.log('Adding business banner');
+        XFile documentFile = businessLogoBanner.value!;
+        String mimeType = lookupMimeType(documentFile.path) ?? 'image/jpeg';
+        String fileName = basename(documentFile.path);
+
+        // Convert document to MultipartFile and add it to the request
+        var multipartFile = await http.MultipartFile.fromPath(
+          'banner', // The name of the field in your API
           documentFile.path,
           filename: fileName,
           contentType: MediaType(
@@ -241,6 +309,7 @@ class BusinessController extends GetxController {
         businessLogoFile.value =
             null; // Clear the image after successful upload
         businessDocumentFile.value =
+        businessLogoBanner.value = null;
             null; // Clear the document after successful upload
         identificationFile.value =
             null; // Clear the identification image after successful upload

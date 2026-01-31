@@ -19,96 +19,56 @@ class PlanController extends GetxController {
   List<Data> planList = <Data>[];
 
   Future<void> updateVendorPlanId() async {
-    OverlayLoadingProgress.start(circularProgressColor: Color(0XFF004BFD));
-    myLog.log(selectedPlanId.value.toString());
-    myLog.log(selectedPlan.value);
-    var email = await dataBase.getEmail();
     try {
-      String url =
-          '${apiClient.baseUrl}/profile-update/$email'; // Replace with your API endpoint
-      Map<String, String> headers = {
-        'Accept': 'application/json',
+      OverlayLoadingProgress.start(circularProgressColor: Color(0XFF004BFD));
 
-        //'Content-Type': 'multipart/form-data', // Important for multipart
-      };
+      if (selectedPlanId.value == 0) {
+        throw Exception("Please select a plan before continuing");
+      }
+
+      var email = await dataBase.getEmail();
+      if (email == null || email.isEmpty) {
+        throw Exception("Email not found. Please login again.");
+      }
+
+      String url = '${apiClient.baseUrl}/profile-update/$email';
+
       await dataBase.savePlan(selectedPlan.value);
 
-      // Create multipart request
       var request = http.MultipartRequest('POST', Uri.parse(url));
-      request.headers.addAll(headers);
-      //request.fields['payment_method'] = selectedPlan.value;
+      request.headers['Accept'] = 'application/json';
+      request.fields['tax_number'] = '123456789';
       request.fields['plan_id'] = selectedPlanId.value.toString();
 
-      // if (file1.value != null) {
-      //   myLog.log('profile photo adding');
-      //   XFile? imageFile = file1.value;
-      //   String mimeType = lookupMimeType(imageFile!.path) ?? 'image/jpeg';
-      //   String fileName = basename(imageFile.path);
+      myLog.log('Updating plan to ID: ${selectedPlanId.value}');
 
-      //   // Convert image to MultipartFile and add it to the request
-      //   var multipartFile1 = await http.MultipartFile.fromPath(
-      //     'profile_picture', // The name of the field in your API
-      //     imageFile.path,
-      //     filename: fileName,
-      //     contentType:
-      //         MediaType(mimeType.split('/')[0], mimeType.split('/')[1]),
-      //   );
-      //   request.files.add(multipartFile1);
-      // }
-
-      // Send the request
       var response = await request.send();
-      print(response.headers);
-      print(response.stream);
-      print(response.request);
-      myLog.log('Response status: ${response.statusCode}');
-      myLog.log('Response headers: ${response.headers}');
-      myLog.log('Response request: ${response.request}');
-      // var responseBody = await response.stream.bytesToString();
-      //   myLog.log('Response Body: $responseBody');
+      var responseBody = await response.stream.bytesToString();
+
+      myLog.log('Response (${response.statusCode}): $responseBody');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        OverlayLoadingProgress.stop();
         await dataBase.savePayment(selectedPlan.value);
-
-        var responseBody = await response.stream.bytesToString();
-        myLog.log('Response Body: $responseBody');
-        //   // Refresh profile data
-        //   fetchUserProfile();
-        //   ScaffoldMessenger.of(Get.context!).showSnackBar(
-        //     const SnackBar(content: Text('Profile updated successfully')),
-        //   );
-        // } else {
-        //   ScaffoldMessenger.of(Get.context!).showSnackBar(
-        //     SnackBar(content: Text('Failed to update profile: ${response.body}')),
-        //   );
         Get.snackbar(
           "Success",
-          "Business Category updated successfully",
+          "Business Plan updated successfully",
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
-        //Get.snackbar(titleText: Icon(Icons.check),'success','Category updated successfully.', colorText: Colors.white, backgroundColor: Colors.green);
-        myLog.log('Profile updated successfully');
-
-        //  businessNameController.clear();
-        //Navigator.pushNamed(Get.context!, '/summary');
-        // Get.toNamed('/summary', arguments: {'category': selectedPlan.value});
-
         Get.to(() => PaymentMethodScreen());
       } else {
-        OverlayLoadingProgress.stop();
-        var responseBody = await response.stream.bytesToString();
-        print('Error: ${response.statusCode}, Response: $responseBody');
-        Get.snackbar("Error:", " ${response.statusCode} - $responseBody");
+        throw Exception("Server error: ${response.statusCode} - $responseBody");
       }
     } catch (e) {
-      OverlayLoadingProgress.stop();
-      Get.snackbar("Error occurred:", e.toString());
-      myLog.log(e.toString());
+      Get.snackbar(
+        "Error",
+        e.toString().replaceAll('Exception: ', ''),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      myLog.log('Error in updateVendorPlanId: $e');
     } finally {
       OverlayLoadingProgress.stop();
-      // Navigator.pushNamed(Get.context!, '/summary');
     }
   }
 
@@ -141,6 +101,102 @@ class PlanController extends GetxController {
       );
     } finally {
       isLoading.value = false;
+    }
+  }
+  Future<void> updateVendorBusinessLocation() async {
+    OverlayLoadingProgress.start(circularProgressColor: Color(0xff004BFD));
+    // myLog.log(email);
+    // myLog.log("oder cut off  ${orderCutOffTimeController.text}");
+    // myLog.log("ealset pre order ${earlestPreOrderTimeController.text}");
+    // myLog.log("oder fulfilment ${orderFulfilmentController.text}");
+    // myLog.log(fullfillmentType.value);
+    var email = await dataBase.getEmail();
+    try {
+      String url =
+          '${apiClient.baseUrl}/update-business-profile/$email'; // Replace with your API endpoint
+      Map<String, String> headers = {
+        'Accept': 'application/json',
+
+        //'Content-Type': 'multipart/form-data', // Important for multipart
+      };
+
+      // Create multipart request
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      request.headers.addAll(headers);
+      // request.fields['country_id'] = selectedCountryId.toString();
+      // request.fields['state_id'] = selectedStateId.toString();
+      // //business_type_id
+      // request.fields['lga_id'] = selectedLGAId.toString();
+      // request.fields['phone_number'] = contactNumberController.text;
+      // request.fields['business_address'] = contactAddressController.text;
+      // request.fields['tax_number'] = '0';
+      request.fields['plan_id'] = selectedPlanId.value.toString();
+
+      //businessDescriptionController.text;
+
+      // if (file1.value != null) {
+      //   myLog.log('profile photo adding');
+      //   XFile? imageFile = file1.value;
+      //   String mimeType = lookupMimeType(imageFile!.path) ?? 'image/jpeg';
+      //   String fileName = basename(imageFile.path);
+
+      //   // Convert image to MultipartFile and add it to the request
+      //   var multipartFile1 = await http.MultipartFile.fromPath(
+      //     'profile_picture', // The name of the field in your API
+      //     imageFile.path,
+      //     filename: fileName,
+      //     contentType:
+      //         MediaType(mimeType.split('/')[0], mimeType.split('/')[1]),
+      //   );
+      //   request.files.add(multipartFile1);
+      // }
+
+      // Send the request
+      var response = await request.send();
+      print(response.headers);
+      print(response.stream);
+      print(response.request);
+      myLog.log('Response status: ${response.statusCode}');
+      myLog.log('Response headers: ${response.headers}');
+      myLog.log('Response request: ${response.request}');
+      // var responseBody = await response.stream.bytesToString();
+      //   myLog.log('Response Body: $responseBody');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        OverlayLoadingProgress.stop();
+        var responseBody = await response.stream.bytesToString();
+
+      myLog.log('Response (${response.statusCode}): $responseBody');
+        // await dataBase.saveLocation(
+        //   '${selectedCountry1.toString()}, ${selectedState1.toString()}, ${selectedLGA1.toString()}, ${contactAddressController.text}',
+        // );
+        // var responseBody = await response.stream.bytesToString();
+        // myLog.log('Response Body: $responseBody');
+        //   // Refresh profile data
+        //   fetchUserProfile();
+        //   ScaffoldMessenger.of(Get.context!).showSnackBar(
+        //     const SnackBar(content: Text('Profile updated successfully')),
+        //   );
+        // } else {
+        //   ScaffoldMessenger.of(Get.context!).showSnackBar(
+        //     SnackBar(content: Text('Failed to update profile: ${response.body}')),
+        //   );
+        Get.snackbar("Success", "Profile updated successfully");
+        myLog.log('Profile updated successfully');
+
+        Get.to(() => PaymentMethodScreen());
+      } else {
+        OverlayLoadingProgress.stop();
+        var responseBody = await response.stream.bytesToString();
+        print('Error: ${response.statusCode}, Response: $responseBody');
+        Get.snackbar("Error:", " ${response.statusCode} - $responseBody");
+      }
+    } catch (e) {
+      OverlayLoadingProgress.stop();
+      Get.snackbar("Error occurred:", e.toString());
+      myLog.log(e.toString());
+    } finally {
+      OverlayLoadingProgress.stop();
     }
   }
 }

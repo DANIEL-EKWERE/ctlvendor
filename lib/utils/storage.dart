@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:convert' as json;
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -82,7 +84,6 @@ class DataBase extends GetxController {
 
   String get category_id => _categoryId;
 
-
   String get token => _token;
 
   bool get isSeen => _isSeen;
@@ -147,11 +148,11 @@ class DataBase extends GetxController {
 
   String get confirmTransactionPin => _confirmTransactionPin;
 
-// logOut()async{
-//   final SharedPreferences _pref = await SharedPreferences.getInstance();
-//   await _pref.clear();
+  // logOut()async{
+  //   final SharedPreferences _pref = await SharedPreferences.getInstance();
+  //   await _pref.clear();
 
-// }
+  // }
 
   saveToken(String token) async {
     SharedPreferences sharedPreferences = await _pref;
@@ -364,7 +365,7 @@ class DataBase extends GetxController {
     return true;
   }
 
-    saveFullName(String full_name) async {
+  saveFullName(String full_name) async {
     SharedPreferences sharedPreferences = await _pref;
     await sharedPreferences.setString('full_name', last_name);
 
@@ -378,21 +379,21 @@ class DataBase extends GetxController {
     return true;
   }
 
-// Save Profile Photo
+  // Save Profile Photo
   Future<bool> saveBIo(String bio) async {
     SharedPreferences sharedPreferences = await _pref;
     await sharedPreferences.setString('bio', bio);
     return true;
   }
 
-// Save Profile Photo
+  // Save Profile Photo
   Future<bool> saveProfilePhoto(String profilePhotoPath) async {
     SharedPreferences sharedPreferences = await _pref;
     await sharedPreferences.setString('profilePhoto', profilePhotoPath);
     return true;
   }
 
-// Save Cover Photo
+  // Save Cover Photo
   Future<bool> saveCoverPhoto(String coverPhotoPath) async {
     SharedPreferences sharedPreferences = await _pref;
     await sharedPreferences.setString('coverPhoto', coverPhotoPath);
@@ -420,38 +421,33 @@ class DataBase extends GetxController {
     return true;
   }
 
-
-    saveReferalCode(String refCode) async {
+  saveReferalCode(String refCode) async {
     SharedPreferences sharedPreferences = await _pref;
     await sharedPreferences.setString('refCode', refCode);
 
     return true;
   }
 
-
   Future<void> saveSelectedProducts(List<String> products) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('selected_products', products.join(', '));
-}
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selected_products', products.join(', '));
+  }
 
-
-
-    saveReferalCount(String refCount) async {
+  saveReferalCount(String refCount) async {
     SharedPreferences sharedPreferences = await _pref;
     await sharedPreferences.setString('refCount', refCount);
 
     return true;
   }
 
-    saveRefererId(String referId) async {
+  saveRefererId(String referId) async {
     SharedPreferences sharedPreferences = await _pref;
     await sharedPreferences.setString('referId', referId);
 
     return true;
   }
 
-
-// Get Profile Photo
+  // Get Profile Photo
   Future<String> getProfilePhoto() async {
     SharedPreferences sharedPreferences = await _pref;
     if (sharedPreferences.containsKey('profilePhoto')) {
@@ -462,7 +458,7 @@ class DataBase extends GetxController {
     }
   }
 
-// Get Profile Photo
+  // Get Profile Photo
   Future<String> getMainCategory() async {
     SharedPreferences sharedPreferences = await _pref;
     if (sharedPreferences.containsKey('category')) {
@@ -484,16 +480,14 @@ class DataBase extends GetxController {
     }
   }
 
+  Future<List<String>> loadSelectedProducts() async {
+    final prefs = await SharedPreferences.getInstance();
+    final productsString = prefs.getString('selected_products') ?? '';
+    if (productsString.trim().isEmpty) return [];
+    return productsString.split(', ').toList();
+  }
 
-Future<List<String>> loadSelectedProducts() async {
-  final prefs = await SharedPreferences.getInstance();
-  final productsString = prefs.getString('selected_products') ?? '';
-  if (productsString.trim().isEmpty) return [];
-  return productsString.split(', ').toList();
-}
-
-
-// Get Cover Photo
+  // Get Cover Photo
   Future<String> getCoverPhoto() async {
     SharedPreferences sharedPreferences = await _pref;
     if (sharedPreferences.containsKey('coverPhoto')) {
@@ -504,7 +498,7 @@ Future<List<String>> loadSelectedProducts() async {
     }
   }
 
-// Get Cover Photo
+  // Get Cover Photo
   Future<String> getBio() async {
     SharedPreferences sharedPreferences = await _pref;
     if (sharedPreferences.containsKey('bio')) {
@@ -605,7 +599,7 @@ Future<List<String>> loadSelectedProducts() async {
     }
   }
 
-   Future<String> getCategoryId() async {
+  Future<String> getCategoryId() async {
     SharedPreferences sharedPreferences = await _pref;
 
     if (sharedPreferences.containsKey('categoryId')) {
@@ -740,8 +734,7 @@ Future<List<String>> loadSelectedProducts() async {
     }
   }
 
-
-    Future<String> getPaymentMethod() async {
+  Future<String> getPaymentMethod() async {
     SharedPreferences sharedPreferences = await _pref;
 
     if (sharedPreferences.containsKey('payment')) {
@@ -910,8 +903,9 @@ Future<List<String>> loadSelectedProducts() async {
     SharedPreferences sharedPreferences = await _pref;
 
     if (sharedPreferences.containsKey('businessBrandName')) {
-      String businessBrandName =
-          sharedPreferences.getString('businessBrandName')!;
+      String businessBrandName = sharedPreferences.getString(
+        'businessBrandName',
+      )!;
       _businessBrandName = businessBrandName;
 
       return businessBrandName;
@@ -996,6 +990,462 @@ Future<List<String>> loadSelectedProducts() async {
       return '';
     }
   }
+
+  // ===================== VENDOR METHODS =====================
+
+  // Save Vendor Data
+  Future<bool> saveVendor(Map<String, dynamic> vendorData) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('vendor', jsonEncode(vendorData));
+    return true;
+  }
+
+  // Get Vendor Data
+  Future<Map<String, dynamic>?> getVendor() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor')) {
+      String? vendorString = sharedPreferences.getString('vendor');
+      if (vendorString != null) {
+        return jsonDecode(vendorString) as Map<String, dynamic>;
+      }
+    }
+    return null;
+  }
+
+  // Save Vendor ID
+  Future<bool> saveVendorIdField(int id) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setInt('vendor_id', id);
+    return true;
+  }
+
+  // Get Vendor ID
+  Future<int?> getVendorIdField() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_id')) {
+      return sharedPreferences.getInt('vendor_id');
+    }
+    return null;
+  }
+
+  // Save Business Name
+  Future<bool> saveBusinessName(String businessName) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('vendor_business_name', businessName);
+    return true;
+  }
+
+  // Get Business Name
+  Future<String?> getBusinessName() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_business_name')) {
+      return sharedPreferences.getString('vendor_business_name');
+    }
+    return null;
+  }
+
+  // Save Business Address
+  Future<bool> saveBusinessAddress(String businessAddress) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString(
+      'vendor_business_address',
+      businessAddress,
+    );
+    return true;
+  }
+
+  // Get Business Address
+  Future<String?> getBusinessAddress() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_business_address')) {
+      return sharedPreferences.getString('vendor_business_address');
+    }
+    return null;
+  }
+
+  // Save Distance KM
+  Future<bool> saveDistanceKm(String distanceKm) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('vendor_distance_km', distanceKm);
+    return true;
+  }
+
+  // Get Distance KM
+  Future<String?> getDistanceKm() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_distance_km')) {
+      return sharedPreferences.getString('vendor_distance_km');
+    }
+    return null;
+  }
+
+  // Save Vendor Phone Number
+  Future<bool> saveVendorPhoneNumber(String phoneNumber) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('vendor_phone_number', phoneNumber);
+    return true;
+  }
+
+  // Get Vendor Phone Number
+  Future<String?> getVendorPhoneNumber() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_phone_number')) {
+      return sharedPreferences.getString('vendor_phone_number');
+    }
+    return null;
+  }
+
+  // Save Business Type ID
+  Future<bool> saveBusinessTypeId(String businessTypeId) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString(
+      'vendor_business_type_id',
+      businessTypeId,
+    );
+    return true;
+  }
+
+  // Get Business Type ID
+  Future<String?> getBusinessTypeId() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_business_type_id')) {
+      return sharedPreferences.getString('vendor_business_type_id');
+    }
+    return null;
+  }
+
+  // Save Vendor Email
+  Future<bool> saveVendorEmail(String email) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('vendor_email', email);
+    return true;
+  }
+
+  // Get Vendor Email
+  Future<String?> getVendorEmail() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_email')) {
+      return sharedPreferences.getString('vendor_email');
+    }
+    return null;
+  }
+
+  // Save RC Number
+  Future<bool> saveRcNumber(String rcNumber) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('vendor_rc_number', rcNumber);
+    return true;
+  }
+
+  // Get RC Number
+  Future<String?> getRcNumber() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_rc_number')) {
+      return sharedPreferences.getString('vendor_rc_number');
+    }
+    return null;
+  }
+
+  // Save Tax Number
+  Future<bool> saveTaxNumber(String taxNumber) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('vendor_tax_number', taxNumber);
+    return true;
+  }
+
+  // Get Tax Number
+  Future<String?> getTaxNumber() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_tax_number')) {
+      return sharedPreferences.getString('vendor_tax_number');
+    }
+    return null;
+  }
+
+  // Save Business Description
+  Future<bool> saveBusinessDescription(String businessDescription) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString(
+      'vendor_business_description',
+      businessDescription,
+    );
+    return true;
+  }
+
+  // Get Business Description
+  Future<String?> getBusinessDescription() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_business_description')) {
+      return sharedPreferences.getString('vendor_business_description');
+    }
+    return null;
+  }
+
+  // Save BVN
+  Future<bool> saveBvn(String bvn) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('vendor_bvn', bvn);
+    return true;
+  }
+
+  // Get BVN
+  Future<String?> getBvn() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_bvn')) {
+      return sharedPreferences.getString('vendor_bvn');
+    }
+    return null;
+  }
+
+  // Save Means of Identification
+  Future<bool> saveMeansOfIdentification(String meansOfIdentification) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString(
+      'vendor_means_of_identification',
+      meansOfIdentification,
+    );
+    return true;
+  }
+
+  // Get Means of Identification
+  Future<String?> getMeansOfIdentification() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_means_of_identification')) {
+      return sharedPreferences.getString('vendor_means_of_identification');
+    }
+    return null;
+  }
+
+  // Save Identification URL
+  Future<bool> saveIdentificationUrl(String identificationUrl) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString(
+      'vendor_identification_url',
+      identificationUrl,
+    );
+    return true;
+  }
+
+  // Get Identification URL
+  Future<String?> getIdentificationUrl() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_identification_url')) {
+      return sharedPreferences.getString('vendor_identification_url');
+    }
+    return null;
+  }
+
+  // Save Is Verified
+  Future<bool> saveIsVerified(bool isVerified) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setBool('vendor_is_verified', isVerified);
+    return true;
+  }
+
+  // Get Is Verified
+  Future<bool?> getIsVerified() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_is_verified')) {
+      return sharedPreferences.getBool('vendor_is_verified');
+    }
+    return null;
+  }
+
+  // Save Is Active
+  Future<bool> saveIsActive(bool isActive) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setBool('vendor_is_active', isActive);
+    return true;
+  }
+
+  // Get Is Active
+  Future<bool?> getIsActive() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_is_active')) {
+      return sharedPreferences.getBool('vendor_is_active');
+    }
+    return null;
+  }
+
+  // Save Is Registered
+  Future<bool> saveIsRegistered(bool isRegistered) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setBool('vendor_is_registered', isRegistered);
+    return true;
+  }
+
+  // Get Is Registered
+  Future<bool?> getIsRegistered() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_is_registered')) {
+      return sharedPreferences.getBool('vendor_is_registered');
+    }
+    return null;
+  }
+
+  // Save Fulfilment Type
+  Future<bool> saveFulfilmentType(String fulfilmentType) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('vendor_fulfilment_type', fulfilmentType);
+    return true;
+  }
+
+  // Get Fulfilment Type
+  Future<String?> getFulfilmentType() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_fulfilment_type')) {
+      return sharedPreferences.getString('vendor_fulfilment_type');
+    }
+    return null;
+  }
+
+  // Save Logo
+  Future<bool> saveLogo(String logo) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('vendor_logo', logo);
+    return true;
+  }
+
+  // Get Logo
+  Future<String?> getLogo() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_logo')) {
+      return sharedPreferences.getString('vendor_logo');
+    }
+    return null;
+  }
+
+  // Save Banner
+  Future<bool> saveBanner(String banner) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('vendor_banner', banner);
+    return true;
+  }
+
+  // Get Banner
+  Future<String?> getBanner() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_banner')) {
+      return sharedPreferences.getString('vendor_banner');
+    }
+    return null;
+  }
+
+  // Save Business Documents
+  Future<bool> saveBusinessDocuments(String businessDocuments) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString(
+      'vendor_business_documents',
+      businessDocuments,
+    );
+    return true;
+  }
+
+  // Get Business Documents
+  Future<String?> getBusinessDocuments() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_business_documents')) {
+      return sharedPreferences.getString('vendor_business_documents');
+    }
+    return null;
+  }
+
+  // Save Locations
+  Future<bool> saveLocations(List<dynamic> locations) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString(
+      'vendor_locations',
+      jsonEncode(locations),
+    );
+    return true;
+  }
+
+  // Get Locations
+  Future<List<dynamic>?> getLocations() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_locations')) {
+      String? locationsString = sharedPreferences.getString('vendor_locations');
+      if (locationsString != null) {
+        return jsonDecode(locationsString) as List<dynamic>;
+      }
+    }
+    return null;
+  }
+
+  // Save Category
+  Future<bool> saveVendorCategory(Map<String, dynamic> category) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('vendor_category', jsonEncode(category));
+    return true;
+  }
+
+  // Get Category
+  Future<Map<String, dynamic>?> getVendorCategory() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_category')) {
+      String? categoryString = sharedPreferences.getString('vendor_category');
+      if (categoryString != null) {
+        return jsonDecode(categoryString) as Map<String, dynamic>;
+      }
+    }
+    return null;
+  }
+
+  // Save Plan
+  Future<bool> saveVendorPlan(Map<String, dynamic> plan) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('vendor_plan', jsonEncode(plan));
+    return true;
+  }
+
+  // Get Plan
+  Future<Map<String, dynamic>?> getVendorPlan() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_plan')) {
+      String? planString = sharedPreferences.getString('vendor_plan');
+      if (planString != null) {
+        return jsonDecode(planString) as Map<String, dynamic>;
+      }
+    }
+    return null;
+  }
+
+  // Save Vehicles
+  Future<bool> saveVehicles(List<dynamic> vehicles) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('vendor_vehicles', jsonEncode(vehicles));
+    return true;
+  }
+
+  // Get Vehicles
+  Future<List<dynamic>?> getVehicles() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_vehicles')) {
+      String? vehiclesString = sharedPreferences.getString('vendor_vehicles');
+      if (vehiclesString != null) {
+        return jsonDecode(vehiclesString) as List<dynamic>;
+      }
+    }
+    return null;
+  }
+
+  // Save Created At
+  Future<bool> saveVendorCreatedAt(String createdAt) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('vendor_created_at', createdAt);
+    return true;
+  }
+
+  // Get Created At
+  Future<String?> getVendorCreatedAt() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('vendor_created_at')) {
+      return sharedPreferences.getString('vendor_created_at');
+    }
+    return null;
+  }
+
+  // ===================== END VENDOR METHODS =====================
 
   Future updateUserP(BuildContext? context) async {
     _isLoading = true;

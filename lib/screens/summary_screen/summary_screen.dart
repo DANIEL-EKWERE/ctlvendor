@@ -38,7 +38,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
     var lastName1 = await dataBase.getLastName();
     var email1 = await dataBase.getEmail();
     var phoneNumber1 = await dataBase.getPhone();
-    var address1 = await dataBase.getAddress();
+    var address1 = await dataBase.getLocation();
     var category1 = await dataBase.loadSelectedProducts();
     var paymentMethod1 = await dataBase.getPaymentMethod() ?? 'Online';
     var cat = Get.arguments['category'];
@@ -61,13 +61,13 @@ class _SummaryScreenState extends State<SummaryScreen> {
         width: double.infinity,
         child: Row(
           children: List.generate(
-            6,
+            7,
             (index) => Expanded(
               child: Container(
                 height: 4,
                 margin: const EdgeInsets.symmetric(horizontal: 2),
                 decoration: BoxDecoration(
-                  color: index < 6 ? Color(0XFF004BFD) : Colors.grey.shade300,
+                  color: index < 7 ? Color(0XFF004BFD) : Colors.grey.shade300,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -233,14 +233,14 @@ class _SummaryScreenState extends State<SummaryScreen> {
               ),
 
               Text(
-                'Online Payment',
+                'Vendor Business Account',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ],
           ),
           SizedBox(height: 10),
           Text(
-            "Payment details have been updated to receive payment online, you will receive your payment immediately you place request for widthdrawal ${paymentMethod.isNotEmpty ? paymentMethod : 'N/A'}",
+            "Payment details have been updated to receive payment online, you will receive your payment immediately you place request for widthdrawal \n\n Vendor business details also set, you can view them in your profile settings.",
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
           ),
           // const SizedBox(height: 8),

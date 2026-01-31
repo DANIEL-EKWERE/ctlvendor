@@ -134,7 +134,9 @@ class _PlanScreenState extends State<PlanScreen> {
               padding: const EdgeInsets.all(24.0),
               child: ElevatedButton(
                 onPressed: () {
-                  controller.updateVendorPlanId();
+                  controller.updateVendorBusinessLocation();
+                  // print(controller.selectedPlanId.value.toString());
+                  // print(controller.selectedPlan.value.toString());
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0XFF004BFD),
@@ -161,13 +163,13 @@ class _PlanScreenState extends State<PlanScreen> {
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
       child: Row(
         children: List.generate(
-          6,
+          7,
           (index) => Expanded(
             child: Container(
               height: 4,
               margin: const EdgeInsets.symmetric(horizontal: 2),
               decoration: BoxDecoration(
-                color: index < 4 ? Color(0XFF004BFD) : Colors.grey.shade300,
+                color: index < 5 ? Color(0XFF004BFD) : Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:ctlvendor/data/apiClient/apiClient.dart';
+import 'package:ctlvendor/screens/addLocation.dart/addLocation.dart';
 import 'package:ctlvendor/screens/payment_method/payment_method.dart';
 import 'package:ctlvendor/screens/plan/plan_screen.dart';
 import 'package:ctlvendor/screens/summary_screen/summary_screen.dart';
@@ -17,12 +18,16 @@ class OperationController extends GetxController {
   TextEditingController orderFulfilmentController = TextEditingController();
   TextEditingController orderCutOffTimeController = TextEditingController();
   TextEditingController earlestPreOrderTimeController = TextEditingController();
-
+  Rx<String> fullfillmentType = ''.obs;
   ApiClient apiClient = ApiClient(Duration(seconds: 60 * 5));
 
   Future<void> updateVendorOperation() async {
     OverlayLoadingProgress.start(circularProgressColor: Color(0xff004BFD));
     // myLog.log(email);
+    myLog.log("oder cut off  ${orderCutOffTimeController.text}");
+    myLog.log("ealset pre order ${earlestPreOrderTimeController.text}");
+    myLog.log("oder fulfilment ${orderFulfilmentController.text}");
+    myLog.log(fullfillmentType.value);
     var email = await dataBase.getEmail();
     try {
       String url =
@@ -36,11 +41,14 @@ class OperationController extends GetxController {
       // Create multipart request
       var request = http.MultipartRequest('POST', Uri.parse(url));
       request.headers.addAll(headers);
-      //  request.fields['order_cut_off_time'] = orderCutOffTimeController.text;
-      // request.fields['earliest_pre_order_time'] =
-      //     earlestPreOrderTimeController.text;
+      request.fields['order_cut_off_time'] = orderCutOffTimeController.text;
+      request.fields['earliest_pre_order_time'] =
+          earlestPreOrderTimeController.text;
       //business_type_id
       request.fields['order_full_fillment'] = orderFulfilmentController.text;
+      request.fields['fulfilment_type'] = fullfillmentType.value;
+
+      //request.fields['plan'] = "1";
       //businessDescriptionController.text;
 
       // if (file1.value != null) {
@@ -90,7 +98,7 @@ class OperationController extends GetxController {
         Get.to(
           () =>
               //SummaryScreen(),
-              PlanScreen(),
+              Addlocation(),
         );
       } else {
         OverlayLoadingProgress.stop();

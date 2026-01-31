@@ -35,6 +35,34 @@ Future<void> _showImageSourceDialog(BuildContext context) {
   );
 }
 
+Future<void> _showImageBannerSourceDialog(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Select Image Source'),
+        content: const Text('Choose where to upload image from'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              controller.obtainImageBannerFromGallery();
+            },
+            child: const Text('Gallery'),
+          ),
+          // TextButton(
+          //   onPressed: () {
+          //     Navigator.of(context).pop();
+          //     controller.obtainImageFromCamera();
+          //   },
+          //   child: const Text('Camera'),
+          // ),
+        ],
+      );
+    },
+  );
+}
+
 Future<void> _showDocumentSourceDialog(BuildContext context) {
   return showDialog(
     context: context,
@@ -114,7 +142,7 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
         width: double.infinity,
         child: Row(
           children: List.generate(
-            6,
+            7,
             (index) => Expanded(
               child: Container(
                 height: 4,
@@ -225,46 +253,19 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: DropdownMenuFormField<String>(
-                  hintText: 'Fulfilment Type',
-                  textStyle: TextStyle(color: Colors.grey),
-                  width: double.infinity,
-                  dropdownMenuEntries: const [
-                    DropdownMenuEntry(value: 'instant', label: 'INSTANT'),
-                    DropdownMenuEntry(value: 'preorder', label: 'PRE-ORDER'),
-                    DropdownMenuEntry(value: 'both', label: 'BOTH'),
-                  ],
-                  // decoration: const InputDecoration(
-                  //   labelText: 'Select an option',
-                  //   border: OutlineInputBorder(),
-                  // ),
-                  onSelected: (String? value) {
-                    print('Selected: $value');
-                    controller.fullfillmentType.value = value!;
-                  },
+
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: TextField(
+                  controller: controller.taxNoController,
+                  decoration: const InputDecoration(
+                    hintText: 'TIN No (Optional)',
+                    hintStyle: TextStyle(color: Colors.grey),
+                    border: OutlineInputBorder(),
+                  ),
                 ),
               ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: controller.cacNoController,
-                decoration: const InputDecoration(
-                  hintText: 'CAC No.',
-                  hintStyle: TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: controller.taxNoController,
-                decoration: const InputDecoration(
-                  hintText: 'Tax No.',
-                  hintStyle: TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 20),
+              // const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: DropdownMenuFormField<String>(
@@ -294,15 +295,27 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
                   },
                 ),
               ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: controller.contactAddressController,
-                decoration: const InputDecoration(
-                  hintText: 'Contact Address',
-                  hintStyle: TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(),
-                ),
-              ),
+
+              // const SizedBox(height: 20),
+              // TextField(
+              //   controller: controller.cacNoController,
+              //   decoration: const InputDecoration(
+              //     hintText: 'CAC No.',
+              //     hintStyle: TextStyle(color: Colors.grey),
+              //     border: OutlineInputBorder(),
+              //   ),
+              // ),
+
+              //  : SizedBox.shrink(),
+              // const SizedBox(height: 20),
+              // TextField(
+              //   controller: controller.contactAddressController,
+              //   decoration: const InputDecoration(
+              //     hintText: 'Contact Address',
+              //     hintStyle: TextStyle(color: Colors.grey),
+              //     border: OutlineInputBorder(),
+              //   ),
+              // ),
               const SizedBox(height: 20),
               TextField(
                 controller: controller.businessDescriptionController,
@@ -312,16 +325,25 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
                   border: OutlineInputBorder(),
                 ),
               ),
-              // const SizedBox(height: 20),
-              // TextField(
-              //   controller: controller.rcNumberController,
-              //   decoration: const InputDecoration(
-              //     hintText: 'RC Number',
-              //     hintStyle: TextStyle(color: Colors.grey),
-              //     border: OutlineInputBorder(),
-              //   ),
-              // ),
               const SizedBox(height: 20),
+              AnimatedSize(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+                child: controller.isBusinessRegistered.value
+                    ? Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: TextField(
+                          controller: controller.rcNumberController,
+                          decoration: const InputDecoration(
+                            hintText: 'Company Registration Number',
+                            hintStyle: TextStyle(color: Colors.grey),
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      )
+                    : SizedBox.shrink(),
+              ),
+              // const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: DropdownMenuFormField<String>(
@@ -485,6 +507,73 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
                             children: [
                               Image.file(
                                 File(controller.businessLogoFile.value!.path),
+                                fit: BoxFit.cover,
+                              ),
+                              Positioned(
+                                right: 8,
+                                top: 8,
+                                child: GestureDetector(
+                                  onTap: () =>
+                                      controller.businessLogoFile.value = null,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    padding: const EdgeInsets.all(4),
+                                    child: const Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 40),
+              Obx(
+                () => GestureDetector(
+                  onTap: () => _showImageBannerSourceDialog(context),
+                  child: Container(
+                    height: 150,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: controller.businessLogoFile.value == null
+                            ? Colors.grey
+                            : Color(0XFF004BFD),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: controller.businessLogoBanner.value == null
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.cloud_upload_outlined,
+                                size: 48,
+                                color: Color(0XFF004BFD),
+                              ),
+                              const SizedBox(height: 8),
+                              const Text(
+                                'Upload Business Banner',
+                                style: TextStyle(
+                                  color: Color(0XFF004BFD),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.file(
+                                File(controller.businessLogoBanner.value!.path),
                                 fit: BoxFit.cover,
                               ),
                               Positioned(

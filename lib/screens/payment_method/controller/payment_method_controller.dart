@@ -29,7 +29,7 @@ class PaymentMethodController extends GetxController {
       Map<String, String> headers = {
         'Accept': 'application/json',
 
-        //'Content-Type': 'multipart/form-data', // Important for multipart
+        'Content-Type': 'application/json', // Important for multipart
       };
       await dataBase.savePayment(selectedPaymentMethod.value);
 
@@ -81,12 +81,12 @@ class PaymentMethodController extends GetxController {
         //   ScaffoldMessenger.of(Get.context!).showSnackBar(
         //     SnackBar(content: Text('Failed to update profile: ${response.body}')),
         //   );
-        Get.snackbar(
-          "Success",
-          "Business Category updated successfully",
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+        // Get.snackbar(
+        //   "Success",
+        //   "Business Category updated successfully",
+        //   backgroundColor: Colors.green,
+        //   colorText: Colors.white,
+        // );
         //Get.snackbar(titleText: Icon(Icons.check),'success','Category updated successfully.', colorText: Colors.white, backgroundColor: Colors.green);
         myLog.log('Profile updated successfully');
 
@@ -112,6 +112,114 @@ class PaymentMethodController extends GetxController {
       // Navigator.pushNamed(Get.context!, '/summary');
     }
   }
+
+//TODO: FETCH BUSINESS CATEGORY
+
+Future<void> updateVendorBusinessLocation() async {
+    OverlayLoadingProgress.start(circularProgressColor: Color(0xff004BFD));
+    // myLog.log(email);
+    // myLog.log("oder cut off  ${orderCutOffTimeController.text}");
+    // myLog.log("ealset pre order ${earlestPreOrderTimeController.text}");
+    // myLog.log("oder fulfilment ${orderFulfilmentController.text}");
+    // myLog.log(fullfillmentType.value);
+    var email = await dataBase.getEmail();
+    try {
+      String url =
+          '${apiClient.baseUrl}/update-business-profile/$email'; // Replace with your API endpoint
+      Map<String, String> headers = {
+        'Accept': 'application/json',
+
+        //'Content-Type': 'multipart/form-data', // Important for multipart
+      };
+
+      // Create multipart request
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      request.headers.addAll(headers);
+      // request.fields['country_id'] = selectedCountryId.toString();
+      // request.fields['state_id'] = selectedStateId.toString();
+      // //business_type_id
+      // request.fields['lga_id'] = selectedLGAId.toString();
+      // request.fields['phone_number'] = contactNumberController.text;
+      // request.fields['business_address'] = contactAddressController.text;
+      // request.fields['tax_number'] = '0';
+      request.fields['category_id'] = selectedCategoryId.first.toString();
+
+      //businessDescriptionController.text;
+
+      // if (file1.value != null) {
+      //   myLog.log('profile photo adding');
+      //   XFile? imageFile = file1.value;
+      //   String mimeType = lookupMimeType(imageFile!.path) ?? 'image/jpeg';
+      //   String fileName = basename(imageFile.path);
+
+      //   // Convert image to MultipartFile and add it to the request
+      //   var multipartFile1 = await http.MultipartFile.fromPath(
+      //     'profile_picture', // The name of the field in your API
+      //     imageFile.path,
+      //     filename: fileName,
+      //     contentType:
+      //         MediaType(mimeType.split('/')[0], mimeType.split('/')[1]),
+      //   );
+      //   request.files.add(multipartFile1);
+      // }
+
+      // Send the request
+      var response = await request.send();
+      print(response.headers);
+      print(response.stream);
+      print(response.request);
+      myLog.log('Response status: ${response.statusCode}');
+      myLog.log('Response headers: ${response.headers}');
+      myLog.log('Response request: ${response.request}');
+      // var responseBody = await response.stream.bytesToString();
+      //   myLog.log('Response Body: $responseBody');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        OverlayLoadingProgress.stop();
+        var responseBody = await response.stream.bytesToString();
+
+      myLog.log('Response (${response.statusCode}): $responseBody');
+        // await dataBase.saveLocation(
+        //   '${selectedCountry1.toString()}, ${selectedState1.toString()}, ${selectedLGA1.toString()}, ${contactAddressController.text}',
+        // );
+        // var responseBody = await response.stream.bytesToString();
+        // myLog.log('Response Body: $responseBody');
+        //   // Refresh profile data
+        //   fetchUserProfile();
+        //   ScaffoldMessenger.of(Get.context!).showSnackBar(
+        //     const SnackBar(content: Text('Profile updated successfully')),
+        //   );
+        // } else {
+        //   ScaffoldMessenger.of(Get.context!).showSnackBar(
+        //     SnackBar(content: Text('Failed to update profile: ${response.body}')),
+        //   );
+        Get.snackbar("Success", "Profile updated successfully");
+        myLog.log('Profile updated successfully');
+
+        Get.toNamed(
+          '/summary',
+          arguments: {'category': selectedCategory.first},
+        );
+      } else {
+        OverlayLoadingProgress.stop();
+        var responseBody = await response.stream.bytesToString();
+        print('Error: ${response.statusCode}, Response: $responseBody');
+        Get.snackbar("Error:", " ${response.statusCode} - $responseBody");
+      }
+    } catch (e) {
+      OverlayLoadingProgress.stop();
+      Get.snackbar("Error occurred:", e.toString());
+      myLog.log(e.toString());
+    } finally {
+      OverlayLoadingProgress.stop();
+    }
+  }
+
+  //TODO: FETCH BUSINESS CATEGORY
+
+
+
+
 
   Future<void> fetchBusinessCategory() async {
     //  OverlayLoadingProgress.start(circularProgressColor: Color(0XFF004BFD));

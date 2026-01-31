@@ -103,19 +103,25 @@ class _OperationsScreenState extends State<OperationsScreen> {
     return '${hour == 0 ? 12 : hour}:$minute $period';
   }
 
+  // String _formatTime(TimeOfDay time) {
+  //   final hour = time.hour;
+  //   final minute = time.minute.toString(); //.padLeft(2, '0');
+  //   //final period = time.period == DayPeriod.am ? 'AM' : 'PM';
+  //   return '$hour:$minute';
+  // }
+
   String _formatTime(TimeOfDay time) {
-    final hour = time.hour;
-    final minute = time.minute.toString(); //.padLeft(2, '0');
-    //final period = time.period == DayPeriod.am ? 'AM' : 'PM';
-    return '$hour:$minute';
-  }
+  final hour = time.hour.toString().padLeft(2, '0');
+  final minute = time.minute.toString().padLeft(2, '0');
+  return '$hour:$minute';
+}
 
   Widget _buildProgressIndicator() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
       child: Row(
         children: List.generate(
-          6,
+          7,
           (index) => Expanded(
             child: Container(
               height: 3,
@@ -210,6 +216,27 @@ class _OperationsScreenState extends State<OperationsScreen> {
               ),
 
               const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: DropdownMenuFormField<String>(
+                  hintText: 'Fulfilment Type',
+                  textStyle: TextStyle(color: Colors.grey),
+                  width: double.infinity,
+                  dropdownMenuEntries: const [
+                    DropdownMenuEntry(value: 'instant', label: 'INSTANT'),
+                    DropdownMenuEntry(value: 'preorder', label: 'PRE-ORDER'),
+                    DropdownMenuEntry(value: 'both', label: 'BOTH'),
+                  ],
+                  // decoration: const InputDecoration(
+                  //   labelText: 'Select an option',
+                  //   border: OutlineInputBorder(),
+                  // ),
+                  onSelected: (String? value) {
+                    print('Selected: $value');
+                    controller.fullfillmentType.value = value!;
+                  },
+                ),
+              ),
 
               const Spacer(),
               SizedBox(height: 20),

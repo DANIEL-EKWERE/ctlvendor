@@ -83,11 +83,11 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
             'Products',
             () => Get.toNamed(AppRoutes.productList),
           ),
-          _buildDrawerItem(
-            Icons.category_outlined,
-            'Categories',
-            () => Get.toNamed(AppRoutes.categoryList),
-          ),
+          // _buildDrawerItem(
+          //   Icons.category_outlined,
+          //   'Categories',
+          //   () => Get.toNamed(AppRoutes.categoryList),
+          // ),
           _buildDrawerItem(
             Icons.inventory_2_outlined,
             'Packs',

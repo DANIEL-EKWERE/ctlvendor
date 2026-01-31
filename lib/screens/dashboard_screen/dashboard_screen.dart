@@ -1,4 +1,5 @@
 import 'package:ctlvendor/routes/app_routes.dart';
+import 'package:ctlvendor/screens/login/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -121,7 +122,6 @@ class _HomeTabState extends State<HomeTab> {
     myLog.log('first name $fname ans last name $lastName');
   }
 
-  
   // Widget build(BuildContext context) {
   //   return Column(
   //     children: [
@@ -263,11 +263,14 @@ class _HomeTabState extends State<HomeTab> {
                 //   Icons.attach_money,
                 //   Colors.green,
                 // ),
-                _buildStatCard(
-                  'Sales Today',
-                  '₦${controller.salesToday.value}',
-                  Icons.attach_money,
-                  Colors.green,
+                GestureDetector(
+                  onTap: () async {},
+                  child: _buildStatCard(
+                    'Sales Today',
+                    '₦${controller.salesToday.value}',
+                    Icons.attach_money,
+                    Colors.green,
+                  ),
                 ),
                 SizedBox(height: 12),
                 _buildStatCard(
@@ -520,11 +523,11 @@ class _HomeTabState extends State<HomeTab> {
             'Products',
             () => Get.toNamed(AppRoutes.productList),
           ),
-          _buildDrawerItem(
-            Icons.category_outlined,
-            'Categories',
-            () => Get.toNamed(AppRoutes.categoryList),
-          ),
+          // _buildDrawerItem(
+          //   Icons.category_outlined,
+          //   'Categories',
+          //   () => Get.toNamed(AppRoutes.categoryList),
+          // ),
           _buildDrawerItem(
             Icons.inventory_2_outlined,
             'Packs',
@@ -546,8 +549,12 @@ class _HomeTabState extends State<HomeTab> {
             () => Get.toNamed(AppRoutes.orderList),
           ),
           Divider(),
-          _buildDrawerItem(Icons.settings, 'Settings', () {}),
-          _buildDrawerItem(Icons.logout, 'Logout', () {}),
+          _buildDrawerItem(Icons.settings, 'Settings', () async {
+            // Navigate to settings
+          }),
+          _buildDrawerItem(Icons.logout, 'Logout', () async {
+            await dataBase.logOut();
+          }),
         ],
       ),
     );
@@ -566,7 +573,7 @@ class OrdersTab extends StatefulWidget {
 }
 
 class _OrdersTabState extends State<OrdersTab> {
-    String firstName = 'N/A';
+  String firstName = 'N/A';
   String lastName = '';
   @override
   initState() {
@@ -583,6 +590,7 @@ class _OrdersTabState extends State<OrdersTab> {
     });
     myLog.log('first name $fname ans last name $lastName');
   }
+
   @override
   Widget build(BuildContext context) {
     return const OrdersScreen();

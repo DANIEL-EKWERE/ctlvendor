@@ -30,6 +30,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   @override
   void initState() {
     super.initState();
+    controller.resendOtp({'email': email});
     controller.startResendTimer();
 
     // Set up focus node listeners

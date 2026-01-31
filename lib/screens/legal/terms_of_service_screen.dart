@@ -72,7 +72,7 @@ class TermsOfServiceScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
                     _buildClause(
-                      'For inquiries, please contact jaramarket101@gmail.com.',
+                      'For inquiries, please contact nksereke101@gmail.com.',
                       'By using JaraMarket, you agree to these Terms.',
                     ),
                   ],

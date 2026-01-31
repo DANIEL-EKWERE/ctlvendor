@@ -72,7 +72,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _buildSection(
               '9. Contact Us',
               'For questions or concerns about this Privacy Policy, please contact: JaraMarket Support\n'
-                  'Email: jaramarket1@gmail.com - Phone: 08088884983',
+                  'Email: nksereke@gmail.com - Phone: 08088884983',
             ),
             const SizedBox(height: 30),
             Center(

@@ -1,5 +1,6 @@
 import 'package:ctlvendor/data/apiClient/apiClient.dart';
 import 'package:ctlvendor/main.dart';
+import 'package:ctlvendor/screens/email_verification/controller/email_verification_controller.dart';
 import 'dart:convert';
 import 'dart:developer' as myLog;
 import 'package:flutter/material.dart';
@@ -15,6 +16,10 @@ class LoginController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   RxBool isButtonEnabled = false.obs;
+
+  EmailVerificationController controller = Get.put(
+    EmailVerificationController(),
+  );
 
   RxBool isLoading = false.obs;
   // bool get isLoading => _isLoading;
@@ -57,6 +62,38 @@ class LoginController extends GetxController {
         loginModel = loginModelFromJson(response.body);
         data = loginModel.data!;
 
+        if (!data.emailVerified!) {
+          //await dataBase.saveEmail(email);
+
+          Get.toNamed(
+            '/email-verification',
+            arguments: {
+              'email': emailController.text,
+              // 'password': password,
+            },
+          );
+          emailController.clear();
+          passwordController.clear();
+          return;
+        }
+
+        if (!data.vendor!.isRegistered!) {
+          await dataBase.saveEmail(data.email ?? 'N/A');
+          Navigator.pushNamed(Get.context!, '/business-name');
+          // Proceed with saving data and navigating to dashboard
+          Get.snackbar(
+            'Welcome Back',
+            'You are already registered, continue were you left off.',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.orange[600],
+            colorText: Colors.white,
+            duration: Duration(seconds: 6),
+          );
+          emailController.clear();
+          passwordController.clear();
+          return;
+        }
+
         // Save token and user data to shared preferences
         await dataBase.saveToken(data.token ?? 'N/A');
         await dataBase.saveUserId((data.id!.toInt()).toString());
@@ -72,11 +109,22 @@ class LoginController extends GetxController {
         );
         await dataBase.saveRefererId(data.referrerId?.toString() ?? 'N/A');
         await dataBase.saveVendorId(data.vendor?.id.toString() ?? 'N/A');
-        await dataBase.saveCategoryId(data.vendor?.category?.id.toString() ?? 'N/A');
+        await dataBase.saveCategoryId(
+          data.vendor?.category?.id.toString() ?? 'N/A',
+        );
         await dataBase.saveCompanyId(
           //data.contactAddress?.first.id.toString() ?? 'N/A',
           data.vendor?.locations?.first.id.toString() ?? '0',
         );
+
+        //TODO: save vendor details
+
+        await dataBase.saveVendor(data.vendor?.toJson() ?? {});
+        // await dataBase.saveLocations(data.vendor?.locations ?? []);
+        // await dataBase.saveVendorCategory(data.vendor?.category?.toJson() ?? {});
+        // await dataBase.saveVendorPlan(data.vendor?.plan?.toJson() ?? {});
+        // await dataBase.saveVehicles(data.vendor?.vehicles ?? []);
+        //TODO: done saving vendor details
 
         emailController.clear();
         passwordController.clear();
@@ -93,6 +141,18 @@ class LoginController extends GetxController {
 
         // Navigate to dashboard
         Get.offAllNamed('/dashboard');
+      } else if (response.statusCode == 400) {
+        // Handle unauthorized response'
+        controller.resendOtp({'email': emailController.text});
+        Get.toNamed(
+          '/email-verification',
+          arguments: {
+            'email': emailController.text,
+            // 'password': password,
+          },
+        );
+        emailController.clear();
+        passwordController.clear();
       } else {
         // Handle error response
         var errorData = jsonDecode(response.body);
