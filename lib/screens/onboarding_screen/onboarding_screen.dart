@@ -20,7 +20,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final List<Map<String, String>> _onboardingData = [
     {
       'title': 'Welcome Onboard.',
-      'description': 'Welcome to the JaraMarket Vendor App.',
+      'description': 'Welcome to the NK sereke Vendor App.',
       'icon': 'camera',
     },
     {

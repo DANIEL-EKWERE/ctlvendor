@@ -38,7 +38,8 @@ dependencies:
   intl:
   get:
   overlay_kit:
-  shared_preferences:
+  # shared_preferences:
+  shared_preferences: ^2.5.4
   http:
   mime:
   pull_to_refresh_flutter3:
@@ -69,7 +70,7 @@ dev_dependencies:
 
 
 launcher_name:
-  default: "NK'sereke"
+  default: "NKsereke"
 
 
 # For information on the generic Dart part of this file, see the

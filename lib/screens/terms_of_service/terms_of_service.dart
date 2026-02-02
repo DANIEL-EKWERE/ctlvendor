@@ -31,38 +31,38 @@ class TermsOfServiceScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Text(
-              'This Vendor Service Agreement ("Agreement") is made between JaraMarket ("Platform") and the Vendor ("Vendor") who signs up to supply and fulfill customer orders on the JaraMarket platform.',
+              'This Vendor Service Agreement ("Agreement") is made between NK sereke ("Platform") and the Vendor ("Vendor") who signs up to supply and fulfill customer orders on the NK sereke platform.',
               style: TextStyle(fontSize: 14),
             ),
             const SizedBox(height: 16),
             _buildSection(
               '1. Vendor Responsibilities',
-              'Vendor agrees to maintain an up-to-date inventory of goods listed on JaraMarket.\n\n'
-                  'Vendor shall process all received orders within the stipulated timeframe and ensure prompt delivery to the JaraMarket Packaging Hub before the countdown timer elapses. Vendor shall maintain quality standards and accurate order fulfillment.',
+              'Vendor agrees to maintain an up-to-date inventory of goods listed on NK sereke.\n\n'
+                  'Vendor shall process all received orders within the stipulated timeframe and ensure prompt delivery to the NK sereke Packaging Hub before the countdown timer elapses. Vendor shall maintain quality standards and accurate order fulfillment.',
             ),
             _buildSection(
               '2. Order Fulfillment & Countdown',
-              'Once an order is received, a countdown timer (as specified per item or category) begins. Vendor must deliver the items to the designated Packaging Hub before the timer expires otherwise, the vendor will be losing rating with Jaramarket and Failure to meet delivery times consistently may result in temporary suspension or permanent delisting.',
+              'Once an order is received, a countdown timer (as specified per item or category) begins. Vendor must deliver the items to the designated Packaging Hub before the timer expires otherwise, the vendor will be losing rating with NK sereke and Failure to meet delivery times consistently may result in temporary suspension or permanent delisting.',
             ),
             _buildSection(
               '3. Payments & Fees',
-              'JaraMarket shall remit payments for fulfilled orders within 2 hrs after successful delivery. A 5% service fee shall be deducted from each order to cover platform services and logistics. All payments are made via the platform\'s vendor wallet or directly to the vendor\'s bank account.',
+              'NK sereke shall remit payments for fulfilled orders within 2 hrs after successful delivery. A 5% service fee shall be deducted from each order to cover platform services and logistics. All payments are made via the platform\'s vendor wallet or directly to the vendor\'s bank account.',
             ),
             _buildSection(
               '4. Product Quality & Liability',
-              'Vendor is responsible for ensuring all products are of acceptable quality and fit for consumption/use. JaraMarket reserves the right to remove any product or vendor reported for repeated customer dissatisfaction or product issues and may terminate this contract on such repeated infractions.',
+              'Vendor is responsible for ensuring all products are of acceptable quality and fit for consumption/use. NK sereke reserves the right to remove any product or vendor reported for repeated customer dissatisfaction or product issues and may terminate this contract on such repeated infractions.',
             ),
             _buildSection(
               '5. Cancellation & Refunds',
-              'Vendors must notify JaraMarket immediately of any order they are unable to fulfill by refusing to accept the order. Any losses due to late cancellations or non-availability may be charged to the Vendor if avoidable.',
+              'Vendors must notify NK sereke immediately of any order they are unable to fulfill by refusing to accept the order. Any losses due to late cancellations or non-availability may be charged to the Vendor if avoidable.',
             ),
             _buildSection(
               '6. Compliance',
-              'Vendor agrees to comply with all laws and regulations applicable to the sale and handling of food or goods listed. JaraMarket reserves the right to audit, inspect or request documentation for compliance.',
+              'Vendor agrees to comply with all laws and regulations applicable to the sale and handling of food or goods listed. NK sereke reserves the right to audit, inspect or request documentation for compliance.',
             ),
             _buildSection(
               '7. Termination',
-              'Either party may terminate this Agreement with a [15-30 day] notice. JaraMarket may terminate the agreement immediately for breach of contract, repeated lateness, or customer complaints.',
+              'Either party may terminate this Agreement with a [15-30 day] notice. NK sereke may terminate the agreement immediately for breach of contract, repeated lateness, or customer complaints.',
             ),
             const SizedBox(height: 20),
             const Center(

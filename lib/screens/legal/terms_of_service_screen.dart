@@ -32,18 +32,18 @@ class TermsOfServiceScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildClause(
-                      'Welcome to JaraMarket!',
+                      'Welcome to NK sereke!',
                       'By using our platform, you agree to these Terms of Service.',
                     ),
                     const SizedBox(height: 24),
                     _buildClause(
                       '1. Services',
-                      'JaraMarket connects users with a selection of food recipes, sources the necessary ingredients, and delivers them through Ryda dispatch. We charge a 10% service fee on the total purchase cost, along with an additional fee for meal preparation services.',
+                      'NK sereke connects users with a selection of food recipes, sources the necessary ingredients, and delivers them through Ryda dispatch. We charge a 10% service fee on the total purchase cost, along with an additional fee for meal preparation services.',
                     ),
                     const SizedBox(height: 24),
                     _buildClause(
                       '2. User Responsibilities',
-                      'Please provide accurate delivery information.\n\nMake sure you are available to receive your orders.\n\nPayment for orders must be completed before fulfillment.\n\nUse JaraMarket solely for personal or authorized purposes.',
+                      'Please provide accurate delivery information.\n\nMake sure you are available to receive your orders.\n\nPayment for orders must be completed before fulfillment.\n\nUse NK sereke solely for personal or authorized purposes.',
                     ),
                     const SizedBox(height: 24),
                     _buildClause(
@@ -58,7 +58,7 @@ class TermsOfServiceScreen extends StatelessWidget {
                     const SizedBox(height: 24),
                     _buildClause(
                       '5. Liability',
-                      'JaraMarket is not liable for delays caused by third-party logistics or unforeseen events. While we aim for quality, we cannot guarantee that ingredients will meet specific dietary requirements.',
+                      'NK sereke is not liable for delays caused by third-party logistics or unforeseen events. While we aim for quality, we cannot guarantee that ingredients will meet specific dietary requirements.',
                     ),
                     const SizedBox(height: 24),
                     _buildClause(
@@ -68,12 +68,12 @@ class TermsOfServiceScreen extends StatelessWidget {
                     const SizedBox(height: 24),
                     _buildClause(
                       '7. Changes to Terms',
-                      'We may revise these Terms at any time. Your continued use of JaraMarket indicates your acceptance of any changes.',
+                      'We may revise these Terms at any time. Your continued use of NK sereke indicates your acceptance of any changes.',
                     ),
                     const SizedBox(height: 24),
                     _buildClause(
                       'For inquiries, please contact nksereke101@gmail.com.',
-                      'By using JaraMarket, you agree to these Terms.',
+                      'By using NK sereke, you agree to these Terms.',
                     ),
                   ],
                 ),
@@ -105,13 +105,7 @@ class TermsOfServiceScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        Text(
-          content,
-          style: const TextStyle(
-            fontSize: 16,
-            height: 1.5,
-          ),
-        ),
+        Text(content, style: const TextStyle(fontSize: 16, height: 1.5)),
       ],
     );
   }

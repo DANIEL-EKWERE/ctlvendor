@@ -66,7 +66,7 @@ class _FaqScreenState extends State<FaqScreen> {
           FaqItem(
             question: 'What is the service fee?',
             answer:
-                'JaraMarket charges a 5% service fee on each successful transaction. This fee covers platform maintenance, customer support, and payment processing.',
+                'NK sereke charges a 5% service fee on each successful transaction. This fee covers platform maintenance, customer support, and payment processing.',
           ),
           FaqItem(
             question: 'What are my responsibilities for order fulfillment?',
@@ -285,7 +285,7 @@ class _FaqScreenState extends State<FaqScreen> {
       context,
       userContext: UserContext.general,
       customMessage:
-          'Hello JaraMarket Support, I have a question that wasn\'t answered in the FAQ: ',
+          'Hello NK sereke Support, I have a question that wasn\'t answered in the FAQ: ',
     );
   }
 

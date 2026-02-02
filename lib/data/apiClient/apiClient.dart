@@ -1450,6 +1450,24 @@ class ApiClient extends GetConnect {
     return response;
   }
 
+
+    // Get all dashboard data
+  Future<http.Response> getDashboardData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    final url = Uri.parse('$baseUrl/vendor/dashboard');
+    _logRequest('GET', url);
+    final response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    _logResponse(response);
+    return response;
+  }
+
   // Create a new category
   Future<http.Response> createCategory(
     Map<String, dynamic> categoryData,

@@ -339,6 +339,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     controller.fetchUserProfile();
   }
 
+  bool fromDrawer = false;
   final RefreshController _refreshController = RefreshController(
     initialRefresh: false,
   );
@@ -347,6 +348,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     controller.fetchUserProfileByCondition();
+
+    fromDrawer =
+        Get.arguments != null &&
+        (Get.arguments as Map<String, dynamic>)['fromDrawer'] == true;
   }
 
   @override
@@ -415,6 +420,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             backgroundColor: Color(0xffEBF0F0),
                           ),
                         ),
+                        fromDrawer
+                            ? Positioned(
+                                top: 10,
+                                left: 10,
+                                child: Container(
+                                  margin: const EdgeInsets.only(
+                                    top: 0,
+                                    left: 0,
+                                  ),
+                                  padding: const EdgeInsets.all(0),
+                                  // height: 40,
+                                  // width: 40,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: IconButton(
+                                    icon: Icon(
+                                      Icons.chevron_left,
+                                      size: 30,
+                                      color: Colors.grey.shade800,
+                                    ),
+                                    onPressed: () {
+                                      if (fromDrawer) {
+                                        Get.back();
+                                      } else {
+                                        Get.offAllNamed(AppRoutes.dashboard);
+                                      }
+                                    },
+                                  ),
+                                ),
+                              )
+                            : SizedBox.shrink(),
                         Column(
                           children: [
                             const SizedBox(height: 80),

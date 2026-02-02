@@ -29,7 +29,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Text(
-              'At JaraMarket, your privacy is important to us. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform, including our website and mobile applications. By using JaraMarket, you agree to the terms of this policy.',
+              'At NK sereke, your privacy is important to us. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform, including our website and mobile applications. By using NK sereke, you agree to the terms of this policy.',
               style: TextStyle(fontSize: 14),
             ),
             _buildSection(
@@ -63,7 +63,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             ),
             _buildSection(
               '7. Children\'s Privacy',
-              'JaraMarket is not intended for children under 13. We do not knowingly collect personal information from minors.',
+              'NK sereke is not intended for children under 13. We do not knowingly collect personal information from minors.',
             ),
             _buildSection(
               '8. Changes to This Policy',
@@ -71,7 +71,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             ),
             _buildSection(
               '9. Contact Us',
-              'For questions or concerns about this Privacy Policy, please contact: JaraMarket Support\n'
+              'For questions or concerns about this Privacy Policy, please contact: NK sereke Support\n'
                   'Email: nksereke@gmail.com - Phone: 08088884983',
             ),
             const SizedBox(height: 30),

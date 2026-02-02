@@ -32,8 +32,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildClause(
-                      'Welcome to JaraMarket!',
-                      'We value your privacy. This Privacy Policy outlines how we gather, utilize, disclose, and safeguard your personal information when you engage with our platform and services. By using JaraMarket, you consent to the terms of this policy.',
+                      'Welcome to NK sereke!',
+                      'We value your privacy. This Privacy Policy outlines how we gather, utilize, disclose, and safeguard your personal information when you engage with our platform and services. By using NK sereke, you consent to the terms of this policy.',
                     ),
                     const SizedBox(height: 24),
                     _buildClause(
@@ -78,7 +78,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     const SizedBox(height: 24),
                     _buildClause(
                       '6. Cookies and Tracking Technologies',
-                      'JaraMarket utilizes cookies and similar tracking technologies to improve your experience. You can adjust your cookie preferences through your browser settings.',
+                      'NK sereke utilizes cookies and similar tracking technologies to improve your experience. You can adjust your cookie preferences through your browser settings.',
                     ),
                     const SizedBox(height: 24),
                     _buildClause(
@@ -88,12 +88,12 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     const SizedBox(height: 24),
                     _buildClause(
                       '8. Updates to This Policy',
-                      'We may revise this Privacy Policy periodically. Any changes will be posted on this page, and we may inform you via email or app notifications. Your continued use of JaraMarket indicates your acceptance of the updated policy.',
+                      'We may revise this Privacy Policy periodically. Any changes will be posted on this page, and we may inform you via email or app notifications. Your continued use of NK sereke indicates your acceptance of the updated policy.',
                     ),
                     const SizedBox(height: 24),
                     _buildClause(
                       '9. Contact Us',
-                      'If you have any questions or concerns regarding this Privacy Policy, please reach out to us at:\n\nJaraMarket Customer Support\n[Your Contact Email]\n[Your Business Address]\n[Your Phone Number]',
+                      'If you have any questions or concerns regarding this Privacy Policy, please reach out to us at:\n\nNK sereke Customer Support\n[Your Contact Email]\n[Your Business Address]\n[Your Phone Number]',
                     ),
                   ],
                 ),

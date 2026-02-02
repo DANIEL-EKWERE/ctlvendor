@@ -1,9 +1,11 @@
 import 'package:ctlvendor/routes/app_routes.dart';
 import 'package:ctlvendor/screens/OrderListScreen/controller/OrderListController.dart';
+import 'package:ctlvendor/screens/profile_screen/controller/profile_controller.dart';
 import 'package:ctlvendor/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+ProfileController controller1 = Get.put(ProfileController());
 OrderListController controller = Get.put(OrderListController());
 
 class OrderListScreen extends StatefulWidget {
@@ -31,7 +33,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
       firstName = fname;
       lastName = lname;
     });
-   // myLog.log('first name $fname ans last name $lastName');
+    // myLog.log('first name $fname ans last name $lastName');
   }
 
   Widget _buildDrawer() {
@@ -71,6 +73,11 @@ class _OrderListScreenState extends State<OrderListScreen> {
             () => Get.toNamed(AppRoutes.dashboard),
           ),
           _buildDrawerItem(
+            Icons.shopping_bag_outlined,
+            'Orders',
+            () => Get.back(),
+          ),
+          _buildDrawerItem(
             Icons.inventory_2_outlined,
             'Products',
             () => Get.toNamed(AppRoutes.productList),
@@ -95,14 +102,58 @@ class _OrderListScreenState extends State<OrderListScreen> {
             'Locations',
             () => Get.toNamed(AppRoutes.locationList),
           ),
-          _buildDrawerItem(
-            Icons.shopping_bag_outlined,
-            'Orders',
-            () => Get.back(),
-          ),
           Divider(),
-          _buildDrawerItem(Icons.settings, 'Settings', () {}),
-          _buildDrawerItem(Icons.logout, 'Logout', () {}),
+          _buildDrawerItem(Icons.settings, 'Profile', () {}),
+          _buildDrawerItem(Icons.logout, 'Logout', () {
+            Get.dialog(
+              AlertDialog(
+                content: SizedBox(
+                  height: 180,
+                  child: Column(
+                    children: [
+                      Icon(Icons.logout, size: 40, color: Colors.red),
+                      Text(
+                        'Logout Confirmation',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text('Are you sure you want to logout?'),
+                      SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () => Get.back(),
+                            child: Text('Cancel'),
+                          ),
+                          SizedBox(width: 10),
+                          SizedBox(
+                            height: 40,
+                            width: 110,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                controller1.logOut();
+                              },
+                              child: Text('Logout'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }),
+          Divider(),
+          SizedBox(height: 30),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8.0),
+            child: Text('version 1.1'),
+          ),
         ],
       ),
     );

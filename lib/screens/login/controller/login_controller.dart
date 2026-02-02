@@ -143,16 +143,35 @@ class LoginController extends GetxController {
         Get.offAllNamed('/dashboard');
       } else if (response.statusCode == 400) {
         // Handle unauthorized response'
-        controller.resendOtp({'email': emailController.text});
-        Get.toNamed(
-          '/email-verification',
-          arguments: {
-            'email': emailController.text,
-            // 'password': password,
-          },
-        );
+
+        var responseData = jsonDecode(response.body);
+        if (responseData['errors']['scalar'] == 422) {
+          Get.snackbar(
+            'Error',
+            responseData['message'] ?? 'Login failed',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            duration: Duration(seconds: 6),
+          );
+        } else {
+          controller.resendOtp({'email': emailController.text});
+          Get.toNamed(
+            '/email-verification',
+            arguments: {
+              'email': emailController.text,
+              // 'password': password,
+            },
+          );
+        }
         emailController.clear();
         passwordController.clear();
+      } else if (response.statusCode == 422) {
+        var responseData = jsonDecode(response.body);
+        String errorMessage = responseData['message'] ?? 'Login failed';
+        String errorMessage1 = responseData['error']['email'] ?? 'Login failed';
+        myLog.log('Login error: $errorMessage1');
+        myLog.log('Login error: $errorMessage');
       } else {
         // Handle error response
         var errorData = jsonDecode(response.body);
@@ -166,6 +185,7 @@ class LoginController extends GetxController {
           colorText: Colors.white,
           duration: Duration(seconds: 3),
         );
+        return;
       }
     } catch (e) {
       isLoading.value = false;

@@ -253,7 +253,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                 SizedBox(height: 20),
 
                 // SKU
-                _buildLabel('SKU/Pack Name'),
+                _buildLabel('Pack'),
                 SizedBox(height: 8),
 
                 // TextFormField(
@@ -544,72 +544,62 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                     fit: FlexFit.loose,
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 30),
 
                 // Price, Cost, Stock in Row
-                Row(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildLabel('Price'),
-                          SizedBox(height: 8),
-                          TextFormField(
-                            controller: widget.controller.priceController,
-                            keyboardType: TextInputType.number,
-                            decoration: _inputDecoration('0'),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Required';
-                              }
-                              return null;
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildLabel('Cost (Optional)'),
-                          SizedBox(height: 8),
-                          TextFormField(
-                            controller: widget.controller.costController,
-                            keyboardType: TextInputType.number,
-                            decoration: _inputDecoration('0'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildLabel('Stock'),
-                          SizedBox(height: 8),
-                          TextFormField(
-                            controller: widget
-                                .controller
-                                .stockController, //stockController,
-                            keyboardType: TextInputType.number,
-                            decoration: _inputDecoration('0'),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Required';
-                              }
-                              return null;
-                            },
-                          ),
-                        ],
-                      ),
+                    _buildLabel('Price'),
+                    SizedBox(height: 8),
+                    TextFormField(
+                      controller: widget.controller.priceController,
+                      keyboardType: TextInputType.number,
+                      decoration: _inputDecoration('0'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required';
+                        }
+                        return null;
+                      },
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 30),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildLabel('Cost (Optional)'),
+                    SizedBox(height: 8),
+                    TextFormField(
+                      controller: widget.controller.costController,
+                      keyboardType: TextInputType.number,
+                      decoration: _inputDecoration('0'),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 30),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildLabel('Stock'),
+                    SizedBox(height: 8),
+                    TextFormField(
+                      controller:
+                          widget.controller.stockController, //stockController,
+                      keyboardType: TextInputType.number,
+                      decoration: _inputDecoration('0'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required';
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 30),
 
                 // Description
                 _buildLabel('Description'),
