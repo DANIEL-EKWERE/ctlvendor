@@ -781,7 +781,7 @@ class ApiClient extends GetConnect {
 
   // Fetch available orders
   Future<http.Response> fetchorders() async {
-    final url = Uri.parse('$baseUrl/orders');
+    final url = Uri.parse('$baseUrl/vendor/orders?status=pending');
     var token = await dataBase.getToken();
     _logRequest('GET', url);
     return _retryRequest(() async {
@@ -805,7 +805,7 @@ class ApiClient extends GetConnect {
   }
 
   Future<http.Response> fetchAcceptedOrders() async {
-    final url = Uri.parse('$baseUrl/vendor/orders/accepted');
+    final url = Uri.parse('$baseUrl/vendor/orders?status=accepted');
     var token = await dataBase.getToken();
     _logRequest('GET', url);
     return _retryRequest(() async {
@@ -831,7 +831,7 @@ class ApiClient extends GetConnect {
   //accept order
   Future<http.Response> acceptedOrders(String itemId, int vendorId) async {
     print(vendorId);
-    final url = Uri.parse('$baseUrl/vendor/orders/item/$itemId/decision');
+    final url = Uri.parse('$baseUrl/vendor/orders/update/$itemId/status');
     var token = await dataBase.getToken();
     _logRequest('POST', url);
     return _retryRequest(() async {
@@ -843,8 +843,8 @@ class ApiClient extends GetConnect {
               'Authorization': 'Bearer $token',
             },
             body: jsonEncode({
-              "status": "accepted", //rejected
-              "vendor_id": vendorId, //1 if is admin that is accepted
+              "status": "accepted", //acepted, processing,assigned, cancelled
+              //  "rider_id": null, // if is assigned
             }),
           )
           .timeout(
@@ -1132,13 +1132,17 @@ class ApiClient extends GetConnect {
 
   // Cancel an order
   Future<http.Response> cancelOrder(String orderId) async {
-    final url = Uri.parse('$baseUrl/orders/$orderId/cancel');
+    final url = Uri.parse('$baseUrl/vendor/orders/update/$orderId/status');
     _logRequest('POST', url);
     final response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
+      body: jsonEncode({
+        "status": "cancelled", //acepted, processing,assigned, cancelled
+        //   "rider_id": null // if is assigned
+      }),
     );
     _logResponse(response);
     return response;
@@ -1450,8 +1454,7 @@ class ApiClient extends GetConnect {
     return response;
   }
 
-
-    // Get all dashboard data
+  // Get all dashboard data
   Future<http.Response> getDashboardData() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';

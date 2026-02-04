@@ -1,10 +1,7 @@
-
-
 import 'dart:convert';
 
 DashboardModel dashboardModelFromJson(String str) =>
     DashboardModel.fromJson(json.decode(str));
-
 
 class DashboardModel {
   int? salesToday;
@@ -34,14 +31,14 @@ class DashboardModel {
     activePromotions = json['active_promotions'];
     lowStockAlert = json['low_stock_alert'];
     pendingOrders = json['pending_orders'];
-    
+
     if (json['monthly_revenue'] != null) {
       monthlyRevenue = <MonthlyRevenue>[];
       json['monthly_revenue'].forEach((v) {
         monthlyRevenue!.add(MonthlyRevenue.fromJson(v));
       });
     }
-    
+
     if (json['top_selling_products'] != null) {
       topSellingProducts = <TopSellingProduct>[];
       json['top_selling_products'].forEach((v) {
@@ -58,17 +55,19 @@ class DashboardModel {
     data['active_promotions'] = this.activePromotions;
     data['low_stock_alert'] = this.lowStockAlert;
     data['pending_orders'] = this.pendingOrders;
-    
+
     if (this.monthlyRevenue != null) {
-      data['monthly_revenue'] =
-          this.monthlyRevenue!.map((v) => v.toJson()).toList();
+      data['monthly_revenue'] = this.monthlyRevenue!
+          .map((v) => v.toJson())
+          .toList();
     }
-    
+
     if (this.topSellingProducts != null) {
-      data['top_selling_products'] =
-          this.topSellingProducts!.map((v) => v.toJson()).toList();
+      data['top_selling_products'] = this.topSellingProducts!
+          .map((v) => v.toJson())
+          .toList();
     }
-    
+
     return data;
   }
 }
@@ -82,13 +81,15 @@ class MonthlyRevenue {
 
   MonthlyRevenue.fromJson(Map<String, dynamic> json) {
     month = json['month'];
-    revenue = json['revenue']?.toDouble();
+    if (json['amount'] != null) {
+      revenue = double.tryParse(json['amount'].toString()) ?? 0.0;
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['month'] = this.month;
-    data['revenue'] = this.revenue;
+    data['amount'] = this.revenue;
     return data;
   }
 }
@@ -99,6 +100,8 @@ class TopSellingProduct {
   String? name;
   int? soldCount;
   double? revenue;
+  String? category;
+  String? stock;
 
   TopSellingProduct({this.id, this.name, this.soldCount, this.revenue});
 
@@ -106,6 +109,8 @@ class TopSellingProduct {
     id = json['id'];
     name = json['name'];
     soldCount = json['sold_count'];
+    category = json['category'];
+    stock = json['stock'];
     revenue = json['revenue']?.toDouble();
   }
 

@@ -152,7 +152,7 @@ class _OrdersScreenState extends State<OrdersScreen>
       itemCount: controller.availableData.length,
       itemBuilder: (context, index) {
         Data dataAvaialable = controller.availableData[index];
-        return _buildOrderCardAvailable(false, dataAvaialable);
+        return _buildOrderCardAvailable(false, dataAvaialable, index);
       },
     );
   }
@@ -169,7 +169,11 @@ class _OrdersScreenState extends State<OrdersScreen>
     );
   }
 
-  Widget _buildOrderCardAvailable(bool isCompleted, Data dataAvaialable) {
+  Widget _buildOrderCardAvailable(
+    bool isCompleted,
+    Data dataAvaialable,
+    int index,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -208,7 +212,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                   children: [
                     Text(
                       // 'Brenda OKeefe',
-                      dataAvaialable.customer!,
+                      dataAvaialable.customer!.name!,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -233,7 +237,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                     const SizedBox(height: 2),
                     Text(
                       // '294.702.3148',
-                      dataAvaialable.orderId.toString(),
+                      dataAvaialable.reference.toString(),
                       style: TextStyle(
                         fontSize: 10,
                         fontFamily: 'Inter',
@@ -258,32 +262,34 @@ class _OrdersScreenState extends State<OrdersScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '₦${dataAvaialable.price}',
+                      '₦${dataAvaialable.total}',
                       style: const TextStyle(
                         fontSize: 14,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w800,
-                        color: Color(0xffFA254C),
+                        color: Color(0xff004BFD),
                       ),
                     ),
                     const SizedBox(height: 2),
                     Row(
                       spacing: 3,
                       children: [
-                        Text(
-                          dataAvaialable.name!.length > 7
-                              ? "${dataAvaialable.name!.substring(0, 6)}..."
-                              : dataAvaialable.name!,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w800,
-                            //fontWeight: FontWeight.w500,
+                        for (var i in dataAvaialable.items!.toList())
+                          Text(
+                            //dataHistory.name!.length > 7
+                            // ?
+                            "${i.product!.name!}",
+                            // : dataHistory.name!,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w800,
+                              //fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
                         const SizedBox(height: 2),
                         Text(
-                          dataAvaialable.unit!,
+                          dataAvaialable.packageType!,
                           style: const TextStyle(
                             fontSize: 12,
                             fontFamily: 'Inter',
@@ -339,7 +345,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                     },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.zero,
-                      backgroundColor: const Color(0xffE83C00),
+                      backgroundColor: const Color(0xff004BFD),
                     ),
                     child: const Text(
                       'view',
@@ -401,7 +407,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                   children: [
                     Text(
                       // 'Brenda OKeefe',
-                      dataHistory.customer!,
+                      dataHistory.customer!.name!,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -426,7 +432,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                     const SizedBox(height: 2),
                     Text(
                       // '294.702.3148',
-                      dataHistory.orderId.toString(),
+                      dataHistory.reference.toString(),
                       style: TextStyle(
                         fontSize: 10,
                         fontFamily: 'Inter',
@@ -451,32 +457,34 @@ class _OrdersScreenState extends State<OrdersScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '₦${dataHistory.price}',
+                      '₦${dataHistory.total}',
                       style: const TextStyle(
                         fontSize: 14,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w800,
-                        color: Color(0xffFA254C),
+                        color: Color(0xff004BFD),
                       ),
                     ),
                     const SizedBox(height: 2),
                     Row(
                       spacing: 3,
                       children: [
-                        Text(
-                          dataHistory.name!.length > 7
-                              ? "${dataHistory.name!.substring(0, 6)}..."
-                              : dataHistory.name!,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w800,
-                            //fontWeight: FontWeight.w500,
+                        for (var i in dataHistory.items!.toList())
+                          Text(
+                            //dataHistory.name!.length > 7
+                            // ?
+                            "${i.product!.name!}",
+                            // : dataHistory.name!,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w800,
+                              //fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
                         const SizedBox(height: 2),
                         Text(
-                          dataHistory.unit!,
+                          dataHistory.packageType!,
                           style: const TextStyle(
                             fontSize: 12,
                             fontFamily: 'Inter',
@@ -553,7 +561,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                   children: [
                     const Text('Order Cost'),
                     Text(
-                      "₦${dataHistory.price!}",
+                      "₦${dataHistory.total!}",
                       style: const TextStyle(
                         fontSize: 20,
                         fontFamily: 'Poppins',

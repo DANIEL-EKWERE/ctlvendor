@@ -17,6 +17,7 @@ class DashboardController extends GetxController {
   var lowStockCount = 0.obs;
   var pendingOrders = 0.obs;
   var topProducts = <Map<String, dynamic>>[].obs;
+  var monthlyRevenue = <Map<String, dynamic>>[].obs;
 
   @override
   void onInit() {
@@ -83,7 +84,18 @@ class DashboardController extends GetxController {
               return {
                 'name': product.name ?? 'N/A',
                 'sold': product.soldCount ?? 0,
+                'category': product.category,
+                'stock': product.stock,
                 'revenue': product.revenue ?? 0.0,
+              };
+            }).toList() ??
+            [];
+
+        monthlyRevenue.value =
+            dashboardModel.monthlyRevenue?.map((revenue) {
+              return {
+                'month': revenue.month ?? 'N/A',
+                'amount': revenue.revenue ?? 0.0,
               };
             }).toList() ??
             [];
@@ -93,7 +105,8 @@ class DashboardController extends GetxController {
       }
     } catch (e) {
       isLoading.value = false;
-      Get.snackbar('Error', 'Failed to load dashboard data');
+      Get.snackbar('Error', 'Failed to load dashboard data \n$e');
+      myLog.log(e.toString());
     } finally {
       isLoading.value = false;
     }

@@ -75,7 +75,7 @@ class OrdersController extends GetxController {
         myLog.log(jsonDecode(response.body));
       }
     } catch (e) {
-      myLog.log(e.toString());
+      myLog.log("ERROR ${e}");
       isloadingAccpted.value = false;
       Get.snackbar('Error', e.toString());
       myLog.log(e.toString());

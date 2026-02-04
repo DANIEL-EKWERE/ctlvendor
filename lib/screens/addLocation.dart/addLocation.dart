@@ -32,6 +32,70 @@ class Addlocation extends StatefulWidget {
 }
 
 class _AddlocationState extends State<Addlocation> {
+  String _locationMessage = "";
+
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controller.fetchCountries();
+    _getCurrentLocation();
+  }
+
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      setState(() {
+        _locationMessage = 'Location services are disabled.';
+      });
+      return;
+    }
+
+    // Check location permissions
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        setState(() {
+          _locationMessage = 'Location permissions are denied';
+        });
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      setState(() {
+        _locationMessage = 'Location permissions are permanently denied';
+      });
+      return;
+    }
+
+    // Get current position
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+
+        //desiredAccuracy: LocationAccuracy.high,
+      );
+
+      setState(() {
+        _locationMessage =
+            'Lat: ${position.latitude}, Lng: ${position.longitude}';
+        controller.lat?.value = position.latitude.toString();
+        controller.long?.value = position.longitude.toString();
+      });
+    } catch (e) {
+      setState(() {
+        _locationMessage = 'Error: $e';
+      });
+    }
+  }
+
   Widget _buildProgressIndicator() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),

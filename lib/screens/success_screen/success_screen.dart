@@ -80,7 +80,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                             children: [
                               Text(
                                 // 'Brenda OKeefe',
-                                widget.dataHistory.customer!,
+                                widget.dataHistory.customer!.name!,
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -105,7 +105,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                               const SizedBox(height: 2),
                               Text(
                                 // '294.702.3148',
-                                widget.dataHistory.orderId.toString(),
+                                widget.dataHistory.reference.toString(),
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontFamily: 'Inter',
@@ -130,12 +130,12 @@ class _SuccessScreenState extends State<SuccessScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '₦${widget.dataHistory.price}',
+                                '₦${widget.dataHistory.total}',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontFamily: 'Inter',
                                   fontWeight: FontWeight.w800,
-                                  color: Color(0xffFA254C),
+                                  color: Colors.green,
                                 ),
                               ),
                               const SizedBox(height: 2),
@@ -143,7 +143,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                                 spacing: 3,
                                 children: [
                                   Text(
-                                    widget.dataHistory.name!,
+                                    widget.dataHistory.items?.join(', ') ?? '',
                                     style: const TextStyle(
                                       fontSize: 12,
                                       fontFamily: 'Inter',
@@ -153,7 +153,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    widget.dataHistory.unit!,
+                                    widget.dataHistory.packageType!,
                                     style: const TextStyle(
                                       fontSize: 12,
                                       fontFamily: 'Inter',
@@ -232,7 +232,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                             children: [
                               const Text('Order Cost'),
                               Text(
-                                "₦${widget.dataHistory.price!}",
+                                "₦${widget.dataHistory.total!}",
                                 style: const TextStyle(
                                   fontSize: 24,
                                   fontFamily: 'Mont',

@@ -3,6 +3,7 @@ import 'package:ctlvendor/screens/login/models/models.dart';
 import 'package:ctlvendor/screens/profile_screen/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/route_manager.dart';
@@ -322,13 +323,103 @@ class _HomeTabState extends State<HomeTab> {
                 ),
                 SizedBox(height: 12),
                 Container(
-                  height: 200,
+                  height: 250,
+                  padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(width: 1, color: Colors.black12),
                   ),
-                  child: Center(child: Text('Chart: Revenue vs Month')),
+                  child: controller.monthlyRevenue.isEmpty
+                      ? Center(
+                          child: Text(
+                            'No revenue data available',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        )
+                      : BarChart(
+                          BarChartData(
+                            alignment: BarChartAlignment.spaceAround,
+                            maxY: _getMaxRevenue(controller.monthlyRevenue),
+                            barTouchData: BarTouchData(
+                              enabled: true,
+                              touchTooltipData: BarTouchTooltipData(
+                                getTooltipColor: (group) =>
+                                    Colors.grey.shade800,
+                                tooltipRoundedRadius: 8,
+                                tooltipPadding: EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                getTooltipItem:
+                                    (group, groupIndex, rod, rodIndex) {
+                                      return BarTooltipItem(
+                                        '₦${rod.toY.toStringAsFixed(2)}',
+                                        TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      );
+                                    },
+                              ),
+                            ),
+                            titlesData: FlTitlesData(
+                              show: true,
+                              bottomTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  getTitlesWidget: (value, meta) {
+                                    int index = value.toInt();
+                                    if (index >= 0 &&
+                                        index <
+                                            controller.monthlyRevenue.length) {
+                                      return Text(
+                                        controller
+                                                .monthlyRevenue[index]['month'] ??
+                                            '',
+                                        style: TextStyle(fontSize: 12),
+                                      );
+                                    }
+                                    return Text('');
+                                  },
+                                  reservedSize: 40,
+                                ),
+                              ),
+                              leftTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  getTitlesWidget: (value, meta) {
+                                    return Text(
+                                      '₦${value.toInt()}',
+                                      style: TextStyle(fontSize: 10),
+                                    );
+                                  },
+                                  reservedSize: 50,
+                                ),
+                              ),
+                              topTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              rightTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                            ),
+                            gridData: FlGridData(
+                              show: true,
+                              drawVerticalLine: false,
+                              getDrawingHorizontalLine: (value) {
+                                return FlLine(
+                                  color: Colors.grey.shade200,
+                                  strokeWidth: 0.8,
+                                );
+                              },
+                            ),
+                            borderData: FlBorderData(show: false),
+                            barGroups: _buildBarGroups(
+                              controller.monthlyRevenue,
+                            ),
+                          ),
+                        ),
                 ),
                 SizedBox(height: 24),
 
@@ -369,6 +460,9 @@ class _HomeTabState extends State<HomeTab> {
                             surfaceTintColor: Colors.white,
                             //margin: EdgeInsets.only(bottom: 8),
                             child: ListTile(
+                              onTap: () {
+                                print(product);
+                              },
                               leading: CircleAvatar(
                                 radius: 15,
                                 backgroundColor: Color(
@@ -386,7 +480,7 @@ class _HomeTabState extends State<HomeTab> {
                                 product['name'] ?? '',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              subtitle: Text('${product['categoryName']}'),
+                              subtitle: Text('${product['category']}'),
                               trailing: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -399,7 +493,7 @@ class _HomeTabState extends State<HomeTab> {
                                       color: Colors.black,
                                     ),
                                   ),
-                                  Text('${product['sold']} in Stock'),
+                                  Text('${product['stock']} in Stock'),
                                 ],
                               ),
                             ),
@@ -481,6 +575,44 @@ class _HomeTabState extends State<HomeTab> {
         ],
       ),
     );
+  }
+
+  List<BarChartGroupData> _buildBarGroups(
+    List<Map<String, dynamic>> revenueData,
+  ) {
+    return List.generate(
+      revenueData.length,
+      (index) => BarChartGroupData(
+        x: index,
+        barRods: [
+          BarChartRodData(
+            toY: _parseAmount(revenueData[index]['amount']),
+            color: Color(0xFF004DBF),
+            width: 16,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(6),
+              topRight: Radius.circular(6),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  double _parseAmount(dynamic amount) {
+    if (amount == null) return 0.0;
+    if (amount is double) return amount;
+    if (amount is int) return amount.toDouble();
+    if (amount is String) return double.tryParse(amount) ?? 0.0;
+    return 0.0;
+  }
+
+  double _getMaxRevenue(List<Map<String, dynamic>> revenueData) {
+    if (revenueData.isEmpty) return 5000;
+    double maxRevenue = revenueData
+        .map((data) => _parseAmount(data['amount']))
+        .reduce((a, b) => a > b ? a : b);
+    return maxRevenue * 1.2; // Add 20% padding to max value
   }
 
   Widget _buildDrawer() {
