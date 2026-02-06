@@ -5,13 +5,16 @@ import 'package:ctlvendor/screens/ProductCreateScreen/controller/ProductCreateCo
 import 'package:ctlvendor/screens/ProductListScreen/controller/ProductListController.dart';
 import 'package:ctlvendor/screens/profile_screen/controller/profile_controller.dart';
 import 'package:ctlvendor/utils/storage.dart';
+import 'package:ctlvendor/widgets/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // lib/screens/products/product_list_screen.dart
+import 'dart:developer' as myLog;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 ProfileController controller1 = Get.put(ProfileController());
+ProductCreateController controller2 = Get.put(ProductCreateController());
 
 class ProductListScreen extends StatefulWidget {
   @override
@@ -244,7 +247,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         style: TextStyle(fontSize: 12),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
+                        backgroundColor: Color(0xFF004DBF),
                         foregroundColor: Colors.white,
                         // padding: EdgeInsets.symmetric(
                         //   horizontal: 20,
@@ -312,7 +315,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         if (controller.isLoading.value) {
                           return const Center(
                             child: CircularProgressIndicator(
-                              color: Colors.black,
+                              color: Color(0xFF004DBF),
                             ),
                           );
                         }
@@ -367,113 +370,262 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           scrollDirection: Axis.horizontal,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.vertical,
-                            child: Table(
-                              columnWidths: const {
-                                0: FixedColumnWidth(100),
-                                1: FixedColumnWidth(100),
-                                2: FixedColumnWidth(100),
-                                3: FixedColumnWidth(100),
-                                4: FixedColumnWidth(100),
-                                5: FixedColumnWidth(80),
-                                6: FixedColumnWidth(80),
-                                7: FixedColumnWidth(100),
-                                8: FixedColumnWidth(80),
-                              },
-                              border: TableBorder(
-                                horizontalInside: BorderSide(
-                                  color: Colors.grey.shade200,
-                                ),
-                              ),
-                              children: [
-                                /// HEADER
-                                TableRow(
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade100,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Table(
+                                columnWidths: const {
+                                  0: FixedColumnWidth(120),
+                                  1: FixedColumnWidth(120),
+                                  2: FixedColumnWidth(120),
+                                  3: FixedColumnWidth(110),
+                                  4: FixedColumnWidth(100),
+                                  5: FixedColumnWidth(90),
+                                  6: FixedColumnWidth(130),
+                                  7: FixedColumnWidth(10),
+                                  8: FixedColumnWidth(80),
+                                  9: FixedColumnWidth(100),
+                                },
+                                border: TableBorder(
+                                  top: BorderSide(
+                                    color: Color(0xFF004DBF),
+                                    width: 2,
                                   ),
-                                  children: [
-                                    _headerCell('Name'),
-                                    _headerCell('Category'),
-                                    _headerCell('Pack'),
-                                    _headerCell('Price'),
-                                    _headerCell('Stock'),
-                                    _headerCell('Status'),
-                                    _headerCell(''),
-                                    _headerCell(''),
-                                    _headerCell('Action'),
-                                  ],
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                    width: 1,
+                                  ),
+                                  horizontalInside: BorderSide(
+                                    color: Colors.grey.shade100,
+                                    width: 0.6,
+                                  ),
                                 ),
-
-                                /// DATA
-                                ...controller.products.map(
-                                  (product) => TableRow(
+                                children: [
+                                  /// HEADER
+                                  TableRow(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xFF004DBF),
+                                          Color(0xFF0056D2),
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.08),
+                                          blurRadius: 4,
+                                          offset: Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
                                     children: [
-                                      _cell(product.product!.name),
-                                      _cell(product.category!.name),
-                                      _cell(
-                                        (product.pack?.name ?? 'N/A')
-                                            as String?,
+                                      _headerCell('Image', icon: Icons.image),
+                                      _headerCell(
+                                        'Name',
+                                        icon: Icons.shopping_bag,
                                       ),
-                                      _cell('₦${product.price}'),
-                                      _cell('${product.stock}'),
-                                      Container(
-                                        margin: EdgeInsets.all(10),
-                                        padding: EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                          color: Colors.black,
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            product.status == '1'
-                                                ? 'Active'
-                                                : 'In-Active',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
+                                      _headerCell(
+                                        'Category',
+                                        icon: Icons.category,
                                       ),
-
-                                      // _menuCell(product),
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.edit,
-                                          color: Colors.red,
-                                        ),
-                                        onPressed: () {
-                                          Get.dialog(
-                                            AlertDialog(
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              insetPadding: EdgeInsets.zero,
-                                              contentPadding: EdgeInsets.zero,
-                                              content: SizedBox(
-                                                height: 520,
-                                                child: ProductEditScreen(
-                                                  Get.put(
-                                                    ProductCreateController(),
-                                                  ),
-                                                  product,
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        color: Colors.red,
+                                      _headerCell(
+                                        'Pack',
+                                        icon: Icons.inventory,
                                       ),
-                                      _cell('Deactivate'),
-
-                                      IconButton(
-                                        icon: Icon(Icons.delete_outline),
-                                        onPressed: () {},
-                                        color: Colors.red,
+                                      _headerCell(
+                                        'Price',
+                                        icon: Icons.attach_money,
+                                      ),
+                                      _headerCell(
+                                        'Stock',
+                                        icon: Icons.warehouse,
+                                      ),
+                                      _headerCell('Status', icon: Icons.info),
+                                      _headerCell(''),
+                                      _headerCell('Edit', icon: Icons.edit),
+                                      _headerCell(
+                                        'Action',
+                                        icon: Icons.settings,
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
+
+                                  /// DATA
+                                  ...controller.products.asMap().entries.map((
+                                    entry,
+                                  ) {
+                                    final index = entry.key;
+                                    final product = entry.value;
+                                    final isEvenRow = index.isEven;
+                                    return TableRow(
+                                      decoration: BoxDecoration(
+                                        color: isEvenRow
+                                            ? Colors.white
+                                            : Colors.grey.shade50,
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color: Colors.grey.shade100,
+                                            width: 0.5,
+                                          ),
+                                        ),
+                                      ),
+                                      children: [
+                                        //_dataCell(product.product!.name!),
+                                        CustomImageView(
+                                          fit: BoxFit.cover,
+                                          height: 50,
+                                          width: 20,
+                                          imagePath: product.imageUrl,
+                                        ),
+                                        _dataCell(product.product!.name!),
+                                        _dataCell(product.category!.name!),
+                                        _dataCell(product.pack?.name ?? 'N/A'),
+                                        _amountCell('₦${product.price}'),
+                                        _stockCell(product.stock.toString()),
+                                        _statusBadge(
+                                          product.status == '1'
+                                              ? 'Active'
+                                              : 'Inactive',
+                                        ),
+                                        SizedBox(),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Tooltip(
+                                            message: 'Edit Product',
+                                            child: Material(
+                                              color: Colors.transparent,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Get.dialog(
+                                                    AlertDialog(
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      insetPadding:
+                                                          EdgeInsets.zero,
+                                                      contentPadding:
+                                                          EdgeInsets.zero,
+                                                      content: SizedBox(
+                                                        height: 520,
+                                                        child: ProductEditScreen(
+                                                          Get.put(
+                                                            ProductCreateController(),
+                                                          ),
+                                                          product,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                                child: Container(
+                                                  padding: EdgeInsets.all(6),
+                                                  child: Icon(
+                                                    Icons.edit_outlined,
+                                                    size: 18,
+                                                    color: Colors.blue.shade600,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Tooltip(
+                                            message: 'Delete Product',
+                                            child: Material(
+                                              color: Colors.transparent,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  int currentStatus =
+                                                      product.status == 1
+                                                      ? 1
+                                                      : 0;
+                                                  int newStatus =
+                                                      currentStatus == 1
+                                                      ? 0
+                                                      : 1;
+
+                                                  // Show confirmation dialog
+                                                  Get.dialog(
+                                                    AlertDialog(
+                                                      title: Text('Confirm'),
+                                                      content: Text(
+                                                        newStatus == 1 ||
+                                                                newStatus == "1"
+                                                            ? 'Activate this product?'
+                                                            : 'Deactivate this product?',
+                                                      ),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () =>
+                                                              Get.back(),
+                                                          child: Text('Cancel'),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Get.back();
+                                                            setState(() {
+                                                              // controller2
+                                                              //         .isActive
+                                                              //         .value =
+                                                              //     newStatus;
+                                                              myLog.log(
+                                                                product.status
+                                                                    .toString(),
+                                                              );
+                                                              if (product.status ==
+                                                                      1 ||
+                                                                  product.status ==
+                                                                      "1") {
+                                                                newStatus = 0;
+                                                              } else {
+                                                                newStatus = 1;
+                                                              }
+                                                              myLog.log(
+                                                                'main product ${product.status}: new status ${newStatus}',
+                                                              );
+                                                            });
+                                                            controller2.deactivateProduct(
+                                                              product.id
+                                                                  .toString(),
+                                                              newStatus
+                                                                  .toString(),
+                                                              product
+                                                                  .category!
+                                                                  .id
+                                                                  .toString(),
+                                                              product.price!,
+                                                              product.stock!,
+                                                              product.packId ??
+                                                                  '1'.toString(),
+                                                            );
+                                                          },
+                                                          child: Text(
+                                                            'Confirm',
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                                child: Container(
+                                                  padding: EdgeInsets.all(6),
+                                                  child: Text('Deactivate'),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -491,32 +643,139 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
   }
 
-  Widget _headerCell(String text) {
+  Widget _headerCell(String text, {IconData? icon}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 16, color: Colors.white70),
+            SizedBox(width: 8),
+          ],
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 12.5,
+                color: Colors.white,
+                letterSpacing: 0.6,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _dataCell(String text) {
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       child: Text(
         text,
-        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+        style: TextStyle(
+          fontSize: 13.5,
+          fontWeight: FontWeight.w500,
+          color: Colors.grey.shade800,
+          height: 1.4,
+        ),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }
 
-  Widget _cell(String? text) {
+  Widget _amountCell(String amount) {
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       child: Text(
-        text ?? '',
-        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        amount,
+        style: TextStyle(
+          fontSize: 13.5,
+          fontWeight: FontWeight.w700,
+          color: Color(0xFF004DBF),
+        ),
       ),
     );
   }
 
-  Widget _menuCell(product) {
+  Widget _stockCell(String stock) {
+    final stockValue = int.tryParse(stock) ?? 0;
+    final isLowStock = stockValue < 10;
+
     return Padding(
-      padding: const EdgeInsets.all(8),
-      child: PopupMenuButton(
-        icon: Icon(Icons.more_horiz),
-        itemBuilder: (_) => [],
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: isLowStock ? Colors.red.shade50 : Colors.green.shade50,
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(
+            color: isLowStock ? Colors.red.shade300 : Colors.green.shade300,
+            width: 0.8,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            stock,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: isLowStock ? Colors.red.shade700 : Colors.green.shade700,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _statusBadge(String status) {
+    final isActive = status.toLowerCase() == 'active';
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: isActive ? Colors.green.shade50 : Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isActive ? Colors.green.shade300 : Colors.grey.shade300,
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: isActive
+                  ? Colors.green.withOpacity(0.08)
+                  : Colors.grey.withOpacity(0.08),
+              blurRadius: 3,
+              offset: Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              isActive ? Icons.check_circle : Icons.remove_circle_outline,
+              size: 14,
+              color: isActive ? Colors.green.shade700 : Colors.grey.shade700,
+            ),
+            SizedBox(width: 6),
+            Text(
+              status.toUpperCase(),
+              style: TextStyle(
+                color: isActive ? Colors.green.shade700 : Colors.grey.shade700,
+                fontWeight: FontWeight.w700,
+                fontSize: 11,
+                letterSpacing: 0.4,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

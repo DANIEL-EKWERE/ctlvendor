@@ -329,21 +329,21 @@ class _WalletScreenState extends State<WalletScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  _buildActionButton(
-                                    icon: 'assets/add.svg',
-                                    label: 'Add Money',
-                                    onTap: () async {
-                                      await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const AddMoneyScreen(),
-                                        ),
-                                      );
+                                  // _buildActionButton(
+                                  //   icon: 'assets/add.svg',
+                                  //   label: 'Add Money',
+                                  //   onTap: () async {
+                                  //     await Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             const AddMoneyScreen(),
+                                  //       ),
+                                  //     );
 
-                                      // Navigator.pushNamed(context, '/add-money');
-                                    },
-                                  ),
+                                  //     // Navigator.pushNamed(context, '/add-money');
+                                  //   },
+                                  // ),
                                   _buildActionButton(
                                     icon: 'assets/withdraw.svg',
                                     label: 'Withdraw',

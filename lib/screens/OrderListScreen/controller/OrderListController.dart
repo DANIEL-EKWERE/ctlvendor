@@ -1,42 +1,93 @@
+import 'dart:convert';
+
+import 'package:ctlvendor/data/apiClient/apiClient.dart';
 import 'package:ctlvendor/screens/OrderDetailsScreen/models/model.dart';
+import 'package:ctlvendor/screens/orders_screen/models/accepted_order.dart';
+import 'package:ctlvendor/screens/orders_screen/models/models.dart';
 import 'package:get/get.dart';
+import 'dart:developer' as myLog;
 
 class OrderListController extends GetxController {
-  Rx<bool> isLoading = false.obs;
-  List<String> header = [
-    'Name',
-    "Description",
-    'Product Count',
-    'Status',
-    'Action',
-  ];
+  ApiClient apiClient = ApiClient(Duration(seconds: 60 * 5));
 
-  List<Order> orders = <Order>[
-    Order(
-      orderNumber: 'ORD-2026-001',
-      customerName: 'John Doe',
-      date: '18/01/2026',
-      total: 45.97,
-      paymentMethod: 'Credit Card',
-      status: 'pending',
-    ),
-    Order(
-      orderNumber: 'ORD-2026-002',
-      customerName: 'Jane Smith',
-      date: '18/01/2026',
-      total: 28.95,
-      paymentMethod: 'Cash',
-      status: 'confirmed',
-    ),
-    Order(
-      orderNumber: 'ORD-2026-003',
-      customerName: 'Bob Johnson',
-      date: '17/01/2026',
-      total: 67.43,
-      paymentMethod: 'Debit Card',
-      status: 'delivered',
-    ),
-  ];
+  OrderModel orderModel = OrderModel();
+  AcceptedOrderModel acceptedOrderModel = AcceptedOrderModel();
+  RxList<Data> availableData = <Data>[].obs;
+
+  RxList<Data> orders = <Data>[].obs;
+
+  RxList<AcceptedData> acceptedData = <AcceptedData>[].obs;
+
+  RxBool isLoading = false.obs;
+
+  //RxBool isLoadingOrders = false.obs;
+  RxBool isloadingAccpted = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchOrderByCondition();
+    fetchAcceptedOrderByCondition();
+  }
+
+  fetchOrderByCondition() {
+    if (orders.isNotEmpty) return;
+    fetchOrders();
+  }
+
+  fetchAcceptedOrderByCondition() {
+    if (acceptedData.isNotEmpty) return;
+    fetchAcceptedOrders();
+  }
+
+  Future<void> fetchOrders() async {
+    isLoading.value = true;
+    try {
+      var response = await apiClient.fetchAllOrders();
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        isLoading.value = false;
+        myLog.log('Response: ${response.body}');
+        myLog.log('Status Code: ${response.statusCode}');
+        orderModel = orderModelFromJson(response.body);
+        orders.value = orderModel.data!;
+      } else {
+        isLoading.value = false;
+        Get.snackbar('Something Went Wrong', jsonDecode(response.body));
+        myLog.log(jsonDecode(response.body));
+      }
+    } catch (e) {
+      isLoading.value = false;
+      Get.snackbar('Error', e.toString());
+      myLog.log(e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> fetchAcceptedOrders() async {
+    isloadingAccpted.value = true;
+    try {
+      var response = await apiClient.fetchAcceptedOrders();
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        isloadingAccpted.value = false;
+        acceptedOrderModel = acceptedOrderModelFromJson(response.body);
+        acceptedData.value = acceptedOrderModel.data!;
+      } else {
+        isloadingAccpted.value = false;
+        Get.snackbar('Something Went Wrong', jsonDecode(response.body));
+        myLog.log(jsonDecode(response.body));
+      }
+    } catch (e) {
+      myLog.log("ERROR ${e}");
+      isloadingAccpted.value = false;
+      Get.snackbar('Error', e.toString());
+      myLog.log(e.toString());
+    } finally {
+      isloadingAccpted.value = false;
+    }
+  }
 
   Future<void> deleteProduct(int id) async {}
 }

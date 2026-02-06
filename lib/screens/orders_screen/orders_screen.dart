@@ -264,7 +264,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                     Text(
                       '₦${dataAvaialable.total}',
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 12,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w800,
                         color: Color(0xff004BFD),
@@ -281,9 +281,9 @@ class _OrdersScreenState extends State<OrdersScreen>
                             "${i.product!.name!}",
                             // : dataHistory.name!,
                             style: const TextStyle(
-                              fontSize: 12,
+                              fontSize: 10,
                               fontFamily: 'Inter',
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w700,
                               //fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -322,8 +322,10 @@ class _OrdersScreenState extends State<OrdersScreen>
                       ],
                     ),
                     const SizedBox(height: 2),
-                    const Text(
-                      'CTL Store, Itam',
+                    Text(
+                      dataAvaialable.address!.contactAddress!.length > 15
+                          ? "${(dataAvaialable.address!.contactAddress!).substring(0, 12)}..."
+                          : dataAvaialable.address!.contactAddress!,
                       style: TextStyle(
                         fontSize: 10,
                         fontFamily: 'Poppins',

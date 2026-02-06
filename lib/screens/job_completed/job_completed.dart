@@ -213,8 +213,8 @@ class _JobCompletedScreenState extends State<JobCompletedScreen>
                                   ],
                                 ),
                                 const SizedBox(height: 2),
-                                const Text(
-                                  'CTL Store, Itam',
+                                Text(
+                                  myData.address!.contactAddress!,
                                   style: TextStyle(
                                     fontSize: 10,
                                     fontFamily: 'Mont',
@@ -247,7 +247,7 @@ class _JobCompletedScreenState extends State<JobCompletedScreen>
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    'Lorem ipsum dolor sit amet consectetur. Nibh malesuada nisi massa pulvinar gravida volutpat vitae consectetur.',
+                                    myData.remark!,
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.grey.shade600,

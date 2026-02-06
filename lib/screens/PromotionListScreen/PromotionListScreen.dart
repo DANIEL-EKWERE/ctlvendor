@@ -235,7 +235,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                             contentPadding: EdgeInsets.zero,
 
                             content: SizedBox(
-                              height: 600,
+                              height: 650,
                               width: 300,
                               child: PromotionCreateScreen(
                                 Get.put(PromotionCreateController()),
@@ -251,7 +251,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                         style: TextStyle(fontSize: 12),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
+                        backgroundColor: Color(0xFF004DBF),
                         foregroundColor: Colors.white,
                         // padding: EdgeInsets.symmetric(
                         //   horizontal: 20,
@@ -319,7 +319,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                         if (controller.isLoading.value) {
                           return const Center(
                             child: CircularProgressIndicator(
-                              color: Colors.black,
+                              color: Color(0xFF004DBF),
                             ),
                           );
                         }
@@ -352,7 +352,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                                         contentPadding: EdgeInsets.zero,
 
                                         content: SizedBox(
-                                          height: 600,
+                                          height: 650,
                                           width: 300,
                                           child: PromotionCreateScreen(
                                             Get.put(
@@ -378,116 +378,177 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                           scrollDirection: Axis.horizontal,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.vertical,
-                            child: Table(
-                              columnWidths: const {
-                                0: FixedColumnWidth(100),
-                                1: FixedColumnWidth(100),
-                                2: FixedColumnWidth(220),
-                                3: FixedColumnWidth(100),
-                                4: FixedColumnWidth(100),
-                                5: FixedColumnWidth(80),
-                                6: FixedColumnWidth(80),
-                                // 7: FixedColumnWidth(100),
-                                // 8: FixedColumnWidth(80),
-                              },
-                              border: TableBorder(
-                                horizontalInside: BorderSide(
-                                  color: Colors.grey.shade200,
-                                ),
-                              ),
-                              children: [
-                                /// HEADER
-                                TableRow(
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade100,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Table(
+                                columnWidths: const {
+                                  0: FixedColumnWidth(130),
+                                  1: FixedColumnWidth(110),
+                                  2: FixedColumnWidth(200),
+                                  3: FixedColumnWidth(100),
+                                  4: FixedColumnWidth(120),
+                                  5: FixedColumnWidth(80),
+                                  6: FixedColumnWidth(100),
+                                },
+                                border: TableBorder(
+                                  top: BorderSide(
+                                    color: Color(0xFF004DBF),
+                                    width: 2,
                                   ),
-                                  children: [
-                                    _headerCell('Title'),
-                                    _headerCell('Discount'),
-                                    _headerCell('Date Range'),
-                                    _headerCell('Products'),
-                                    _headerCell('Status'),
-
-                                    _headerCell(''),
-                                    _headerCell('Action'),
-                                  ],
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                    width: 1,
+                                  ),
+                                  horizontalInside: BorderSide(
+                                    color: Colors.grey.shade100,
+                                    width: 0.6,
+                                  ),
                                 ),
-
-                                /// DATA
-                                ...controller.promotions.map(
-                                  (product) => TableRow(
+                                children: [
+                                  /// HEADER
+                                  TableRow(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xFF004DBF),
+                                          Color(0xFF0056D2),
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.08),
+                                          blurRadius: 4,
+                                          offset: Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
                                     children: [
-                                      _cell(product.title),
-                                      _cell(product.discount),
-                                      _cell(
-                                        "${DateFormat('yyyy-MM-dd').format(DateTime.parse(product.startsAt!))} - ${DateFormat('yyyy-MM-dd').format(DateTime.parse(product.endsAt!))}",
+                                      _headerCell(
+                                        'Title',
+                                        icon: Icons.local_offer,
                                       ),
-                                      _cell(
-                                        '${product.vendorProducts!.length}',
+                                      _headerCell(
+                                        'Discount',
+                                        icon: Icons.percent,
                                       ),
+                                      _headerCell(
+                                        'Date Range',
+                                        icon: Icons.date_range,
+                                      ),
+                                      _headerCell(
+                                        'Products',
+                                        icon: Icons.inventory,
+                                      ),
+                                      _headerCell('Status', icon: Icons.info),
+                                      _headerCell('Edit', icon: Icons.edit),
+                                      _headerCell(
+                                        'Action',
+                                        icon: Icons.settings,
+                                      ),
+                                    ],
+                                  ),
 
-                                      Container(
-                                        margin: EdgeInsets.all(10),
-                                        padding: EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            12,
+                                  /// DATA
+                                  ...controller.promotions.asMap().entries.map((
+                                    entry,
+                                  ) {
+                                    final index = entry.key;
+                                    final product = entry.value;
+                                    final isEvenRow = index.isEven;
+                                    return TableRow(
+                                      decoration: BoxDecoration(
+                                        color: isEvenRow
+                                            ? Colors.white
+                                            : Colors.grey.shade50,
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color: Colors.grey.shade100,
+                                            width: 0.5,
                                           ),
-                                          color: Colors.black,
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            // product.isActive!
-                                            // ?
-                                            'Active',
-                                            //   : 'In-Active',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
                                         ),
                                       ),
-
-                                      // _menuCell(product),
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.edit,
-                                          color: Colors.red,
+                                      children: [
+                                        _dataCell(product.title!),
+                                        _discountCell(product.discount!),
+                                        _dataCell(
+                                          "${DateFormat('MMM dd, yyyy').format(DateTime.parse(product.startsAt!))} - ${DateFormat('MMM dd, yyyy').format(DateTime.parse(product.endsAt!))}",
                                         ),
-                                        onPressed: () {
-                                          Get.dialog(
-                                            AlertDialog(
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              insetPadding: EdgeInsets.zero,
-                                              contentPadding: EdgeInsets.zero,
-
-                                              content: SizedBox(
-                                                height: 600,
-                                                width: 300,
-                                                child: PromotionEditScreen(
-                                                  product,
-                                                  Get.put(
-                                                    PromotionCreateController(),
+                                        _dataCell(
+                                          '${product.vendorProducts!.length} items',
+                                        ),
+                                        _statusBadgePromotion(true),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Tooltip(
+                                            message: 'Edit Promotion',
+                                            child: Material(
+                                              color: Colors.transparent,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Get.dialog(
+                                                    AlertDialog(
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      insetPadding:
+                                                          EdgeInsets.zero,
+                                                      contentPadding:
+                                                          EdgeInsets.zero,
+                                                      content: SizedBox(
+                                                        height: 650,
+                                                        width: 300,
+                                                        child: PromotionEditScreen(
+                                                          product,
+                                                          Get.put(
+                                                            PromotionCreateController(),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                                child: Container(
+                                                  padding: EdgeInsets.all(6),
+                                                  child: Icon(
+                                                    Icons.edit_outlined,
+                                                    size: 18,
+                                                    color: Colors.blue.shade600,
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          );
-                                        },
-                                        color: Colors.red,
-                                      ),
-
-                                      //_cell('Deactivate'),
-                                      IconButton(
-                                        icon: Icon(Icons.delete_outline),
-                                        onPressed: () {},
-                                        color: Colors.red,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                                          ),
+                                        ),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Tooltip(
+                                            message: 'Delete Promotion',
+                                            child: Material(
+                                              color: Colors.transparent,
+                                              child: InkWell(
+                                                onTap: () {},
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                                child: Container(
+                                                  padding: EdgeInsets.all(6),
+                                                  child: Icon(
+                                                    Icons.delete_outline,
+                                                    size: 18,
+                                                    color: Colors.red.shade500,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -505,32 +566,117 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
     );
   }
 
-  Widget _headerCell(String text) {
+  Widget _headerCell(String text, {IconData? icon}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 16, color: Colors.white70),
+            SizedBox(width: 8),
+          ],
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 12.5,
+                color: Colors.white,
+                letterSpacing: 0.6,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _dataCell(String text) {
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       child: Text(
         text,
-        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+        style: TextStyle(
+          fontSize: 13.5,
+          fontWeight: FontWeight.w500,
+          color: Colors.grey.shade800,
+          height: 1.4,
+        ),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }
 
-  Widget _cell(String? text) {
+  Widget _discountCell(String discount) {
     return Padding(
-      padding: const EdgeInsets.all(12),
-      child: Text(
-        text ?? '',
-        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.purple.shade50,
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: Colors.purple.shade300, width: 0.8),
+        ),
+        child: Center(
+          child: Text(
+            discount,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: Colors.purple.shade700,
+            ),
+          ),
+        ),
       ),
     );
   }
 
-  Widget _menuCell(product) {
+  Widget _statusBadgePromotion(bool isActive) {
     return Padding(
-      padding: const EdgeInsets.all(8),
-      child: PopupMenuButton(
-        icon: Icon(Icons.more_horiz),
-        itemBuilder: (_) => [],
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: isActive ? Colors.green.shade50 : Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isActive ? Colors.green.shade300 : Colors.grey.shade300,
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: isActive
+                  ? Colors.green.withOpacity(0.08)
+                  : Colors.grey.withOpacity(0.08),
+              blurRadius: 3,
+              offset: Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              isActive ? Icons.check_circle : Icons.remove_circle_outline,
+              size: 14,
+              color: isActive ? Colors.green.shade700 : Colors.grey.shade700,
+            ),
+            SizedBox(width: 6),
+            Text(
+              isActive ? 'ACTIVE' : 'INACTIVE',
+              style: TextStyle(
+                color: isActive ? Colors.green.shade700 : Colors.grey.shade700,
+                fontWeight: FontWeight.w700,
+                fontSize: 11,
+                letterSpacing: 0.4,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

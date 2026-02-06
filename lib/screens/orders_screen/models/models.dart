@@ -2,12 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 
-OrderModel orderModelFromJson(String x)=> OrderModel.fromJson(jsonDecode(x));
-
-
-
-    
-
+OrderModel orderModelFromJson(String x) => OrderModel.fromJson(jsonDecode(x));
 
 class OrderModel {
   bool? status;
@@ -47,8 +42,9 @@ class Data {
   String? total;
   String? serviceCharge;
   String? shippingFee;
+  String? remark;
   String? vat;
-    RxBool isAccepted;
+  RxBool isAccepted;
   RxBool isRejected;
   RxBool isCompleted;
   RxBool isStarted;
@@ -67,6 +63,7 @@ class Data {
     this.packageType,
     this.isPaid,
     this.total,
+    this.remark,
     this.serviceCharge,
     this.shippingFee,
     this.vat,
@@ -74,21 +71,25 @@ class Data {
     this.address,
     this.vendor,
     this.items,
-    
+
     this.histories,
     this.createdAt,
-  }): isAccepted = RxBool(false),isRejected = RxBool(false), isCompleted = RxBool(false), isStarted = RxBool(false);
+  }) : isAccepted = RxBool(false),
+       isRejected = RxBool(false),
+       isCompleted = RxBool(false),
+       isStarted = RxBool(false);
 
   Data.fromJson(Map<String, dynamic> json)
-      : isAccepted = RxBool(false),
-        isRejected = RxBool(false),
-        isCompleted = RxBool(false),
-        isStarted = RxBool(false) {
+    : isAccepted = RxBool(false),
+      isRejected = RxBool(false),
+      isCompleted = RxBool(false),
+      isStarted = RxBool(false) {
     id = json['id'];
     reference = json['reference'];
     status = json['status'];
     packageType = json['package_type'];
     isPaid = json['is_paid'];
+    remark = json['remark'] ?? 'this user has no remark!!!';
     total = json['total']?.toString();
     serviceCharge = json['service_charge']?.toString();
     shippingFee = json['shipping_fee']?.toString();
@@ -96,12 +97,10 @@ class Data {
     customer = json['customer'] != null
         ? Customer.fromJson(json['customer'])
         : null;
-    address = json['address'] != null 
-        ? Address.fromJson(json['address']) 
+    address = json['address'] != null
+        ? Address.fromJson(json['address'])
         : null;
-    vendor = json['vendor'] != null 
-        ? Vendor.fromJson(json['vendor']) 
-        : null;
+    vendor = json['vendor'] != null ? Vendor.fromJson(json['vendor']) : null;
     if (json['items'] != null) {
       items = <Items>[];
       json['items'].forEach((v) {
@@ -125,6 +124,7 @@ class Data {
     data['package_type'] = this.packageType;
     data['is_paid'] = this.isPaid;
     data['total'] = this.total;
+    data['remark'] = this.remark;
     data['service_charge'] = this.serviceCharge;
     data['shipping_fee'] = this.shippingFee;
     data['vat'] = this.vat;
@@ -313,17 +313,11 @@ class Items {
   String? price;
   String? total;
 
-  Items({
-    this.product,
-    this.productId,
-    this.quantity,
-    this.price,
-    this.total,
-  });
+  Items({this.product, this.productId, this.quantity, this.price, this.total});
 
   Items.fromJson(Map<String, dynamic> json) {
-    product = json['product'] != null 
-        ? Product.fromJson(json['product']) 
+    product = json['product'] != null
+        ? Product.fromJson(json['product'])
         : null;
     productId = json['product_id']?.toString();
     quantity = json['quantity']?.toString();

@@ -3,6 +3,7 @@ import 'package:ctlvendor/data/apiClient/apiClient.dart';
 import 'package:ctlvendor/screens/onboarding_screen/onboarding_screen.dart';
 import 'package:ctlvendor/utils/storage.dart';
 import 'package:mime/mime.dart';
+import 'package:overlay_kit/overlay_kit.dart';
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
 import 'dart:developer' as myLog;
@@ -217,13 +218,25 @@ class ProfileController extends GetxController {
   }
 
   void logOut() async {
-    // Clear user data and navigate to login screen
-    var response = await apiService.logOut();
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      myLog.log('User logged out successfully');
-      dataBase.logOut();
-      Get.offAll(() => const OnboardingScreen());
-      Get.snackbar("Logged out", "You have been logged out successfully");
+    OverlayLoadingProgress.start(circularProgressColor: Color(0xff004BFD));
+    try {
+      // Clear user data and navigate to login screen
+      var response = await apiService.logOut();
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        myLog.log('User logged out successfully');
+        dataBase.logOut();
+        Get.offAll(() => const OnboardingScreen());
+        Get.snackbar("Logged out", "You have been logged out successfully");
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        e.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      OverlayLoadingProgress.stop();
     }
   }
 }

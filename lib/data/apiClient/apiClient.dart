@@ -804,6 +804,31 @@ class ApiClient extends GetConnect {
     });
   }
 
+  // Fetch all orders
+  Future<http.Response> fetchAllOrders() async {
+    final url = Uri.parse('$baseUrl/vendor/orders');
+    var token = await dataBase.getToken();
+    _logRequest('GET', url);
+    return _retryRequest(() async {
+      final response = await http
+          .get(
+            url,
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer $token',
+            },
+          )
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () {
+              throw TimeoutException('Request timed out');
+            },
+          );
+      _logResponse(response);
+      return response;
+    });
+  }
+
   Future<http.Response> fetchAcceptedOrders() async {
     final url = Uri.parse('$baseUrl/vendor/orders?status=accepted');
     var token = await dataBase.getToken();
@@ -975,7 +1000,7 @@ class ApiClient extends GetConnect {
   //reject order
   Future<http.Response> rejectedOrders(String itemId, int vendorId) async {
     print(vendorId);
-    final url = Uri.parse('$baseUrl/vendor/orders/item/$itemId/decision');
+    final url = Uri.parse('$baseUrl/vendor/orders/update/$itemId/status');
     var token = await dataBase.getToken();
     _logRequest('POST', url);
     return _retryRequest(() async {
@@ -987,8 +1012,8 @@ class ApiClient extends GetConnect {
               'Authorization': 'Bearer $token',
             },
             body: jsonEncode({
-              "status": "rejected", //rejected
-              "vendor_id": vendorId, //1 if is admin that is accepted
+              "status": "cancelled", //acepted, processing,assigned, cancelled
+              //"rider_id": null, // if is assigned
             }),
           )
           .timeout(

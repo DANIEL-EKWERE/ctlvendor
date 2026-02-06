@@ -1199,7 +1199,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     const SizedBox(height: 16),
                                     GestureDetector(
                                       onTap: () {
-                                        controller.logOut();
+                                        // controller.logOut();
+                                        Get.dialog(
+                                          AlertDialog(
+                                            content: SizedBox(
+                                              height: 180,
+                                              child: Column(
+                                                children: [
+                                                  Icon(
+                                                    Icons.logout,
+                                                    size: 40,
+                                                    color: Colors.red,
+                                                  ),
+                                                  Text(
+                                                    'Logout Confirmation',
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 20),
+                                                  Text(
+                                                    'Are you sure you want to logout?',
+                                                  ),
+                                                  SizedBox(height: 30),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Get.back(),
+                                                        child: Text('Cancel'),
+                                                      ),
+                                                      SizedBox(width: 10),
+                                                      SizedBox(
+                                                        height: 40,
+                                                        width: 110,
+                                                        child: ElevatedButton(
+                                                          onPressed: () async {
+                                                            controller.logOut();
+                                                          },
+                                                          child: Text('Logout'),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
                                       },
                                       child: Row(
                                         mainAxisAlignment:

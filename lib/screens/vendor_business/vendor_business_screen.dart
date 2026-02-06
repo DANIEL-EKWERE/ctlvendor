@@ -1,255 +1,994 @@
-// import 'dart:io';
+// // import 'dart:io';
+// // import 'package:flutter/material.dart';
+// // import 'package:get/get.dart';
+// // import 'package:ctlvendor/screens/vendor_business/controller/vendor_business_controller.dart';
+
+// // VendorBusinessController controller = Get.put(VendorBusinessController());
+
+// // class VendorBusinessScreen extends StatefulWidget {
+// //   const VendorBusinessScreen({Key? key}) : super(key: key);
+
+// //   @override
+// //   State<VendorBusinessScreen> createState() => _VendorBusinessScreenState();
+// // }
+
+// // class _VendorBusinessScreenState extends State<VendorBusinessScreen> {
+// //   Widget _fieldTile(String title, String? value) {
+// //     return ListTile(title: Text(title), subtitle: Text(value ?? '-'));
+// //   }
+
+// //   Widget _imageTile(String title, String? path) {
+// //     if (path == null || path.isEmpty) {
+// //       return ListTile(title: Text(title), subtitle: Text('No file'));
+// //     }
+// //     return Column(
+// //       crossAxisAlignment: CrossAxisAlignment.start,
+// //       children: [
+// //         Padding(
+// //           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+// //           child: Text(title, style: TextStyle(fontWeight: FontWeight.w600)),
+// //         ),
+// //         Padding(
+// //           padding: const EdgeInsets.symmetric(horizontal: 16.0),
+// //           child: SizedBox(
+// //             height: 180,
+// //             child: Image.file(File(path), fit: BoxFit.contain),
+// //           ),
+// //         ),
+// //         const SizedBox(height: 12),
+// //       ],
+// //     );
+// //   }
+
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return Scaffold(
+// //       appBar: AppBar(title: const Text('Vendor Business')),
+// //       body: Obx(() {
+// //         final m = controller.model.value;
+// //         if (m == null) {
+// //           return const Center(child: Text('No business data provided'));
+// //         }
+// //         return ListView(
+// //           children: [
+// //             // Banner + Profile header
+// //             Stack(
+// //               clipBehavior: Clip.none,
+// //               children: [
+// //                 Container(
+// //                   height: 180,
+// //                   width: double.infinity,
+// //                   decoration: BoxDecoration(
+// //                     color: Colors.grey.shade300,
+// //                     image:
+// //                         m.businessDocumentPath != null &&
+// //                             m.businessDocumentPath!.isNotEmpty
+// //                         ? DecorationImage(
+// //                             image: FileImage(File(m.businessDocumentPath!)),
+// //                             fit: BoxFit.cover,
+// //                           )
+// //                         : null,
+// //                   ),
+// //                   child:
+// //                       m.businessDocumentPath == null ||
+// //                           m.businessDocumentPath!.isEmpty
+// //                       ? Container(
+// //                           decoration: BoxDecoration(
+// //                             gradient: LinearGradient(
+// //                               colors: [
+// //                                 Colors.blue.shade300,
+// //                                 Colors.blue.shade700,
+// //                               ],
+// //                               begin: Alignment.topLeft,
+// //                               end: Alignment.bottomRight,
+// //                             ),
+// //                           ),
+// //                           alignment: Alignment.center,
+// //                           child: Text(
+// //                             m.businessName ?? 'Vendor',
+// //                             style: const TextStyle(
+// //                               color: Colors.white,
+// //                               fontSize: 20,
+// //                               fontWeight: FontWeight.w600,
+// //                             ),
+// //                           ),
+// //                         )
+// //                       : null,
+// //                 ),
+// //                 Positioned(
+// //                   left: 16,
+// //                   bottom: -36,
+// //                   child: Row(
+// //                     crossAxisAlignment: CrossAxisAlignment.end,
+// //                     children: [
+// //                       CircleAvatar(
+// //                         radius: 44,
+// //                         backgroundColor: Colors.white,
+// //                         child: ClipOval(
+// //                           child: m.logoPath != null && m.logoPath!.isNotEmpty
+// //                               ? Image.file(
+// //                                   File(m.logoPath!),
+// //                                   width: 80,
+// //                                   height: 80,
+// //                                   fit: BoxFit.cover,
+// //                                 )
+// //                               : Icon(
+// //                                   Icons.store,
+// //                                   size: 48,
+// //                                   color: Colors.grey.shade700,
+// //                                 ),
+// //                         ),
+// //                       ),
+// //                       const SizedBox(width: 12),
+// //                       Column(
+// //                         crossAxisAlignment: CrossAxisAlignment.start,
+// //                         children: [
+// //                           SizedBox(height: 8),
+// //                           Text(
+// //                             m.businessName ?? '-',
+// //                             style: const TextStyle(
+// //                               fontSize: 18,
+// //                               fontWeight: FontWeight.w700,
+// //                             ),
+// //                           ),
+// //                           const SizedBox(height: 4),
+// //                           Row(
+// //                             children: [
+// //                               const Icon(
+// //                                 Icons.location_on,
+// //                                 size: 14,
+// //                                 color: Colors.grey,
+// //                               ),
+// //                               const SizedBox(width: 4),
+// //                               SizedBox(
+// //                                 width: MediaQuery.of(context).size.width - 160,
+// //                                 child: Text(
+// //                                   m.businessAddress ?? '-',
+// //                                   style: TextStyle(color: Colors.grey.shade700),
+// //                                   overflow: TextOverflow.ellipsis,
+// //                                 ),
+// //                               ),
+// //                             ],
+// //                           ),
+// //                         ],
+// //                       ),
+// //                     ],
+// //                   ),
+// //                 ),
+// //               ],
+// //             ),
+// //             const SizedBox(height: 48),
+
+// //             // Business Details heading
+// //             Padding(
+// //               padding: const EdgeInsets.symmetric(
+// //                 horizontal: 16.0,
+// //                 vertical: 8.0,
+// //               ),
+// //               child: Text(
+// //                 'Business Details',
+// //                 style: TextStyle(
+// //                   fontSize: 16,
+// //                   fontWeight: FontWeight.w700,
+// //                   color: Colors.grey.shade800,
+// //                 ),
+// //               ),
+// //             ),
+// //             Card(
+// //               margin: const EdgeInsets.symmetric(
+// //                 horizontal: 12.0,
+// //                 vertical: 4.0,
+// //               ),
+// //               child: Column(
+// //                 children: [
+// //                   _fieldTile('Business name', m.businessName),
+// //                   _fieldTile('Business address', m.businessAddress),
+// //                   _fieldTile('Business type id', m.businessTypeId),
+// //                   _fieldTile('Fulfilment type', m.fulfilmentType),
+// //                   _fieldTile('Business description', m.businessDescription),
+// //                 ],
+// //               ),
+// //             ),
+
+// //             // Verification heading
+// //             Padding(
+// //               padding: const EdgeInsets.symmetric(
+// //                 horizontal: 16.0,
+// //                 vertical: 8.0,
+// //               ),
+// //               child: Text(
+// //                 'Verification',
+// //                 style: TextStyle(
+// //                   fontSize: 16,
+// //                   fontWeight: FontWeight.w700,
+// //                   color: Colors.grey.shade800,
+// //                 ),
+// //               ),
+// //             ),
+// //             Card(
+// //               margin: const EdgeInsets.symmetric(
+// //                 horizontal: 12.0,
+// //                 vertical: 4.0,
+// //               ),
+// //               child: Column(
+// //                 children: [
+// //                   _fieldTile(
+// //                     'Means of identification',
+// //                     m.meansOfIdentification,
+// //                   ),
+// //                   _fieldTile('Tax number', m.taxNumber),
+// //                   _fieldTile('BVN', m.bvn),
+// //                   _fieldTile('Is registered', m.isRegistered ? 'Yes' : 'No'),
+// //                 ],
+// //               ),
+// //             ),
+
+// //             const Divider(),
+// //             _imageTile('Logo', m.logoPath),
+// //             _imageTile('Business document', m.businessDocumentPath),
+// //             _imageTile('Identification', m.identificationPath),
+// //             const SizedBox(height: 24),
+// //             Padding(
+// //               padding: const EdgeInsets.symmetric(horizontal: 16.0),
+// //               child: ElevatedButton(
+// //                 onPressed: () => Navigator.of(context).pop(),
+// //                 child: const Text('Close'),
+// //               ),
+// //             ),
+// //             const SizedBox(height: 24),
+// //           ],
+// //         );
+// //       }),
+// //     );
+// //   }
+// // }
+
+// import 'package:ctlvendor/screens/login/models/models.dart';
+// import 'package:ctlvendor/screens/vendor_business/controller/vendor_business_controller.dart';
+// import 'package:ctlvendor/utils/storage.dart';
+// import 'package:ctlvendor/widgets/custom_image_view.dart';
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
-// import 'package:ctlvendor/screens/vendor_business/controller/vendor_business_controller.dart';
+// import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:image_picker/image_picker.dart';
 
 // VendorBusinessController controller = Get.put(VendorBusinessController());
 
 // class VendorBusinessScreen extends StatefulWidget {
-//   const VendorBusinessScreen({Key? key}) : super(key: key);
+//   final Vendor? vendor;
+//   final LoginData? userData;
+
+//   const VendorBusinessScreen({Key? key, this.vendor, this.userData})
+//     : super(key: key);
 
 //   @override
 //   State<VendorBusinessScreen> createState() => _VendorBusinessScreenState();
 // }
 
 // class _VendorBusinessScreenState extends State<VendorBusinessScreen> {
-//   Widget _fieldTile(String title, String? value) {
-//     return ListTile(title: Text(title), subtitle: Text(value ?? '-'));
+//   @override
+//   initState() {
+//     super.initState();
+//     setValue();
 //   }
 
-//   Widget _imageTile(String title, String? path) {
-//     if (path == null || path.isEmpty) {
-//       return ListTile(title: Text(title), subtitle: Text('No file'));
-//     }
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         Padding(
-//           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-//           child: Text(title, style: TextStyle(fontWeight: FontWeight.w600)),
-//         ),
-//         Padding(
-//           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-//           child: SizedBox(
-//             height: 180,
-//             child: Image.file(File(path), fit: BoxFit.contain),
-//           ),
-//         ),
-//         const SizedBox(height: 12),
-//       ],
-//     );
+//   void setValue() async {
+//     var logo = await dataBase.getLogo();
+//     var banner = await dataBase.getBanner();
+//     setState(() {
+//       controller.businessLogoFile.value = XFile(logo!);
+//       controller.businessLogoBanner.value = XFile(banner!);
+//     });
 //   }
 
 //   @override
 //   Widget build(BuildContext context) {
+//     if (widget.vendor == null) {
+//       return Scaffold(
+//         appBar: AppBar(title: const Text('Business Profile')),
+//         body: const Center(child: Text('No business data available')),
+//       );
+//     }
+
 //     return Scaffold(
-//       appBar: AppBar(title: const Text('Vendor Business')),
-//       body: Obx(() {
-//         final m = controller.model.value;
-//         if (m == null) {
-//           return const Center(child: Text('No business data provided'));
-//         }
-//         return ListView(
-//           children: [
-//             // Banner + Profile header
-//             Stack(
-//               clipBehavior: Clip.none,
-//               children: [
-//                 Container(
-//                   height: 180,
-//                   width: double.infinity,
-//                   decoration: BoxDecoration(
-//                     color: Colors.grey.shade300,
-//                     image:
-//                         m.businessDocumentPath != null &&
-//                             m.businessDocumentPath!.isNotEmpty
-//                         ? DecorationImage(
-//                             image: FileImage(File(m.businessDocumentPath!)),
+//       backgroundColor: Colors.grey[50],
+//       body: CustomScrollView(
+//         slivers: [
+//           // App Bar with Banner
+//           SliverAppBar(
+//             expandedHeight: 200,
+//             pinned: true,
+//             flexibleSpace: FlexibleSpaceBar(
+//               background: Stack(
+//                 fit: StackFit.expand,
+//                 children: [
+//                   // Banner Image
+//                   controller.businessLogoBanner.value != null &&
+//                           controller.businessLogoBanner.value!.path.isNotEmpty
+//                       ? GestureDetector(
+//                           onTap: () {
+//                             controller.obtainBusinessBannerFromGallery();
+//                           },
+//                           child: CachedNetworkImage(
+//                             imageUrl: controller.businessLogoBanner.value!.path,
 //                             fit: BoxFit.cover,
-//                           )
-//                         : null,
-//                   ),
-//                   child:
-//                       m.businessDocumentPath == null ||
-//                           m.businessDocumentPath!.isEmpty
-//                       ? Container(
-//                           decoration: BoxDecoration(
-//                             gradient: LinearGradient(
-//                               colors: [
-//                                 Colors.blue.shade300,
-//                                 Colors.blue.shade700,
-//                               ],
-//                               begin: Alignment.topLeft,
-//                               end: Alignment.bottomRight,
-//                             ),
-//                           ),
-//                           alignment: Alignment.center,
-//                           child: Text(
-//                             m.businessName ?? 'Vendor',
-//                             style: const TextStyle(
-//                               color: Colors.white,
-//                               fontSize: 20,
-//                               fontWeight: FontWeight.w600,
+//                             placeholder: (context, url) =>
+//                                 Container(color: Colors.blue.shade700),
+//                             errorWidget: (context, url, error) => Container(
+//                               decoration: BoxDecoration(
+//                                 gradient: LinearGradient(
+//                                   colors: [
+//                                     Colors.blue.shade400,
+//                                     Colors.blue.shade700,
+//                                   ],
+//                                   begin: Alignment.topLeft,
+//                                   end: Alignment.bottomRight,
+//                                 ),
+//                               ),
 //                             ),
 //                           ),
 //                         )
-//                       : null,
-//                 ),
-//                 Positioned(
-//                   left: 16,
-//                   bottom: -36,
-//                   child: Row(
-//                     crossAxisAlignment: CrossAxisAlignment.end,
-//                     children: [
-//                       CircleAvatar(
-//                         radius: 44,
-//                         backgroundColor: Colors.white,
-//                         child: ClipOval(
-//                           child: m.logoPath != null && m.logoPath!.isNotEmpty
-//                               ? Image.file(
-//                                   File(m.logoPath!),
+//                       : widget.vendor!.banner != null &&
+//                             widget.vendor!.banner!.isNotEmpty
+//                       ? GestureDetector(
+//                           onTap: () {
+//                             controller.obtainBusinessBannerFromGallery();
+//                           },
+//                           child: CachedNetworkImage(
+//                             imageUrl: widget.vendor!.banner!,
+//                             fit: BoxFit.cover,
+//                             placeholder: (context, url) =>
+//                                 Container(color: Colors.blue.shade700),
+//                             errorWidget: (context, url, error) => Container(
+//                               decoration: BoxDecoration(
+//                                 gradient: LinearGradient(
+//                                   colors: [
+//                                     Colors.blue.shade400,
+//                                     Colors.blue.shade700,
+//                                   ],
+//                                   begin: Alignment.topLeft,
+//                                   end: Alignment.bottomRight,
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
+//                         )
+//                       : GestureDetector(
+//                           onTap: () =>
+//                               controller.obtainBusinessBannerFromGallery(),
+//                           child: Container(
+//                             decoration: BoxDecoration(
+//                               gradient: LinearGradient(
+//                                 colors: [
+//                                   Colors.blue.shade400,
+//                                   Colors.blue.shade700,
+//                                 ],
+//                                 begin: Alignment.topLeft,
+//                                 end: Alignment.bottomRight,
+//                               ),
+//                             ),
+//                             child: CustomImageView(
+//                               imagePath: 'assets/logo.png',
+//                             ),
+//                           ),
+//                         ),
+//                   // Gradient Overlay
+//                   Container(
+//                     decoration: BoxDecoration(
+//                       gradient: LinearGradient(
+//                         begin: Alignment.topCenter,
+//                         end: Alignment.bottomCenter,
+//                         colors: [
+//                           Colors.transparent,
+//                           Colors.black.withOpacity(0.7),
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+
+//           // Content
+//           SliverToBoxAdapter(
+//             child: Column(
+//               children: [
+//                 // Profile Header Card
+//                 Transform.translate(
+//                   offset: const Offset(0, 20),
+//                   child: Padding(
+//                     padding: const EdgeInsets.symmetric(horizontal: 16),
+//                     child: Card(
+//                       elevation: .5,
+//                       shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.circular(16),
+//                       ),
+//                       child: Padding(
+//                         padding: const EdgeInsets.all(20),
+//                         child: Column(
+//                           children: [
+//                             // Logo and Business Name
+//                             Row(
+//                               children: [
+//                                 // Logo
+//                                 Container(
 //                                   width: 80,
 //                                   height: 80,
-//                                   fit: BoxFit.cover,
-//                                 )
-//                               : Icon(
-//                                   Icons.store,
-//                                   size: 48,
-//                                   color: Colors.grey.shade700,
+//                                   padding: EdgeInsets.all(8),
+//                                   decoration: BoxDecoration(
+//                                     color: Colors.white,
+//                                     borderRadius: BorderRadius.circular(12),
+//                                     border: Border.all(
+//                                       width: 1,
+//                                       color: Colors.black12,
+//                                     ),
+//                                   ),
+//                                   child: Obx(
+//                                     () => ClipRRect(
+//                                       borderRadius: BorderRadius.circular(16),
+//                                       child:
+//                                           controller.businessLogoFile.value !=
+//                                                   null &&
+//                                               controller
+//                                                   .businessLogoFile
+//                                                   .value!
+//                                                   .path
+//                                                   .isNotEmpty
+//                                           ? GestureDetector(
+//                                               onTap: () {
+//                                                 controller
+//                                                     .obtainBusinessLogoFromGallery();
+//                                               },
+//                                               child: CachedNetworkImage(
+//                                                 imageUrl: controller
+//                                                     .businessLogoFile
+//                                                     .value!
+//                                                     .path,
+//                                                 fit: BoxFit.cover,
+//                                                 placeholder: (context, url) =>
+//                                                     const Center(
+//                                                       child:
+//                                                           CircularProgressIndicator(),
+//                                                     ),
+//                                                 errorWidget:
+//                                                     (context, url, error) =>
+//                                                         Icon(
+//                                                           Icons.store,
+//                                                           size: 40,
+//                                                           color:
+//                                                               Colors.grey[400],
+//                                                         ),
+//                                               ),
+//                                             )
+//                                           : widget.vendor!.logo != null &&
+//                                                 widget.vendor!.logo!.isNotEmpty
+//                                           ? GestureDetector(
+//                                               onTap: () => controller
+//                                                   .obtainBusinessLogoFromGallery(),
+//                                               child: CachedNetworkImage(
+//                                                 imageUrl: widget.vendor!.logo!,
+//                                                 fit: BoxFit.cover,
+//                                                 placeholder: (context, url) =>
+//                                                     const Center(
+//                                                       child:
+//                                                           CircularProgressIndicator(),
+//                                                     ),
+//                                                 errorWidget:
+//                                                     (context, url, error) =>
+//                                                         Icon(
+//                                                           Icons.store,
+//                                                           size: 40,
+//                                                           color:
+//                                                               Colors.grey[400],
+//                                                         ),
+//                                               ),
+//                                             )
+//                                           : GestureDetector(
+//                                               onTap: () => controller
+//                                                   .obtainBusinessLogoFromGallery(),
+//                                               child: Icon(
+//                                                 Icons.store,
+//                                                 size: 40,
+//                                                 color: Colors.grey[400],
+//                                               ),
+//                                             ),
+//                                     ),
+//                                   ),
 //                                 ),
+//                                 const SizedBox(width: 16),
+//                                 // Business Info
+//                                 Expanded(
+//                                   child: Column(
+//                                     crossAxisAlignment:
+//                                         CrossAxisAlignment.start,
+//                                     children: [
+//                                       Text(
+//                                         widget.vendor!.businessName ??
+//                                             'Business Name',
+//                                         style: const TextStyle(
+//                                           fontSize: 20,
+//                                           fontWeight: FontWeight.bold,
+//                                           color: Colors.black87,
+//                                         ),
+//                                       ),
+//                                       const SizedBox(height: 4),
+//                                       Row(
+//                                         children: [
+//                                           Icon(
+//                                             Icons.location_on,
+//                                             size: 16,
+//                                             color: Colors.grey[600],
+//                                           ),
+//                                           const SizedBox(width: 4),
+//                                           Expanded(
+//                                             child: Text(
+//                                               widget.vendor!.businessAddress ??
+//                                                   'No address',
+//                                               style: TextStyle(
+//                                                 fontSize: 14,
+//                                                 color: Colors.grey[600],
+//                                               ),
+//                                               maxLines: 2,
+//                                               overflow: TextOverflow.ellipsis,
+//                                             ),
+//                                           ),
+//                                         ],
+//                                       ),
+//                                       const SizedBox(height: 8),
+//                                       // Status Badges
+//                                       Wrap(
+//                                         alignment: WrapAlignment.start,
+
+//                                         spacing: 8,
+//                                         runSpacing: 8,
+//                                         children: [
+//                                           _buildBadge(
+//                                             widget.vendor!.isVerified == true
+//                                                 ? 'Verified'
+//                                                 : 'Unverified',
+//                                             widget.vendor!.isVerified == true
+//                                                 ? Colors.green
+//                                                 : Colors.orange,
+//                                             widget.vendor!.isVerified == true
+//                                                 ? Icons.verified
+//                                                 : Icons.pending,
+//                                           ),
+//                                           _buildBadge(
+//                                             widget.vendor!.isActive == true
+//                                                 ? 'Active'
+//                                                 : 'Inactive',
+//                                             widget.vendor!.isActive == true
+//                                                 ? Colors.blue
+//                                                 : Colors.grey,
+//                                             widget.vendor!.isActive == true
+//                                                 ? Icons.check_circle
+//                                                 : Icons.cancel,
+//                                           ),
+//                                         ],
+//                                       ),
+//                                     ],
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+
+//                 // Quick Stats
+//                 Padding(
+//                   padding: const EdgeInsets.fromLTRB(16, 40, 16, 24),
+//                   child: Row(
+//                     children: [
+//                       Expanded(
+//                         child: _buildStatCard(
+//                           'Fulfilment',
+//                           widget.vendor!.fulfilmentType ?? 'N/A',
+//                           Icons.delivery_dining,
+//                           Colors.purple,
 //                         ),
 //                       ),
 //                       const SizedBox(width: 12),
-//                       Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           SizedBox(height: 8),
-//                           Text(
-//                             m.businessName ?? '-',
-//                             style: const TextStyle(
-//                               fontSize: 18,
-//                               fontWeight: FontWeight.w700,
-//                             ),
-//                           ),
-//                           const SizedBox(height: 4),
-//                           Row(
-//                             children: [
-//                               const Icon(
-//                                 Icons.location_on,
-//                                 size: 14,
-//                                 color: Colors.grey,
-//                               ),
-//                               const SizedBox(width: 4),
-//                               SizedBox(
-//                                 width: MediaQuery.of(context).size.width - 160,
-//                                 child: Text(
-//                                   m.businessAddress ?? '-',
-//                                   style: TextStyle(color: Colors.grey.shade700),
-//                                   overflow: TextOverflow.ellipsis,
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ],
+//                       Expanded(
+//                         child: _buildStatCard(
+//                           'Business Type',
+//                           _formatBusinessType(widget.vendor!.businessTypeId),
+//                           Icons.business,
+//                           Colors.teal,
+//                         ),
 //                       ),
 //                     ],
 //                   ),
 //                 ),
+
+//                 // Business Details Section
+//                 _buildSection('Business Details', Icons.store, [
+//                   _buildDetailRow(
+//                     'Business Name',
+//                     widget.vendor!.businessName ?? 'N/A',
+//                   ),
+//                   _buildDetailRow(
+//                     'Email',
+//                     widget.vendor!.email ?? 'No email provided',
+//                   ),
+//                   _buildDetailRow(
+//                     'Phone Number',
+//                     widget.vendor!.phoneNumber ?? 'No phone provided',
+//                   ),
+//                   _buildDetailRow(
+//                     'Business Address',
+//                     widget.vendor!.businessAddress ?? 'No address',
+//                   ),
+//                   _buildDetailRow(
+//                     'Description',
+//                     widget.vendor!.businessDescription ?? 'No description',
+//                   ),
+//                 ]),
+
+//                 // Verification Section
+//                 _buildSection('Verification', Icons.verified_user, [
+//                   _buildDetailRow(
+//                     'Registration Status',
+//                     widget.vendor!.isRegistered == true
+//                         ? 'Registered'
+//                         : 'Not Registered',
+//                   ),
+//                   _buildDetailRow(
+//                     'Tax Number',
+//                     widget.vendor!.taxNumber ?? 'N/A',
+//                   ),
+//                   _buildDetailRow('BVN', widget.vendor!.bvn ?? 'N/A'),
+//                   _buildDetailRow(
+//                     'RC Number',
+//                     widget.vendor!.rcNumber ?? 'N/A',
+//                   ),
+//                   _buildDetailRow(
+//                     'Means of ID',
+//                     widget.vendor!.meansOfIdentification?.toUpperCase() ??
+//                         'N/A',
+//                   ),
+//                 ]),
+
+//                 // Identification Document
+//                 if (widget.vendor!.identificationUrl != null &&
+//                     widget.vendor!.identificationUrl!.isNotEmpty)
+//                   _buildSection(
+//                     'Identification Document',
+//                     Icons.card_membership,
+//                     [
+//                       Padding(
+//                         padding: const EdgeInsets.all(8.0),
+//                         child: ClipRRect(
+//                           borderRadius: BorderRadius.circular(12),
+//                           child: CachedNetworkImage(
+//                             imageUrl: widget.vendor!.identificationUrl!,
+//                             fit: BoxFit.cover,
+//                             placeholder: (context, url) => Container(
+//                               height: 200,
+//                               color: Colors.grey[200],
+//                               child: const Center(
+//                                 child: CircularProgressIndicator(),
+//                               ),
+//                             ),
+//                             errorWidget: (context, url, error) => Container(
+//                               height: 200,
+//                               color: Colors.grey[200],
+//                               child: const Center(child: Icon(Icons.error)),
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+
+//                 // Locations Section
+//                 if (widget.vendor!.locations != null &&
+//                     widget.vendor!.locations!.isNotEmpty)
+//                   _buildSection(
+//                     'Business Locations',
+//                     Icons.location_city,
+//                     widget.vendor!.locations!.map((location) {
+//                       return Card(
+//                         margin: const EdgeInsets.symmetric(
+//                           horizontal: 8,
+//                           vertical: 4,
+//                         ),
+//                         child: ListTile(
+//                           leading: CircleAvatar(
+//                             backgroundColor: location.isPrimary == true
+//                                 ? Colors.blue
+//                                 : Colors.grey,
+//                             child: Icon(
+//                               location.isPrimary == true
+//                                   ? Icons.star
+//                                   : Icons.location_on,
+//                               color: Colors.white,
+//                               size: 20,
+//                             ),
+//                           ),
+//                           title: Text(
+//                             location.contactAddress ?? 'No address',
+//                             style: const TextStyle(fontWeight: FontWeight.w600),
+//                           ),
+//                           subtitle: Column(
+//                             crossAxisAlignment: CrossAxisAlignment.start,
+//                             children: [
+//                               if (location.phoneNumber != null)
+//                                 Text('Phone: ${location.phoneNumber}'),
+//                               Text(
+//                                 location.isPrimary == true
+//                                     ? 'Primary Location'
+//                                     : 'Secondary Location',
+//                                 style: TextStyle(
+//                                   color: location.isPrimary == true
+//                                       ? Colors.blue
+//                                       : Colors.grey,
+//                                   fontSize: 12,
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                           trailing: Icon(
+//                             location.isActive == true
+//                                 ? Icons.check_circle
+//                                 : Icons.cancel,
+//                             color: location.isActive == true
+//                                 ? Colors.green
+//                                 : Colors.red,
+//                           ),
+//                         ),
+//                       );
+//                     }).toList(),
+//                   ),
+
+//                 // Category and Plan
+//                 if (widget.vendor!.category != null ||
+//                     widget.vendor!.plan != null)
+//                   Padding(
+//                     padding: const EdgeInsets.all(16),
+//                     child: Row(
+//                       children: [
+//                         if (widget.vendor!.category != null)
+//                           Expanded(
+//                             child: _buildInfoCard(
+//                               'Category',
+//                               widget.vendor!.category!.name ?? 'N/A',
+//                               Icons.category,
+//                               Colors.orange,
+//                             ),
+//                           ),
+//                         if (widget.vendor!.category != null &&
+//                             widget.vendor!.plan != null)
+//                           const SizedBox(width: 12),
+//                         if (widget.vendor!.plan != null)
+//                           Expanded(
+//                             child: _buildInfoCard(
+//                               'Plan',
+//                               widget.vendor!.plan!.name ?? 'N/A',
+//                               Icons.workspace_premium,
+//                               Colors.amber,
+//                             ),
+//                           ),
+//                       ],
+//                     ),
+//                   ),
+
+//                 const SizedBox(height: 32),
 //               ],
 //             ),
-//             const SizedBox(height: 48),
-
-//             // Business Details heading
-//             Padding(
-//               padding: const EdgeInsets.symmetric(
-//                 horizontal: 16.0,
-//                 vertical: 8.0,
-//               ),
-//               child: Text(
-//                 'Business Details',
-//                 style: TextStyle(
-//                   fontSize: 16,
-//                   fontWeight: FontWeight.w700,
-//                   color: Colors.grey.shade800,
-//                 ),
-//               ),
-//             ),
-//             Card(
-//               margin: const EdgeInsets.symmetric(
-//                 horizontal: 12.0,
-//                 vertical: 4.0,
-//               ),
-//               child: Column(
-//                 children: [
-//                   _fieldTile('Business name', m.businessName),
-//                   _fieldTile('Business address', m.businessAddress),
-//                   _fieldTile('Business type id', m.businessTypeId),
-//                   _fieldTile('Fulfilment type', m.fulfilmentType),
-//                   _fieldTile('Business description', m.businessDescription),
-//                 ],
-//               ),
-//             ),
-
-//             // Verification heading
-//             Padding(
-//               padding: const EdgeInsets.symmetric(
-//                 horizontal: 16.0,
-//                 vertical: 8.0,
-//               ),
-//               child: Text(
-//                 'Verification',
-//                 style: TextStyle(
-//                   fontSize: 16,
-//                   fontWeight: FontWeight.w700,
-//                   color: Colors.grey.shade800,
-//                 ),
-//               ),
-//             ),
-//             Card(
-//               margin: const EdgeInsets.symmetric(
-//                 horizontal: 12.0,
-//                 vertical: 4.0,
-//               ),
-//               child: Column(
-//                 children: [
-//                   _fieldTile(
-//                     'Means of identification',
-//                     m.meansOfIdentification,
-//                   ),
-//                   _fieldTile('Tax number', m.taxNumber),
-//                   _fieldTile('BVN', m.bvn),
-//                   _fieldTile('Is registered', m.isRegistered ? 'Yes' : 'No'),
-//                 ],
-//               ),
-//             ),
-
-//             const Divider(),
-//             _imageTile('Logo', m.logoPath),
-//             _imageTile('Business document', m.businessDocumentPath),
-//             _imageTile('Identification', m.identificationPath),
-//             const SizedBox(height: 24),
-//             Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-//               child: ElevatedButton(
-//                 onPressed: () => Navigator.of(context).pop(),
-//                 child: const Text('Close'),
-//               ),
-//             ),
-//             const SizedBox(height: 24),
-//           ],
-//         );
-//       }),
+//           ),
+//         ],
+//       ),
 //     );
+//   }
+
+//   Widget _buildBadge(String label, Color color, IconData icon) {
+//     return Container(
+//       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+//       decoration: BoxDecoration(
+//         color: color.withOpacity(0.1),
+//         borderRadius: BorderRadius.circular(20),
+//         border: Border.all(color: color.withOpacity(0.3)),
+//       ),
+//       child: Row(
+//         mainAxisSize: MainAxisSize.min,
+//         children: [
+//           Icon(icon, size: 14, color: color),
+//           const SizedBox(width: 4),
+//           Text(
+//             label,
+//             style: TextStyle(
+//               color: color,
+//               fontSize: 12,
+//               fontWeight: FontWeight.w600,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget _buildStatCard(
+//     String label,
+//     String value,
+//     IconData icon,
+//     Color color,
+//   ) {
+//     return Container(
+//       padding: const EdgeInsets.all(16),
+//       // padding: EdgeInsets.all(8),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: BorderRadius.circular(12),
+//         border: Border.all(width: 1, color: Colors.black12),
+//       ),
+//       child: Column(
+//         children: [
+//           Container(
+//             padding: const EdgeInsets.all(12),
+//             decoration: BoxDecoration(
+//               color: color.withOpacity(0.1),
+//               shape: BoxShape.circle,
+//             ),
+//             child: Icon(icon, color: color, size: 24),
+//           ),
+//           const SizedBox(height: 12),
+//           Text(
+//             label,
+//             style: TextStyle(color: Colors.grey[600], fontSize: 12),
+//             textAlign: TextAlign.center,
+//           ),
+//           const SizedBox(height: 4),
+//           Text(
+//             value,
+//             style: const TextStyle(
+//               fontSize: 14,
+//               fontWeight: FontWeight.bold,
+//               color: Colors.black87,
+//             ),
+//             textAlign: TextAlign.center,
+//             maxLines: 2,
+//             overflow: TextOverflow.ellipsis,
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget _buildSection(String title, IconData icon, List<Widget> children) {
+//     return Padding(
+//       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Row(
+//             children: [
+//               Icon(icon, color: Colors.blue[700], size: 24),
+//               const SizedBox(width: 8),
+//               Text(
+//                 title,
+//                 style: TextStyle(
+//                   fontSize: 18,
+//                   fontWeight: FontWeight.bold,
+//                   color: Colors.grey[800],
+//                 ),
+//               ),
+//             ],
+//           ),
+//           const SizedBox(height: 12),
+//           Container(
+//             padding: EdgeInsets.all(8),
+//             decoration: BoxDecoration(
+//               color: Colors.white,
+//               borderRadius: BorderRadius.circular(12),
+//               border: Border.all(width: 1, color: Colors.black12),
+//             ),
+//             child: Column(children: children),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget _buildDetailRow(String label, String value) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+//       child: Row(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           SizedBox(
+//             width: 120,
+//             child: Text(
+//               label,
+//               style: TextStyle(
+//                 color: Colors.grey[600],
+//                 fontSize: 14,
+//                 fontWeight: FontWeight.w500,
+//               ),
+//             ),
+//           ),
+//           Expanded(
+//             child: Text(
+//               value,
+//               style: const TextStyle(
+//                 color: Colors.black87,
+//                 fontSize: 14,
+//                 fontWeight: FontWeight.w600,
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget _buildInfoCard(
+//     String label,
+//     String value,
+//     IconData icon,
+//     Color color,
+//   ) {
+//     return Container(
+//       padding: const EdgeInsets.all(16),
+//       //  padding: EdgeInsets.all(8),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: BorderRadius.circular(12),
+//         border: Border.all(width: 1, color: Colors.black12),
+//       ),
+//       child: Column(
+//         children: [
+//           Icon(icon, color: color, size: 32),
+//           const SizedBox(height: 8),
+//           Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
+//           const SizedBox(height: 4),
+//           Text(
+//             value,
+//             style: const TextStyle(
+//               fontSize: 16,
+//               fontWeight: FontWeight.bold,
+//               color: Colors.black87,
+//             ),
+//             textAlign: TextAlign.center,
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   String _formatBusinessType(String? type) {
+//     if (type == null) return 'N/A';
+//     return type
+//         .split('_')
+//         .map((word) {
+//           return word[0].toUpperCase() + word.substring(1);
+//         })
+//         .join(' ');
 //   }
 // }
 
+// // Usage example:
+// // Get.to(() => VendorBusinessScreen(
+// //   vendor: loginResponse.data?.vendor,
+// //   userData: loginResponse.data,
+// // ));
+import 'dart:io';
 import 'package:ctlvendor/screens/login/models/models.dart';
+import 'package:ctlvendor/screens/vendor_business/controller/vendor_business_controller.dart';
+import 'package:ctlvendor/utils/storage.dart';
 import 'package:ctlvendor/widgets/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:image_picker/image_picker.dart';
 
-class VendorBusinessScreen extends StatelessWidget {
+VendorBusinessController controller = Get.put(VendorBusinessController());
+
+class VendorBusinessScreen extends StatefulWidget {
   final Vendor? vendor;
   final LoginData? userData;
 
@@ -257,8 +996,97 @@ class VendorBusinessScreen extends StatelessWidget {
     : super(key: key);
 
   @override
+  State<VendorBusinessScreen> createState() => _VendorBusinessScreenState();
+}
+
+class _VendorBusinessScreenState extends State<VendorBusinessScreen> {
+  @override
+  void initState() {
+    super.initState();
+    setValue();
+  }
+
+  void setValue() async {
+    var logo = await dataBase.getLogo();
+    var banner = await dataBase.getBanner();
+
+    if (logo != null && logo.isNotEmpty) {
+      controller.businessLogoFile.value = XFile(logo);
+    }
+    if (banner != null && banner.isNotEmpty) {
+      controller.businessLogoBanner.value = XFile(banner);
+    }
+  }
+
+  // Helper widget to display images (handles both local files and network URLs)
+  Widget _buildImage({
+    required String? networkUrl,
+    required Rx<XFile?> localFile,
+    required VoidCallback onTap,
+    required BoxFit fit,
+    Widget? placeholder,
+    Widget? errorWidget,
+  }) {
+    return Obx(() {
+      // Priority: local file > network URL > placeholder
+      if (localFile.value != null && localFile.value!.path.isNotEmpty) {
+        // Check if it's a network URL stored in XFile (fix for the bug)
+        if (localFile.value!.path.startsWith('http://') ||
+            localFile.value!.path.startsWith('https://')) {
+          return GestureDetector(
+            onTap: onTap,
+            child: CachedNetworkImage(
+              imageUrl: localFile.value!.path,
+              fit: fit,
+              placeholder: (context, url) =>
+                  placeholder ??
+                  const Center(child: CircularProgressIndicator()),
+              errorWidget: (context, url, error) =>
+                  errorWidget ?? Icon(Icons.error, color: Colors.grey[400]),
+            ),
+          );
+        } else {
+          // Display local file
+          return GestureDetector(
+            onTap: onTap,
+            child: Image.file(
+              File(localFile.value!.path),
+              fit: fit,
+              errorBuilder: (context, error, stackTrace) {
+                return errorWidget ??
+                    Icon(Icons.error, color: Colors.grey[400]);
+              },
+            ),
+          );
+        }
+      } else if (networkUrl != null && networkUrl.isNotEmpty) {
+        // Display network image
+        return GestureDetector(
+          onTap: onTap,
+          child: CachedNetworkImage(
+            imageUrl: networkUrl,
+            fit: fit,
+            placeholder: (context, url) =>
+                placeholder ?? const Center(child: CircularProgressIndicator()),
+            errorWidget: (context, url, error) =>
+                errorWidget ?? Icon(Icons.error, color: Colors.grey[400]),
+          ),
+        );
+      } else {
+        // Display placeholder
+        return GestureDetector(
+          onTap: onTap,
+          child:
+              errorWidget ??
+              Icon(Icons.store, size: 40, color: Colors.grey[400]),
+        );
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (vendor == null) {
+    if (widget.vendor == null) {
       return Scaffold(
         appBar: AppBar(title: const Text('Business Profile')),
         body: const Center(child: Text('No business data available')),
@@ -278,38 +1106,25 @@ class VendorBusinessScreen extends StatelessWidget {
                 fit: StackFit.expand,
                 children: [
                   // Banner Image
-                  vendor!.banner != null && vendor!.banner!.isNotEmpty
-                      ? CachedNetworkImage(
-                          imageUrl: vendor!.banner!,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              Container(color: Colors.blue.shade700),
-                          errorWidget: (context, url, error) => Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.blue.shade400,
-                                  Colors.blue.shade700,
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.blue.shade400,
-                                Colors.blue.shade700,
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                          ),
-                          child: CustomImageView(imagePath: 'assets/logo.png'),
+                  _buildImage(
+                    networkUrl: widget.vendor!.banner,
+                    localFile: controller.businessLogoBanner,
+                    onTap: () => controller.obtainBusinessBannerFromGallery(),
+                    fit: BoxFit.cover,
+                    placeholder: Container(color: Colors.blue.shade700),
+                    errorWidget: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.blue.shade400, Colors.blue.shade700],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
+                      ),
+                      child: Center(
+                        child: CustomImageView(imagePath: 'assets/logo.png'),
+                      ),
+                    ),
+                  ),
                   // Gradient Overlay
                   Container(
                     decoration: BoxDecoration(
@@ -323,6 +1138,55 @@ class VendorBusinessScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Positioned(
+                    bottom: 10,
+                    right: 10,
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.obtainBusinessBannerFromGallery();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                        ),
+                        child: Icon(Icons.edit),
+                      ),
+                    ),
+                  ),
+
+                  // (controller.businessLogoBanner.value!.path.isNotEmpty &&
+                  //         controller.businessLogoFile.value!.path.isNotEmpty)
+                  //     ?
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.obtainBusinessBannerFromGallery();
+                      },
+                      child: SizedBox(
+                        width: 70,
+                        height: 30,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            controller.updateVendorProfileBusinessName();
+                          },
+                          child: Text('save', style: TextStyle(fontSize: 10)),
+                        ),
+                      ),
+                      // Container(
+                      //   padding: EdgeInsets.all(12),
+                      //   decoration: BoxDecoration(
+                      //     shape: BoxShape.circle,
+                      //     color: Colors.white,
+                      //   ),
+                      //   child: Icon(Icons.save),
+                      // ),
+                    ),
+                  ),
+                  // : SizedBox.shrink(),
                 ],
               ),
             ),
@@ -338,7 +1202,8 @@ class VendorBusinessScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Card(
-                      elevation: .5,
+                      elevation: 0,
+                      color: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -353,7 +1218,7 @@ class VendorBusinessScreen extends StatelessWidget {
                                 Container(
                                   width: 80,
                                   height: 80,
-                                  padding: EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(12),
@@ -363,30 +1228,22 @@ class VendorBusinessScreen extends StatelessWidget {
                                     ),
                                   ),
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(16),
-                                    child:
-                                        vendor!.logo != null &&
-                                            vendor!.logo!.isNotEmpty
-                                        ? CachedNetworkImage(
-                                            imageUrl: vendor!.logo!,
-                                            fit: BoxFit.cover,
-                                            placeholder: (context, url) =>
-                                                const Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                ),
-                                            errorWidget:
-                                                (context, url, error) => Icon(
-                                                  Icons.store,
-                                                  size: 40,
-                                                  color: Colors.grey[400],
-                                                ),
-                                          )
-                                        : Icon(
-                                            Icons.store,
-                                            size: 40,
-                                            color: Colors.grey[400],
-                                          ),
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: _buildImage(
+                                      networkUrl: widget.vendor!.logo,
+                                      localFile: controller.businessLogoFile,
+                                      onTap: () => controller
+                                          .obtainBusinessLogoFromGallery(),
+                                      fit: BoxFit.cover,
+                                      placeholder: const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                      errorWidget: Icon(
+                                        Icons.store,
+                                        size: 40,
+                                        color: Colors.grey[400],
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 16),
@@ -397,7 +1254,8 @@ class VendorBusinessScreen extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        vendor!.businessName ?? 'Business Name',
+                                        widget.vendor!.businessName ??
+                                            'Business Name',
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -415,7 +1273,7 @@ class VendorBusinessScreen extends StatelessWidget {
                                           const SizedBox(width: 4),
                                           Expanded(
                                             child: Text(
-                                              vendor!.businessAddress ??
+                                              widget.vendor!.businessAddress ??
                                                   'No address',
                                               style: TextStyle(
                                                 fontSize: 14,
@@ -430,30 +1288,29 @@ class VendorBusinessScreen extends StatelessWidget {
                                       const SizedBox(height: 8),
                                       // Status Badges
                                       Wrap(
-                                        alignment: WrapAlignment.start  ,
-                                        
+                                        alignment: WrapAlignment.start,
                                         spacing: 8,
                                         runSpacing: 8,
                                         children: [
                                           _buildBadge(
-                                            vendor!.isVerified == true
+                                            widget.vendor!.isVerified == true
                                                 ? 'Verified'
                                                 : 'Unverified',
-                                            vendor!.isVerified == true
+                                            widget.vendor!.isVerified == true
                                                 ? Colors.green
                                                 : Colors.orange,
-                                            vendor!.isVerified == true
+                                            widget.vendor!.isVerified == true
                                                 ? Icons.verified
                                                 : Icons.pending,
                                           ),
                                           _buildBadge(
-                                            vendor!.isActive == true
+                                            widget.vendor!.isActive == true
                                                 ? 'Active'
                                                 : 'Inactive',
-                                            vendor!.isActive == true
+                                            widget.vendor!.isActive == true
                                                 ? Colors.blue
                                                 : Colors.grey,
-                                            vendor!.isActive == true
+                                            widget.vendor!.isActive == true
                                                 ? Icons.check_circle
                                                 : Icons.cancel,
                                           ),
@@ -473,13 +1330,13 @@ class VendorBusinessScreen extends StatelessWidget {
 
                 // Quick Stats
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 40, 16, 24),
+                  padding: const EdgeInsets.fromLTRB(16, 30, 16, 24),
                   child: Row(
                     children: [
                       Expanded(
                         child: _buildStatCard(
                           'Fulfilment',
-                          vendor!.fulfilmentType ?? 'N/A',
+                          widget.vendor!.fulfilmentType ?? 'N/A',
                           Icons.delivery_dining,
                           Colors.purple,
                         ),
@@ -488,7 +1345,7 @@ class VendorBusinessScreen extends StatelessWidget {
                       Expanded(
                         child: _buildStatCard(
                           'Business Type',
-                          _formatBusinessType(vendor!.businessTypeId),
+                          _formatBusinessType(widget.vendor!.businessTypeId),
                           Icons.business,
                           Colors.teal,
                         ),
@@ -501,23 +1358,23 @@ class VendorBusinessScreen extends StatelessWidget {
                 _buildSection('Business Details', Icons.store, [
                   _buildDetailRow(
                     'Business Name',
-                    vendor!.businessName ?? 'N/A',
+                    widget.vendor!.businessName ?? 'N/A',
                   ),
                   _buildDetailRow(
                     'Email',
-                    vendor!.email ?? 'No email provided',
+                    widget.vendor!.email ?? 'No email provided',
                   ),
                   _buildDetailRow(
                     'Phone Number',
-                    vendor!.phoneNumber ?? 'No phone provided',
+                    widget.vendor!.phoneNumber ?? 'No phone provided',
                   ),
                   _buildDetailRow(
                     'Business Address',
-                    vendor!.businessAddress ?? 'No address',
+                    widget.vendor!.businessAddress ?? 'No address',
                   ),
                   _buildDetailRow(
                     'Description',
-                    vendor!.businessDescription ?? 'No description',
+                    widget.vendor!.businessDescription ?? 'No description',
                   ),
                 ]),
 
@@ -525,22 +1382,29 @@ class VendorBusinessScreen extends StatelessWidget {
                 _buildSection('Verification', Icons.verified_user, [
                   _buildDetailRow(
                     'Registration Status',
-                    vendor!.isRegistered == true
+                    widget.vendor!.isRegistered == true
                         ? 'Registered'
                         : 'Not Registered',
                   ),
-                  _buildDetailRow('Tax Number', vendor!.taxNumber ?? 'N/A'),
-                  _buildDetailRow('BVN', vendor!.bvn ?? 'N/A'),
-                  _buildDetailRow('RC Number', vendor!.rcNumber ?? 'N/A'),
+                  _buildDetailRow(
+                    'Tax Number',
+                    widget.vendor!.taxNumber ?? 'N/A',
+                  ),
+                  _buildDetailRow('BVN', widget.vendor!.bvn ?? 'N/A'),
+                  _buildDetailRow(
+                    'RC Number',
+                    widget.vendor!.rcNumber ?? 'N/A',
+                  ),
                   _buildDetailRow(
                     'Means of ID',
-                    vendor!.meansOfIdentification?.toUpperCase() ?? 'N/A',
+                    widget.vendor!.meansOfIdentification?.toUpperCase() ??
+                        'N/A',
                   ),
                 ]),
 
                 // Identification Document
-                if (vendor!.identificationUrl != null &&
-                    vendor!.identificationUrl!.isNotEmpty)
+                if (widget.vendor!.identificationUrl != null &&
+                    widget.vendor!.identificationUrl!.isNotEmpty)
                   _buildSection(
                     'Identification Document',
                     Icons.card_membership,
@@ -550,7 +1414,7 @@ class VendorBusinessScreen extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: CachedNetworkImage(
-                            imageUrl: vendor!.identificationUrl!,
+                            imageUrl: widget.vendor!.identificationUrl!,
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Container(
                               height: 200,
@@ -571,11 +1435,12 @@ class VendorBusinessScreen extends StatelessWidget {
                   ),
 
                 // Locations Section
-                if (vendor!.locations != null && vendor!.locations!.isNotEmpty)
+                if (widget.vendor!.locations != null &&
+                    widget.vendor!.locations!.isNotEmpty)
                   _buildSection(
                     'Business Locations',
                     Icons.location_city,
-                    vendor!.locations!.map((location) {
+                    widget.vendor!.locations!.map((location) {
                       return Card(
                         margin: const EdgeInsets.symmetric(
                           horizontal: 8,
@@ -630,27 +1495,29 @@ class VendorBusinessScreen extends StatelessWidget {
                   ),
 
                 // Category and Plan
-                if (vendor!.category != null || vendor!.plan != null)
+                if (widget.vendor!.category != null ||
+                    widget.vendor!.plan != null)
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        if (vendor!.category != null)
+                        if (widget.vendor!.category != null)
                           Expanded(
                             child: _buildInfoCard(
                               'Category',
-                              vendor!.category!.name ?? 'N/A',
+                              widget.vendor!.category!.name ?? 'N/A',
                               Icons.category,
                               Colors.orange,
                             ),
                           ),
-                        if (vendor!.category != null && vendor!.plan != null)
+                        if (widget.vendor!.category != null &&
+                            widget.vendor!.plan != null)
                           const SizedBox(width: 12),
-                        if (vendor!.plan != null)
+                        if (widget.vendor!.plan != null)
                           Expanded(
                             child: _buildInfoCard(
                               'Plan',
-                              vendor!.plan!.name ?? 'N/A',
+                              widget.vendor!.plan!.name ?? 'N/A',
                               Icons.workspace_premium,
                               Colors.amber,
                             ),
@@ -702,7 +1569,6 @@ class VendorBusinessScreen extends StatelessWidget {
   ) {
     return Container(
       padding: const EdgeInsets.all(16),
-      // padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -763,7 +1629,7 @@ class VendorBusinessScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -816,7 +1682,6 @@ class VendorBusinessScreen extends StatelessWidget {
   ) {
     return Container(
       padding: const EdgeInsets.all(16),
-      //  padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -847,14 +1712,9 @@ class VendorBusinessScreen extends StatelessWidget {
     return type
         .split('_')
         .map((word) {
+          if (word.isEmpty) return word;
           return word[0].toUpperCase() + word.substring(1);
         })
         .join(' ');
   }
 }
-
-// Usage example:
-// Get.to(() => VendorBusinessScreen(
-//   vendor: loginResponse.data?.vendor,
-//   userData: loginResponse.data,
-// ));

@@ -501,8 +501,8 @@ class _PromotionCreateScreenState extends State<PromotionEditScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SizedBox(
-                  width: 50,
-                  height: 50,
+                  width: 90,
+                  height: 60,
                   child: CustomButton(
                     isOutlined: true,
                     text: 'Cancel',
@@ -513,7 +513,7 @@ class _PromotionCreateScreenState extends State<PromotionEditScreen> {
                 ),
                 SizedBox(
                   width: 90,
-                  height: 80,
+                  height: 60,
                   child: CustomButton(
                     text: 'Save',
                     onPressed: () {

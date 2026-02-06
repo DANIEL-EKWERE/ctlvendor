@@ -71,7 +71,7 @@ class _ProductCreateScreenState extends State<ProductEditScreen> {
           widget.product.description ?? '';
       if (widget.controller.selectedImages.isEmpty) {
         widget.controller.selectedImages.add(
-          XFile(widget.product.imageUrl!),
+          XFile(widget.product.imageUrl ?? ''),
         ); //= widget.product.imageUrl ?? [];
       }
     });
@@ -912,7 +912,11 @@ class _ProductCreateScreenState extends State<ProductEditScreen> {
                             //   'Success',
                             //   'Product added successfully',
                             // );
-                            widget.controller.updateProduct();
+                            //widget.controller.updateProduct();
+                            
+                            widget.controller.updateProduct(
+                              widget.product.product!.id.toString(),
+                            );
                           }
                           print('object');
                         },

@@ -19,7 +19,7 @@ class JobCompletedController extends GetxController {
   RxInt remainingSeconds = 100.obs;
 
   Future<void> acceptOrder(String itemId, int vendorId, Data myData) async {
-    OverlayLoadingProgress.start(circularProgressColor: Colors.amber);
+    OverlayLoadingProgress.start(circularProgressColor: Color(0xFF004DBF));
 
     try {
       var response = await apiClient.acceptedOrders(itemId, vendorId);
@@ -48,7 +48,7 @@ class JobCompletedController extends GetxController {
   }
 
   Future<void> rejectOrder(String itemId, int vendorId, Data myData) async {
-    OverlayLoadingProgress.start(circularProgressColor: Colors.amber);
+    OverlayLoadingProgress.start(circularProgressColor: Color(0xFF004DBF));
 
     try {
       var response = await apiClient.rejectedOrders(itemId, vendorId);

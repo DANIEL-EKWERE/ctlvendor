@@ -244,7 +244,7 @@ class _PackListScreenState extends State<PackListScreen> {
                       icon: Icon(Icons.add, size: 18),
                       label: Text('Add Pack', style: TextStyle(fontSize: 12)),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
+                        backgroundColor: Color(0xFF004DBF),
                         foregroundColor: Colors.white,
                         // padding: EdgeInsets.symmetric(
                         //   horizontal: 20,
@@ -312,7 +312,7 @@ class _PackListScreenState extends State<PackListScreen> {
                         if (controller.isLoading.value) {
                           return const Center(
                             child: CircularProgressIndicator(
-                              color: Colors.black,
+                              color: Color(0xFF004DBF),
                             ),
                           );
                         }
@@ -365,83 +365,157 @@ class _PackListScreenState extends State<PackListScreen> {
                           scrollDirection: Axis.horizontal,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.vertical,
-                            child: Table(
-                              columnWidths: const {
-                                0: FixedColumnWidth(100),
-                                1: FixedColumnWidth(120),
-                                2: FixedColumnWidth(80),
-                                3: FixedColumnWidth(80),
-                                // 4: FixedColumnWidth(100),
-                                // 5: FixedColumnWidth(80),
-                                // 6: FixedColumnWidth(80),
-                                // 7: FixedColumnWidth(100),
-                                // 8: FixedColumnWidth(80),
-                              },
-                              border: TableBorder(
-                                horizontalInside: BorderSide(
-                                  color: Colors.grey.shade200,
-                                ),
-                              ),
-                              children: [
-                                /// HEADER
-                                TableRow(
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade100,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Table(
+                                columnWidths: const {
+                                  0: FixedColumnWidth(150),
+                                  1: FixedColumnWidth(180),
+                                  2: FixedColumnWidth(80),
+                                  3: FixedColumnWidth(100),
+                                },
+                                border: TableBorder(
+                                  top: BorderSide(
+                                    color: Color(0xFF004DBF),
+                                    width: 2,
                                   ),
-                                  children: [
-                                    _headerCell('Pack Name'),
-                                    _headerCell('Price Modifier (₦)'),
-
-                                    _headerCell(''),
-                                    _headerCell('Action'),
-                                  ],
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                    width: 1,
+                                  ),
+                                  horizontalInside: BorderSide(
+                                    color: Colors.grey.shade100,
+                                    width: 0.6,
+                                  ),
                                 ),
-
-                                /// DATA
-                                ...controller.packs.map(
-                                  (product) => TableRow(
-                                    children: [
-                                      _cell(product.name),
-
-                                      _cell(product.price.toString()),
-
-                                      // _menuCell(product),
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.edit,
-                                          color: Colors.red,
-                                        ),
-                                        onPressed: () {
-                                          Get.dialog(
-                                            AlertDialog(
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              insetPadding: EdgeInsets.zero,
-                                              contentPadding: EdgeInsets.zero,
-                                              content: SizedBox(
-                                                height: 350,
-                                                child: PackEditScreen(
-                                                  Get.put(
-                                                    PackCreateController(),
-                                                  ),
-                                                  product,
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        color: Colors.red,
+                                children: [
+                                  /// HEADER
+                                  TableRow(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xFF004DBF),
+                                          Color(0xFF0056D2),
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
                                       ),
-
-                                      IconButton(
-                                        icon: Icon(Icons.delete_outline),
-                                        onPressed: () {},
-                                        color: Colors.red,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.08),
+                                          blurRadius: 4,
+                                          offset: Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    children: [
+                                      _headerCell(
+                                        'Pack Name',
+                                        icon: Icons.inventory_2,
+                                      ),
+                                      _headerCell(
+                                        'Price Modifier (₦)',
+                                        icon: Icons.attach_money,
+                                      ),
+                                      _headerCell('Edit', icon: Icons.edit),
+                                      _headerCell(
+                                        'Action',
+                                        icon: Icons.settings,
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
+
+                                  /// DATA
+                                  ...controller.packs.asMap().entries.map((
+                                    entry,
+                                  ) {
+                                    final index = entry.key;
+                                    final product = entry.value;
+                                    final isEvenRow = index.isEven;
+                                    return TableRow(
+                                      decoration: BoxDecoration(
+                                        color: isEvenRow
+                                            ? Colors.white
+                                            : Colors.grey.shade50,
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color: Colors.grey.shade100,
+                                            width: 0.5,
+                                          ),
+                                        ),
+                                      ),
+                                      children: [
+                                        _dataCell(product.name!),
+                                        _amountCell('₦${product.price}'),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Tooltip(
+                                            message: 'Edit Pack',
+                                            child: Material(
+                                              color: Colors.transparent,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Get.dialog(
+                                                    AlertDialog(
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      insetPadding:
+                                                          EdgeInsets.zero,
+                                                      contentPadding:
+                                                          EdgeInsets.zero,
+                                                      content: SizedBox(
+                                                        height: 350,
+                                                        child: PackEditScreen(
+                                                          Get.put(
+                                                            PackCreateController(),
+                                                          ),
+                                                          product,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                                child: Container(
+                                                  padding: EdgeInsets.all(6),
+                                                  child: Icon(
+                                                    Icons.edit_outlined,
+                                                    size: 18,
+                                                    color: Colors.blue.shade600,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Tooltip(
+                                            message: 'Delete Pack',
+                                            child: Material(
+                                              color: Colors.transparent,
+                                              child: InkWell(
+                                                onTap: () {},
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                                child: Container(
+                                                  padding: EdgeInsets.all(6),
+                                                  child: Icon(
+                                                    Icons.delete_outline,
+                                                    size: 18,
+                                                    color: Colors.red.shade500,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -459,32 +533,61 @@ class _PackListScreenState extends State<PackListScreen> {
     );
   }
 
-  Widget _headerCell(String text) {
+  Widget _headerCell(String text, {IconData? icon}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 16, color: Colors.white70),
+            SizedBox(width: 8),
+          ],
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 12.5,
+                color: Colors.white,
+                letterSpacing: 0.6,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _dataCell(String text) {
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       child: Text(
         text,
-        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+        style: TextStyle(
+          fontSize: 13.5,
+          fontWeight: FontWeight.w500,
+          color: Colors.grey.shade800,
+          height: 1.4,
+        ),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }
 
-  Widget _cell(String? text) {
+  Widget _amountCell(String amount) {
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       child: Text(
-        text ?? '',
-        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-      ),
-    );
-  }
-
-  Widget _menuCell(product) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: PopupMenuButton(
-        icon: Icon(Icons.more_horiz),
-        itemBuilder: (_) => [],
+        amount,
+        style: TextStyle(
+          fontSize: 13.5,
+          fontWeight: FontWeight.w700,
+          color: Color(0xFF004DBF),
+        ),
       ),
     );
   }
