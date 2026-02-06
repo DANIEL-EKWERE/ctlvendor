@@ -5,6 +5,7 @@ import 'package:ctlvendor/screens/PromotionCreateScreen/controller/PromotionCrea
 import 'package:ctlvendor/screens/PromotionListScreen/controller/PromotionListController.dart';
 import 'package:ctlvendor/screens/profile_screen/controller/profile_controller.dart';
 import 'package:ctlvendor/utils/storage.dart';
+import 'package:ctlvendor/widgets/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -383,12 +384,13 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                               child: Table(
                                 columnWidths: const {
                                   0: FixedColumnWidth(130),
-                                  1: FixedColumnWidth(110),
-                                  2: FixedColumnWidth(200),
-                                  3: FixedColumnWidth(100),
-                                  4: FixedColumnWidth(120),
-                                  5: FixedColumnWidth(80),
-                                  6: FixedColumnWidth(100),
+                                  1: FixedColumnWidth(130),
+                                  2: FixedColumnWidth(110),
+                                  3: FixedColumnWidth(200),
+                                  4: FixedColumnWidth(100),
+                                  5: FixedColumnWidth(120),
+                                  6: FixedColumnWidth(80),
+                                  7: FixedColumnWidth(100),
                                 },
                                 border: TableBorder(
                                   top: BorderSide(
@@ -425,6 +427,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                                       ],
                                     ),
                                     children: [
+                                      _headerCell('Image', icon: Icons.image),
                                       _headerCell(
                                         'Title',
                                         icon: Icons.local_offer,
@@ -470,6 +473,12 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                                         ),
                                       ),
                                       children: [
+                                        CustomImageView(
+                                          fit: BoxFit.cover,
+                                          height: 50,
+                                          width: 20,
+                                          imagePath: product.imageUrl,
+                                        ),
                                         _dataCell(product.title!),
                                         _discountCell(product.discount!),
                                         _dataCell(
@@ -529,16 +538,14 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                                             child: Material(
                                               color: Colors.transparent,
                                               child: InkWell(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  
+                                                },
                                                 borderRadius:
                                                     BorderRadius.circular(6),
                                                 child: Container(
                                                   padding: EdgeInsets.all(6),
-                                                  child: Icon(
-                                                    Icons.delete_outline,
-                                                    size: 18,
-                                                    color: Colors.red.shade500,
-                                                  ),
+                                                  child: Text('Deactivate'),
                                                 ),
                                               ),
                                             ),
