@@ -29,6 +29,8 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
 
   String firstName = 'N/A';
   String lastName = '';
+  String banner = '';
+  String logo = '';
   @override
   initState() {
     super.initState();
@@ -38,9 +40,13 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
   setValue() async {
     var fname = await dataBase.getFirstName();
     var lname = await dataBase.getLastName();
+    var banner1 = await dataBase.getBanner();
+    var logo1 = await dataBase.getLogo();
     setState(() {
       firstName = fname;
       lastName = lname;
+      banner = banner1!;
+      logo = logo1!;
     });
     // myLog.log('first name $fname ans last name $lastName');
   }
@@ -51,14 +57,22 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: Color(0xFF004DBF)),
+            decoration: BoxDecoration(
+              color: Color(0xFF004DBF),
+              image: DecorationImage(
+                image: NetworkImage(banner),
+                fit: BoxFit.cover,
+              ),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
                   radius: 30,
                   backgroundColor: Colors.white,
-                  child: Icon(Icons.person, size: 30, color: Color(0xFF004DBF)),
+                  child: logo == ''
+                      ? Icon(Icons.person, size: 30, color: Color(0xFF004DBF))
+                      : CustomImageView(imagePath: logo),
                 ),
                 SizedBox(height: 12),
                 Text(
@@ -66,6 +80,13 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
+                    shadows: [
+                      BoxShadow(
+                        blurRadius: 1,
+                        offset: Offset(1, 1),
+                        color: Colors.black,
+                      ),
+                    ],
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -538,9 +559,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                                             child: Material(
                                               color: Colors.transparent,
                                               child: InkWell(
-                                                onTap: () {
-                                                  
-                                                },
+                                                onTap: () {},
                                                 borderRadius:
                                                     BorderRadius.circular(6),
                                                 child: Container(

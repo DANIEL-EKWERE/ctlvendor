@@ -72,6 +72,7 @@ class LoginController extends GetxController {
               // 'password': password,
             },
           );
+
           emailController.clear();
           passwordController.clear();
           return;
@@ -79,6 +80,7 @@ class LoginController extends GetxController {
 
         if (!data.vendor!.isRegistered!) {
           await dataBase.saveEmail(data.email ?? 'N/A');
+          await dataBase.saveProfilePhoto(data.profilePicture!);
           Navigator.pushNamed(Get.context!, '/business-name');
           // Proceed with saving data and navigating to dashboard
           Get.snackbar(
@@ -125,7 +127,12 @@ class LoginController extends GetxController {
         // await dataBase.saveVendorPlan(data.vendor?.plan?.toJson() ?? {});
         // await dataBase.saveVehicles(data.vendor?.vehicles ?? []);
         //TODO: done saving vendor details
-
+        myLog.log(data.bankAccount.toString());
+        await dataBase.saveBankName(data.bankAccount!.bankName);
+        await dataBase.saveAcctName(data.bankAccount!.accountName);
+        await dataBase.saveAcctNumber(data.bankAccount!.accountNumber);
+        await dataBase.saveBrmName(data.bankAccount!.bankCode);
+        await dataBase.saveBrmPhone(data.bankAccount!.bankId.toString());
         emailController.clear();
         passwordController.clear();
 

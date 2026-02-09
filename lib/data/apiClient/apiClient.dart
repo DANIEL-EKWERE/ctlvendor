@@ -1531,6 +1531,27 @@ class ApiClient extends GetConnect {
     return response;
   }
 
+  // Update a category
+  Future<http.Response> transferToBank(
+    
+    Map<String, dynamic> categoryData,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    final url = Uri.parse('$baseUrl/wallet/transfer-to-bank');
+    _logRequest('POST', url, body: categoryData);
+    final response = await http.put(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(categoryData),
+    );
+    _logResponse(response);
+    return response;
+  }
+
   // Delete a category
   Future<http.Response> deleteCategory(String categoryId) async {
     final url = Uri.parse('$baseUrl/categories/$categoryId');

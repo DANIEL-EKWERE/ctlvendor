@@ -1,3 +1,5 @@
+import 'package:ctlvendor/utils/storage.dart';
+import 'package:ctlvendor/widgets/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ctlvendor/screens/bank_selection/controller/bank_selection_controller.dart';
@@ -18,6 +20,19 @@ class _BankSelectionScreenState extends State<BankSelectionScreen> {
   bool _isProcessing = false;
   bool _showCompletionDialog = false;
 
+  // "bank_id": 7,
+  //           "bank_name": "OPay Digital Services Limited (OPay)",
+  //           "bank_code": "999992",
+  //           "account_number": "7068628887",
+  //           "account_name": "Ime Sunday iteh"
+
+  String bankId = '';
+  String bankName = '';
+  String accountNumber = '';
+  String accountName = '';
+  String bankCode = '';
+  int amount = 0;
+
   void _processPayment() {
     setState(() {
       _isProcessing = true;
@@ -30,6 +45,30 @@ class _BankSelectionScreenState extends State<BankSelectionScreen> {
         _showCompletionDialog = true;
       });
     });
+  }
+
+  void setValue() async {
+    var bankCode1 = await dataBase.getBrmName();
+    var bankId1 = await dataBase.getBrmPhone();
+    var accountName1 = await dataBase.getAcctName();
+    var accountNumber1 = await dataBase.getAcctNumber();
+    var bankName1 = await dataBase.getBankName();
+    var amount1 = Get.arguments['amount'];
+
+    setState(() {
+      bankId = bankId1;
+      bankCode = bankCode1;
+      accountNumber = accountNumber1;
+      accountName = accountName1;
+      bankName = bankName1;
+      amount = int.parse(amount1);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setValue();
   }
 
   @override
@@ -70,13 +109,16 @@ class _BankSelectionScreenState extends State<BankSelectionScreen> {
                 ),
                 const SizedBox(height: 32),
                 _buildBankOption(
-                  'wema',
-                  'Wema Bank',
-                  '2200020200',
-                  'Jacob Peter',
+                  //'wema',
+                  bankName,
+                  '$bankName Bank',
+                  //'2200020200',
+                  accountNumber,
+                  //'Jacob Peter',
+                  accountName,
                 ),
                 const SizedBox(height: 16),
-                _buildBankOption('gtb', 'GTBank', '0123456789', 'Jacob Peter'),
+                //_buildBankOption('gtb', 'GTBank', '0123456789', 'Jacob Peter'),
                 const Spacer(),
                 Center(
                   child: Container(
@@ -199,11 +241,11 @@ class _BankSelectionScreenState extends State<BankSelectionScreen> {
         });
 
         // After a short delay, show processing
-        if (id == 'wema') {
-          Future.delayed(const Duration(milliseconds: 500), () {
-            _processPayment();
-          });
-        }
+        // if (id != 'wema') {
+        //   Future.delayed(const Duration(milliseconds: 500), () {
+        controller.transferToBank(amount, int.parse(bankId));
+        //   });
+        // }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -227,14 +269,15 @@ class _BankSelectionScreenState extends State<BankSelectionScreen> {
                 border: Border.all(color: Colors.grey.shade200),
               ),
               child: Center(
-                child: Text(
-                  id == 'wema' ? 'WEMA' : 'GTB',
-                  style: TextStyle(
-                    color: id == 'wema' ? Colors.purple : Colors.orange,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
+                child: CustomImageView(imagePath: 'assets/logo.png'),
+                // Text(
+                //   id == 'wema' ? 'WEMA' : 'GTB',
+                //   style: TextStyle(
+                //     color: id == 'wema' ? Colors.purple : Colors.orange,
+                //     fontWeight: FontWeight.bold,
+                //     fontSize: 14,
+                //   ),
+                // ),
               ),
             ),
             const SizedBox(width: 16),

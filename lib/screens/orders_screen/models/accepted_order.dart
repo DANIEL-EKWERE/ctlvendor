@@ -41,6 +41,7 @@ class AcceptedData {
   String? packageType;
   bool? isPaid;
   String? total;
+  String? remark;
   String? serviceCharge;
   String? shippingFee;
   String? vat;
@@ -63,6 +64,7 @@ class AcceptedData {
     this.packageType,
     this.isPaid,
     this.total,
+    this.remark,
     this.serviceCharge,
     this.shippingFee,
     this.vat,
@@ -88,6 +90,7 @@ class AcceptedData {
     packageType = json['package_type'];
     isPaid = json['is_paid'];
     total = json['total']?.toString();
+    remark = json['remark'] ?? 'this user has no remark!!!';
     serviceCharge = json['service_charge']?.toString();
     shippingFee = json['shipping_fee']?.toString();
     vat = json['vat']?.toString();

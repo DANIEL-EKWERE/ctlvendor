@@ -5,6 +5,7 @@ import 'package:ctlvendor/screens/LocationCreateScreen/controller/LocationCreate
 import 'package:ctlvendor/screens/LocationListScreen/controller/LocationListController.dart';
 import 'package:ctlvendor/screens/profile_screen/controller/profile_controller.dart';
 import 'package:ctlvendor/utils/storage.dart';
+import 'package:ctlvendor/widgets/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,6 +24,8 @@ class _LocationListScreenState extends State<LocationListScreen> {
 
   String firstName = 'N/A';
   String lastName = '';
+  String banner = '';
+  String logo = '';
   @override
   initState() {
     super.initState();
@@ -32,9 +35,13 @@ class _LocationListScreenState extends State<LocationListScreen> {
   setValue() async {
     var fname = await dataBase.getFirstName();
     var lname = await dataBase.getLastName();
+    var banner1 = await dataBase.getBanner();
+    var logo1 = await dataBase.getLogo();
     setState(() {
       firstName = fname;
       lastName = lname;
+      banner = banner1!;
+      logo = logo1!;
     });
     //  myLog.log('first name $fname ans last name $lastName');
   }
@@ -45,14 +52,22 @@ class _LocationListScreenState extends State<LocationListScreen> {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: Color(0xFF004DBF)),
+            decoration: BoxDecoration(
+              color: Color(0xFF004DBF),
+              image: DecorationImage(
+                image: NetworkImage(banner),
+                fit: BoxFit.cover,
+              ),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
                   radius: 30,
                   backgroundColor: Colors.white,
-                  child: Icon(Icons.person, size: 30, color: Color(0xFF004DBF)),
+                  child: logo == ''
+                      ? Icon(Icons.person, size: 30, color: Color(0xFF004DBF))
+                      : CustomImageView(imagePath: logo),
                 ),
                 SizedBox(height: 12),
                 Text(
@@ -373,7 +388,7 @@ class _LocationListScreenState extends State<LocationListScreen> {
                                   2: FixedColumnWidth(110),
                                   3: FixedColumnWidth(130),
                                   4: FixedColumnWidth(170),
-                                  5: FixedColumnWidth(120),
+                                  5: FixedColumnWidth(140),
                                   6: FixedColumnWidth(80),
                                   7: FixedColumnWidth(100),
                                 },
@@ -625,7 +640,7 @@ class _LocationListScreenState extends State<LocationListScreen> {
             ),
             SizedBox(width: 6),
             Text(
-              isActive ? 'ACTIVE' : 'INACTIVE',
+              isActive ? 'IS DEFAULT' : 'INACTIVE',
               style: TextStyle(
                 color: isActive ? Colors.teal.shade700 : Colors.grey.shade700,
                 fontWeight: FontWeight.w700,

@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:ctlvendor/routes/app_routes.dart';
 import 'package:ctlvendor/screens/login/models/models.dart';
 import 'package:ctlvendor/screens/profile_screen/controller/profile_controller.dart';
+import 'package:ctlvendor/widgets/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -9,6 +12,7 @@ import 'package:get/get_instance/get_instance.dart';
 import 'package:get/route_manager.dart';
 import 'package:ctlvendor/screens/dashboard_screen/controller/dashboard_controller.dart';
 import 'package:ctlvendor/utils/storage.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../widgets/status_bar.dart';
 import '../orders_screen/orders_screen.dart';
 import '../wallet_screen/wallet_screen.dart';
@@ -29,12 +33,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
   String firstName = 'N/A';
   String lastName = '';
+  String banner = '';
+  String logo = '';
 
   late final List<Widget> _tabs;
   @override
   void initState() {
     super.initState();
-    setValue();
+    // setValue();
     _tabs = [
       HomeTab(firstName: firstName, lastName: lastName),
       const OrdersTab(),
@@ -47,9 +53,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   setValue() async {
     var fname = await dataBase.getFirstName();
     var lname = await dataBase.getLastName();
+    var banner1 = await dataBase.getBanner();
+    var logo1 = await dataBase.getLogo();
+
     setState(() {
       firstName = fname;
       lastName = lname;
+      banner = banner1!;
+      logo = logo1!;
     });
     myLog.log('first name $fname ans last name $lastName');
   }
@@ -109,6 +120,9 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   String firstName = 'N/A';
   String lastName = '';
+  String banner = '';
+  String logo = '';
+
   @override
   initState() {
     super.initState();
@@ -118,119 +132,17 @@ class _HomeTabState extends State<HomeTab> {
   setValue() async {
     var fname = await dataBase.getFirstName();
     var lname = await dataBase.getLastName();
+    var banner1 = await dataBase.getBanner();
+    var logo1 = await dataBase.getLogo();
     setState(() {
       firstName = fname;
       lastName = lname;
+      banner = banner1!;
+      logo = logo1!;
     });
     myLog.log('first name $fname ans last name $lastName');
   }
 
-  // Widget build(BuildContext context) {
-  //   return Column(
-  //     children: [
-  //       const StatusBar(),
-  //       Padding(
-  //         padding: const EdgeInsets.all(16.0),
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             Image.asset('assets/logo.png', height: 40),
-  //             GestureDetector(
-  //               onTap: () {
-  //                 Navigator.pushNamed(context, '/earnings');
-  //               },
-  //               child: const Icon(
-  //                 Icons.notifications_outlined,
-  //                 size: 28,
-  //                 color: Colors.grey,
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       const SizedBox(height: 24),
-  //       GestureDetector(
-  //         onTap: () {
-  //           Navigator.pushNamed(context, '/earnings');
-  //         },
-  //         child: Container(
-  //           margin: const EdgeInsets.symmetric(horizontal: 16),
-  //           padding: const EdgeInsets.all(16),
-  //           decoration: BoxDecoration(
-  //             color: Colors.white,
-  //             borderRadius: BorderRadius.circular(12),
-  //             boxShadow: [
-  //               BoxShadow(
-  //                 color: Colors.black.withAlpha(
-  //                   13,
-  //                 ), // Changed from withOpacity(0.05)
-  //                 blurRadius: 10,
-  //                 offset: const Offset(0, 5),
-  //               ),
-  //             ],
-  //           ),
-  //           child: Row(
-  //             children: [
-  //               Container(
-  //                 width: 50,
-  //                 height: 50,
-  //                 decoration: BoxDecoration(
-  //                   color: const Color(0xFFFFF3E0),
-  //                   borderRadius: BorderRadius.circular(8),
-  //                 ),
-  //                 child: const Icon(
-  //                   Icons.bar_chart,
-  //                   color: Color(0xFF004DBF),
-  //                   size: 30,
-  //                 ),
-  //               ),
-  //               const SizedBox(width: 16),
-  //               const Expanded(
-  //                 child: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: [
-  //                     Text(
-  //                       'View Earnings',
-  //                       style: TextStyle(
-  //                         fontSize: 16,
-  //                         fontWeight: FontWeight.bold,
-  //                       ),
-  //                     ),
-  //                     SizedBox(height: 4),
-  //                     Text(
-  //                       'Check your daily and weekly earnings',
-  //                       style: TextStyle(fontSize: 12, color: Colors.black54),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //               const Icon(
-  //                 Icons.arrow_forward_ios,
-  //                 size: 16,
-  //                 color: Colors.black54,
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //       const Expanded(
-  //         child: Center(
-  //           child: Text(
-  //             'Home Screen Content',
-  //             style: TextStyle(fontSize: 18, color: Colors.black54),
-  //           ),
-  //         ),
-  //       ),
-  //       ElevatedButton(
-  //         onPressed: () async {
-  //           var token = await dataBase.getToken();
-  //           print(token);
-  //         },
-  //         child: Text('token print'),
-  //       ),
-  //     ],
-  //   );
-  // }
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -621,14 +533,27 @@ class _HomeTabState extends State<HomeTab> {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: Color(0xFF004DBF)),
+            decoration: BoxDecoration(
+              color: Color(0xFF004DBF),
+              image: DecorationImage(
+                image: NetworkImage(banner),
+                fit: BoxFit.cover,
+              ),
+              // CustomImageView(
+              //   imagePath: '',
+              // )
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
                   radius: 30,
                   backgroundColor: Colors.white,
-                  child: Icon(Icons.person, size: 30, color: Color(0xFF004DBF)),
+                  child: logo == ''
+                      ? Icon(Icons.person, size: 30, color: Color(0xFF004DBF))
+                      : CustomImageView(imagePath: logo),
+                  //CustomImageView(imagePath: logo),
+                  //Image.network(logo),
                 ),
                 SizedBox(height: 12),
                 Text(
@@ -637,6 +562,13 @@ class _HomeTabState extends State<HomeTab> {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black,
+                        blurRadius: 2,
+                        offset: Offset(1, 1),
+                      ),
+                    ],
                     fontWeight: FontWeight.bold,
                   ),
                 ),

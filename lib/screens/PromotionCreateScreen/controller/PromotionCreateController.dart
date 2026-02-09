@@ -333,4 +333,117 @@ class PromotionCreateController extends GetxController {
       ).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
+
+  Future<void> deactivatePromotion(
+    String productId,
+    String newStatus,
+    String categoryId,
+    String price,
+    String stock,
+    String packId,
+  ) async {
+    OverlayLoadingProgress.start(circularProgressColor: Color(0xff004BFD));
+
+    var companyId = await dataBase.getCompanyId();
+    var vendorId = await dataBase.getVendorId();
+    var userId = await dataBase.getUserId();
+    myLog.log('Updating product $productId with vendorId: $vendorId');
+
+    try {
+      // Use PUT or PATCH for updates, adjust URL to include product ID
+      String url = '${apiClient.baseUrl}/vendor/products/$productId';
+      Map<String, String> headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${await dataBase.getToken()}',
+        'Content-Type': 'multipart/form-data',
+      };
+
+      // Use POST with _method field for Laravel
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      request.headers.addAll(headers);
+      // request.fields['_method'] = 'PUT'; // Laravel method spoofing
+
+      request.fields['company_id'] = companyId.toString();
+      request.fields['product_id'] = productId;
+      request.fields['category_id'] = categoryId;
+      request.fields['pack_id'] = packId;
+      request.fields['price'] = price;
+     // request.fields['description'] = descriptionController.text;
+      request.fields['status'] = newStatus;
+      request.fields['vendor_id'] = userId.toString();
+      request.fields['stock'] = stock;
+    //  request.fields['cost'] = costController.text;
+      // // Send existing image URLs as a field (if your API supports it)
+      // if (existingImageUrls.isNotEmpty) {
+      //   myLog.log('Including ${existingImageUrls.length} existing images');
+      //   for (int i = 0; i < existingImageUrls.length; i++) {
+      //     request.fields['existing_images[$i]'] = existingImageUrls[i];
+      //   }
+      // }
+
+      // // Add ONLY new local images to request
+      // if (selectedImages.isNotEmpty) {
+      //   myLog.log('Adding ${selectedImages.length} NEW images to request');
+      //   for (int i = 0; i < selectedImages.length; i++) {
+      //     XFile imageFile = selectedImages[i];
+
+      //     // ✅ CRITICAL FIX: Skip network URLs - they're already on the server
+      //     if (imageFile.path.startsWith('http://') ||
+      //         imageFile.path.startsWith('https://')) {
+      //       myLog.log('Skipping existing network URL: ${imageFile.path}');
+      //       continue;
+      //     }
+
+      //     String mimeType = lookupMimeType(imageFile.path) ?? 'image/jpeg';
+      //     String fileName = basename(imageFile.path);
+
+      //     var multipartFile = await http.MultipartFile.fromPath(
+      //       'new_images[]', // Use different field name for new images
+      //       imageFile.path,
+      //       filename: fileName,
+      //       contentType: MediaType(
+      //         mimeType.split('/')[0],
+      //         mimeType.split('/')[1],
+      //       ),
+      //     );
+      //     request.files.add(multipartFile);
+      //     myLog.log('New image $i added: $fileName');
+      //   }
+      // }
+
+      var response = await request.send();
+      myLog.log('Response status: ${response.statusCode}');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        OverlayLoadingProgress.stop();
+        //  Get.back();
+        fetchProducts();
+        var responseBody = await response.stream.bytesToString();
+        myLog.log('Response Body: $responseBody');
+
+        // Clear edit controllers and images
+        // priceController.clear();
+        // descriptionController.clear();
+        // stockController.clear();
+        // costController.clear();
+        selectedImages.clear();
+
+        Get.snackbar("Success", "Product deactivated successfully");
+        myLog.log('Product deactivated successfully');
+       // controller.fetchProducts();
+        Get.back();
+      } else {
+        OverlayLoadingProgress.stop();
+        var responseBody = await response.stream.bytesToString();
+        print('Error: ${response.statusCode}, Response: $responseBody');
+        Get.snackbar("Error:", " ${response.statusCode} - $responseBody");
+      }
+    } catch (e) {
+      OverlayLoadingProgress.stop();
+      Get.snackbar("Error occurred:", e.toString());
+      myLog.log('Error deactivating product: ${e.toString()}');
+    } finally {
+      OverlayLoadingProgress.stop();
+    }
+  }
 }

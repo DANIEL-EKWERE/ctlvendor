@@ -20,6 +20,12 @@ class VendorBusinessController extends GetxController {
   ImagePicker picker = ImagePicker();
   Rx<XFile?> businessLogoFile = Rx<XFile?>(null);
   Rx<XFile?> businessLogoBanner = Rx<XFile?>(null);
+  VendorSuccessModel vendorSuccessModel = VendorSuccessModel(
+    status: true,
+    message: '',
+  );
+
+  VendorData vendorData = VendorData();
 
   @override
   void onInit() {
@@ -137,20 +143,20 @@ class VendorBusinessController extends GetxController {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         OverlayLoadingProgress.stop();
+        vendorSuccessModel = vendorSuccessModelFromJson(responseBody);
+        vendorData = vendorSuccessModel.data!;
 
         Get.back();
 
         // ✅ FIXED: Save the correct paths for logo and banner
-        if (businessLogoFile.value != null) {
-          await dataBase.saveLogo(businessLogoFile.value!.path);
-          myLog.log('Logo saved to database: ${businessLogoFile.value!.path}');
+        if (vendorData.logo != null) {
+          await dataBase.saveLogo(vendorData.logo!);
+          myLog.log('Logo saved to database: ${vendorData.logo!}');
         }
 
-        if (businessLogoBanner.value != null) {
-          await dataBase.saveBanner(businessLogoBanner.value!.path);
-          myLog.log(
-            'Banner saved to database: ${businessLogoBanner.value!.path}',
-          );
+        if (vendorData.banner != null) {
+          await dataBase.saveBanner(vendorData.banner!);
+          myLog.log('Banner saved to database: ${vendorData.banner}');
         }
 
         // Clear the files after successful upload

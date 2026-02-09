@@ -519,8 +519,8 @@ class _OrdersScreenState extends State<OrdersScreen>
                       ],
                     ),
                     const SizedBox(height: 2),
-                    const Text(
-                      'CTL Store, Itam',
+                    Text(
+                      dataHistory.address!.contactAddress!,
                       style: TextStyle(
                         fontSize: 10,
                         fontFamily: 'Poppins',
@@ -540,14 +540,14 @@ class _OrdersScreenState extends State<OrdersScreen>
               spacing: 5,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 5,
                     children: [
                       Text('Message'),
                       Text(
-                        'Lorem ipsum dolor sit amet consectetur. Nibh malesuada nisi massa pulvinar gravida volutpat vitae consectetur.',
+                        dataHistory.remark!,
                         style: TextStyle(
                           fontSize: 10,
                           fontFamily: 'Poppins',

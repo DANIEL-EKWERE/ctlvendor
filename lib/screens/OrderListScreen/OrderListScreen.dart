@@ -2,6 +2,7 @@ import 'package:ctlvendor/routes/app_routes.dart';
 import 'package:ctlvendor/screens/OrderListScreen/controller/OrderListController.dart';
 import 'package:ctlvendor/screens/profile_screen/controller/profile_controller.dart';
 import 'package:ctlvendor/utils/storage.dart';
+import 'package:ctlvendor/widgets/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,6 +21,8 @@ class _OrderListScreenState extends State<OrderListScreen> {
 
   String firstName = 'N/A';
   String lastName = '';
+  String banner = '';
+  String logo = '';
   @override
   initState() {
     super.initState();
@@ -30,9 +33,13 @@ class _OrderListScreenState extends State<OrderListScreen> {
   setValue() async {
     var fname = await dataBase.getFirstName();
     var lname = await dataBase.getLastName();
+    var banner1 = await dataBase.getBanner();
+    var logo1 = await dataBase.getLogo();
     setState(() {
       firstName = fname;
       lastName = lname;
+      banner = banner1!;
+      logo = logo1!;
     });
     // myLog.log('first name $fname ans last name $lastName');
   }
@@ -43,14 +50,22 @@ class _OrderListScreenState extends State<OrderListScreen> {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: Color(0xFF004DBF)),
+            decoration: BoxDecoration(
+              color: Color(0xFF004DBF),
+              image: DecorationImage(
+                image: NetworkImage(banner),
+                fit: BoxFit.cover,
+              ),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
                   radius: 30,
                   backgroundColor: Colors.white,
-                  child: Icon(Icons.person, size: 30, color: Color(0xFF004DBF)),
+                  child: logo == ''
+                      ? Icon(Icons.person, size: 30, color: Color(0xFF004DBF))
+                      : CustomImageView(imagePath: logo),
                 ),
                 SizedBox(height: 12),
                 Text(
@@ -58,6 +73,13 @@ class _OrderListScreenState extends State<OrderListScreen> {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black,
+                        blurRadius: 2,
+                        offset: Offset(2, 2),
+                      ),
+                    ],
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -288,7 +310,9 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     child: Obx(() {
                       if (controller.isLoading.value) {
                         return const Center(
-                          child: CircularProgressIndicator(color: Color(0xFF004DBF)),
+                          child: CircularProgressIndicator(
+                            color: Color(0xFF004DBF),
+                          ),
                         );
                       }
 

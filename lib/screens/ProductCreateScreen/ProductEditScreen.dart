@@ -586,69 +586,60 @@ class _ProductCreateScreenState extends State<ProductEditScreen> {
                 SizedBox(height: 20),
 
                 // Price, Cost, Stock in Row
-                Row(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildLabel('Price'),
-                          SizedBox(height: 8),
-                          TextFormField(
-                            controller: widget.controller.editPriceController,
-                            keyboardType: TextInputType.number,
-                            decoration: _inputDecoration('0'),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Required';
-                              }
-                              return null;
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildLabel('Cost (Optional)'),
-                          SizedBox(height: 8),
-                          TextFormField(
-                            controller: widget.controller.editCostController,
-                            keyboardType: TextInputType.number,
-                            decoration: _inputDecoration('0'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildLabel('Stock'),
-                          SizedBox(height: 8),
-                          TextFormField(
-                            controller: widget
-                                .controller
-                                .editStockController, //stockController,
-                            keyboardType: TextInputType.number,
-                            decoration: _inputDecoration('0'),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Required';
-                              }
-                              return null;
-                            },
-                          ),
-                        ],
-                      ),
+                    _buildLabel('Price'),
+                    SizedBox(height: 8),
+                    TextFormField(
+                      controller: widget.controller.editPriceController,
+                      keyboardType: TextInputType.number,
+                      decoration: _inputDecoration('0'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required';
+                        }
+                        return null;
+                      },
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 30),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildLabel('Cost (Optional)'),
+                    SizedBox(height: 8),
+                    TextFormField(
+                      controller: widget.controller.editCostController,
+                      keyboardType: TextInputType.number,
+                      decoration: _inputDecoration('0'),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 30),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildLabel('Stock'),
+                    SizedBox(height: 8),
+                    TextFormField(
+                      controller: widget
+                          .controller
+                          .editStockController, //stockController,
+                      keyboardType: TextInputType.number,
+                      decoration: _inputDecoration('0'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required';
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 30),
 
                 // Description
                 _buildLabel('Description'),
@@ -913,7 +904,7 @@ class _ProductCreateScreenState extends State<ProductEditScreen> {
                             //   'Product added successfully',
                             // );
                             //widget.controller.updateProduct();
-                            
+
                             widget.controller.updateProduct(
                               widget.product.product!.id.toString(),
                             );

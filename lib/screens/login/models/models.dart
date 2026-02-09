@@ -52,6 +52,7 @@ class LoginData {
   String? createdAt;
   String? lastLogin;
   Wallet? wallet;
+  BankAccount? bankAccount;
   List<dynamic>? favorites;
   List<ContactAddress>? contactAddress;
   Vendor? vendor;
@@ -59,35 +60,37 @@ class LoginData {
   String? tokenType;
   int? expiresIn;
 
-  LoginData(
-      {this.id,
-      this.name,
-      this.firstname,
-      this.lastname,
-      this.email,
-      this.phoneNumber,
-      this.profilePicture,
-      this.country,
-      this.emailVerified,
-      this.role,
-      this.isVendor,
-      this.isRider,
-      this.isStaff,
-      this.isAdmin,
-      this.referralCode,
-      this.referrerId,
-      this.referralCount,
-      this.hasPin,
-      this.isActive,
-      this.createdAt,
-      this.lastLogin,
-      this.wallet,
-      this.favorites,
-      this.contactAddress,
-      this.vendor,
-      this.token,
-      this.tokenType,
-      this.expiresIn});
+  LoginData({
+    this.id,
+    this.name,
+    this.firstname,
+    this.lastname,
+    this.email,
+    this.phoneNumber,
+    this.profilePicture,
+    this.bankAccount,
+    this.country,
+    this.emailVerified,
+    this.role,
+    this.isVendor,
+    this.isRider,
+    this.isStaff,
+    this.isAdmin,
+    this.referralCode,
+    this.referrerId,
+    this.referralCount,
+    this.hasPin,
+    this.isActive,
+    this.createdAt,
+    this.lastLogin,
+    this.wallet,
+    this.favorites,
+    this.contactAddress,
+    this.vendor,
+    this.token,
+    this.tokenType,
+    this.expiresIn,
+  });
 
   LoginData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -112,19 +115,23 @@ class LoginData {
     createdAt = json['created_at'];
     lastLogin = json['last_login'];
     wallet = json['wallet'] != null ? Wallet.fromJson(json['wallet']) : null;
-    
+    bankAccount =
+    json['bank_account'] != null
+        ? BankAccount.fromJson(json['bank_account'])
+        : null;
+
     // Fixed: Handle favorites correctly
     if (json['favorites'] != null) {
       favorites = List<dynamic>.from(json['favorites']);
     }
-    
+
     if (json['contact_address'] != null) {
       contactAddress = <ContactAddress>[];
       json['contact_address'].forEach((v) {
         contactAddress!.add(ContactAddress.fromJson(v));
       });
     }
-    
+
     vendor = json['vendor'] != null ? Vendor.fromJson(json['vendor']) : null;
     token = json['token'];
     tokenType = json['token_type'];
@@ -159,8 +166,9 @@ class LoginData {
     }
     data['favorites'] = this.favorites;
     if (this.contactAddress != null) {
-      data['contact_address'] =
-          this.contactAddress!.map((v) => v.toJson()).toList();
+      data['contact_address'] = this.contactAddress!
+          .map((v) => v.toJson())
+          .toList();
     }
     if (this.vendor != null) {
       data['vendor'] = this.vendor!.toJson();
@@ -191,6 +199,42 @@ class Wallet {
   }
 }
 
+class BankAccount {
+  final int bankId;
+  final String bankName;
+  final String bankCode;
+  final String accountNumber;
+  final String accountName;
+
+  BankAccount({
+    required this.bankId,
+    required this.bankName,
+    required this.bankCode,
+    required this.accountNumber,
+    required this.accountName,
+  });
+
+  factory BankAccount.fromJson(Map<String, dynamic> json) {
+    return BankAccount(
+      bankId: json['bank_id'] ?? 0,
+      bankName: json['bank_name'] ?? '',
+      bankCode: json['bank_code'] ?? '',
+      accountNumber: json['account_number'] ?? '',
+      accountName: json['account_name'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'bank_id': bankId,
+      'bank_name': bankName,
+      'bank_code': bankCode,
+      'account_number': accountNumber,
+      'account_name': accountName,
+    };
+  }
+}
+
 class ContactAddress {
   int? id;
   String? country;
@@ -203,17 +247,18 @@ class ContactAddress {
   String? isDefault;
   String? createdAt;
 
-  ContactAddress(
-      {this.id,
-      this.country,
-      this.state,
-      this.lga,
-      this.contactAddress,
-      this.phoneNumber,
-      this.lat,
-      this.lon,
-      this.isDefault,
-      this.createdAt});
+  ContactAddress({
+    this.id,
+    this.country,
+    this.state,
+    this.lga,
+    this.contactAddress,
+    this.phoneNumber,
+    this.lat,
+    this.lon,
+    this.isDefault,
+    this.createdAt,
+  });
 
   ContactAddress.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -271,32 +316,33 @@ class Vendor {
   List<dynamic>? vehicles;
   String? createdAt;
 
-  Vendor(
-      {this.id,
-      this.businessName,
-      this.businessAddress,
-      this.distanceKm,
-      this.phoneNumber,
-      this.businessTypeId,
-      this.email,
-      this.rcNumber,
-      this.taxNumber,
-      this.businessDescription,
-      this.bvn,
-      this.meansOfIdentification,
-      this.identificationUrl,
-      this.isVerified,
-      this.isActive,
-      this.isRegistered,
-      this.fulfilmentType,
-      this.logo,
-      this.banner,
-      this.businessDocuments,
-      this.locations,
-      this.category,
-      this.plan,
-      this.vehicles,
-      this.createdAt});
+  Vendor({
+    this.id,
+    this.businessName,
+    this.businessAddress,
+    this.distanceKm,
+    this.phoneNumber,
+    this.businessTypeId,
+    this.email,
+    this.rcNumber,
+    this.taxNumber,
+    this.businessDescription,
+    this.bvn,
+    this.meansOfIdentification,
+    this.identificationUrl,
+    this.isVerified,
+    this.isActive,
+    this.isRegistered,
+    this.fulfilmentType,
+    this.logo,
+    this.banner,
+    this.businessDocuments,
+    this.locations,
+    this.category,
+    this.plan,
+    this.vehicles,
+    this.createdAt,
+  });
 
   Vendor.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -319,24 +365,24 @@ class Vendor {
     logo = json['logo'];
     banner = json['banner'];
     businessDocuments = json['business_documents'];
-    
+
     if (json['locations'] != null) {
       locations = <Locations>[];
       json['locations'].forEach((v) {
         locations!.add(Locations.fromJson(v));
       });
     }
-    
+
     category = json['category'] != null
         ? Category.fromJson(json['category'])
         : null;
     plan = json['plan'] != null ? Plan.fromJson(json['plan']) : null;
-    
+
     // Fixed: Handle vehicles correctly
     if (json['vehicles'] != null) {
       vehicles = List<dynamic>.from(json['vehicles']);
     }
-    
+
     createdAt = json['created_at'];
   }
 
@@ -383,25 +429,26 @@ class Locations {
   String? contactAddress;
   String? lat;
   String? lon;
-  LocationCountry? country;  // Changed from String? to object
-  LocationState? state;      // Changed from String? to object
-  LocationLga? lga;          // Changed from String? to object
+  LocationCountry? country; // Changed from String? to object
+  LocationState? state; // Changed from String? to object
+  LocationLga? lga; // Changed from String? to object
   bool? isActive;
   bool? isPrimary;
   String? createdAt;
 
-  Locations(
-      {this.id,
-      this.phoneNumber,
-      this.contactAddress,
-      this.lat,
-      this.lon,
-      this.country,
-      this.state,
-      this.lga,
-      this.isActive,
-      this.isPrimary,
-      this.createdAt});
+  Locations({
+    this.id,
+    this.phoneNumber,
+    this.contactAddress,
+    this.lat,
+    this.lon,
+    this.country,
+    this.state,
+    this.lga,
+    this.isActive,
+    this.isPrimary,
+    this.createdAt,
+  });
 
   Locations.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -409,28 +456,28 @@ class Locations {
     contactAddress = json['contact_address'];
     lat = json['lat'];
     lon = json['lon'];
-    
+
     // Handle country as object or string
     if (json['country'] != null) {
       if (json['country'] is Map) {
         country = LocationCountry.fromJson(json['country']);
       }
     }
-    
+
     // Handle state as object or string
     if (json['state'] != null) {
       if (json['state'] is Map) {
         state = LocationState.fromJson(json['state']);
       }
     }
-    
+
     // Handle lga as object or string
     if (json['lga'] != null) {
       if (json['lga'] is Map) {
         lga = LocationLga.fromJson(json['lga']);
       }
     }
-    
+
     isActive = json['is_active'];
     isPrimary = json['is_primary'];
     createdAt = json['created_at'];
@@ -532,14 +579,15 @@ class Category {
   String? sort;
   String? createdAt;
 
-  Category(
-      {this.id,
-      this.type,
-      this.name,
-      this.description,
-      this.imageUrl,
-      this.sort,
-      this.createdAt});
+  Category({
+    this.id,
+    this.type,
+    this.name,
+    this.description,
+    this.imageUrl,
+    this.sort,
+    this.createdAt,
+  });
 
   Category.fromJson(Map<String, dynamic> json) {
     id = json['id'];

@@ -1,3 +1,4 @@
+import 'package:ctlvendor/screens/vendor_business/model/vendor_business_model.dart';
 import 'package:ctlvendor/utils/storage.dart';
 import 'package:mime/mime.dart';
 import 'package:overlay_kit/overlay_kit.dart';
@@ -16,6 +17,11 @@ class BusinessController extends GetxController {
   TextEditingController bvnController = TextEditingController();
   Rx<String> businessType = ''.obs;
   Rx<String> fulfilmentType = ''.obs;
+  VendorSuccessModel vendorSuccessModel = VendorSuccessModel(
+    status: true,
+    message: '',
+  );
+  VendorData vendorData = VendorData();
 
   Rx<String> category = ''.obs;
   TextEditingController cacNoController = TextEditingController();
@@ -98,7 +104,7 @@ class BusinessController extends GetxController {
     }
   }
 
-    Future<void> obtainBannerFromGallery() async {
+  Future<void> obtainBannerFromGallery() async {
     try {
       final file = await picker.pickImage(source: ImageSource.gallery);
       if (file != null) {
@@ -129,7 +135,7 @@ class BusinessController extends GetxController {
     myLog.log('Document removed');
   }
 
-    Future<void> removeBannerFile() async {
+  Future<void> removeBannerFile() async {
     businessLogoBanner.value = null;
     myLog.log('Banner removed');
   }
@@ -238,7 +244,7 @@ class BusinessController extends GetxController {
         );
         request.files.add(multipartFile);
       }
-        // adding banner image if available
+      // adding banner image if available
       if (businessLogoBanner.value != null) {
         myLog.log('Adding business banner');
         XFile documentFile = businessLogoBanner.value!;
@@ -291,7 +297,12 @@ class BusinessController extends GetxController {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         OverlayLoadingProgress.stop();
-        // var responseBody = await response.stream.bytesToString();
+        var responseBody = await response.stream.bytesToString();
+        vendorSuccessModel = vendorSuccessModelFromJson(responseBody);
+        vendorData = vendorSuccessModel.data!;
+
+        await dataBase.saveLogo(vendorData.logo!);
+        await dataBase.saveBanner(vendorData.banner!);
         // myLog.log('Response Body: $responseBody');
         //   // Refresh profile data
         //   fetchUserProfile();
@@ -308,9 +319,8 @@ class BusinessController extends GetxController {
         businessNameController.clear();
         businessLogoFile.value =
             null; // Clear the image after successful upload
-        businessDocumentFile.value =
-        businessLogoBanner.value = null;
-            null; // Clear the document after successful upload
+        businessDocumentFile.value = businessLogoBanner.value = null;
+        null; // Clear the document after successful upload
         identificationFile.value =
             null; // Clear the identification image after successful upload
         Navigator.pushNamed(Get.context!, '/product-selection');

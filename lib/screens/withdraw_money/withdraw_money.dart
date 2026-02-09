@@ -55,7 +55,7 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                   const SizedBox(width: 8),
                   const Text(
                     'How much do you want to withdraw',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -112,7 +112,8 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/bank-selection');
+                  //Navigator.pushNamed(context, '/bank-selection', arguments: {'amount': _amountController.text});
+                  Get.toNamed('/bank-selection', arguments: {'amount': _amountController.text});
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF004DBF),

@@ -68,6 +68,7 @@ cat.ProductCategory productCategory = cat.ProductCategory();
   List<cat.Data> categoryList = [];
 
   Future<void> fetchCategories() async {
+    
     isLoading2.value = true;
 
     try {

@@ -141,7 +141,7 @@ class ProfileController extends GetxController {
       request.fields['firstname'] = firstNameController.text;
       request.fields['lastname'] = lastNameController.text;
       request.fields['phone_number'] = phoneController.text;
-      request.fields['country_id'] = '4';
+      request.fields['country_id'] = '1';
       myLog.log('country_id: 4');
       myLog.log('firstName: ${firstNameController.text}');
       myLog.log('lastName: ${lastNameController.text}');
